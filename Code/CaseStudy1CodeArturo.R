@@ -56,6 +56,14 @@ summary(AllBeer$ABV)
 
 
 # ABV vs IBU #
+library(lattice)
+library(ggplot2)
 plot(ABV~IBU, data=AllBeer)
 abline(lm(ABV~IBU, data=AllBeer))
 
+
+ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+#+
+#scale_color_gradient(low = "#00000000", high = "#0091ff")

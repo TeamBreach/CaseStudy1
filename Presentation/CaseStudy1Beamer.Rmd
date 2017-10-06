@@ -1,0 +1,54 @@
+---
+title: "Untitled"
+author: "Arturo Casillas"
+date: "October 6, 2017"
+#output: 
+output: beamer_presentation:
+keep_tex: true
+ #   keep_md: true
+---
+
+## R Markdown Dummy
+
+This is an R Markdown w/ Beamer test 
+
+```{r Beer, echo=FALSE}
+setwd("C:/Users/acasi/Downloads")
+
+BeersData <- read.csv("Beers.csv")
+BreweriesData <- read.csv("Breweries.csv")
+
+str(BeersData)
+str(BreweriesData)
+
+## Prepare for merging ##
+names(BeersData)
+names(BeersData)[5] = "Brew_ID"
+names(BeersData)[1] = "Beer.name"
+names(BreweriesData)[2] = "Brewery.name"
+
+
+## Merge Data ##
+AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
+str(AllBeer)
+```
+
+
+## Simple Plot
+
+```{r plot1, echo=FALSE}
+plot(ABV~IBU, data=AllBeer)
+abline(lm(ABV~IBU, data=AllBeer))
+```
+
+
+## Fancier Plot
+
+```{r plot2, echo=FALSE}
+library(ggplot2)
+
+ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+```
+

@@ -19,11 +19,21 @@ summary(cars)
 
 ## Including Plots
 
-You can also embed plots, for example:
+Simple Plot
 
-```{r plot, echo=FALSE}
+```{r plot1, echo=FALSE}
 plot(ABV~IBU, data=AllBeer)
 abline(lm(ABV~IBU, data=AllBeer))
 ```
+
+
+Simple Plot
+
+```{r plot2, echo=FALSE}
+ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+```
+
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
