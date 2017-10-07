@@ -1,14 +1,13 @@
 ---
 title: "Untitled"
 author: "Arturo Casillas"
-date: "October 6, 2017"
-#output: 
-output: beamer_presentation:
-keep_tex: true
- #   keep_md: true
+date: 
+output: beamer_presentation
+#keep_tex: true
+
 ---
 
-## R Markdown Dummy
+# R Markdown Dummy
 
 This is an R Markdown w/ Beamer test 
 
@@ -34,7 +33,7 @@ str(AllBeer)
 ```
 
 
-## Simple Plot
+# Simple Plot
 
 ```{r plot1, echo=FALSE}
 plot(ABV~IBU, data=AllBeer)
@@ -42,7 +41,7 @@ abline(lm(ABV~IBU, data=AllBeer))
 ```
 
 
-## Fancier Plot
+# Fancier Plot
 
 ```{r plot2, echo=FALSE}
 library(ggplot2)
