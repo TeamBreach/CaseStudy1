@@ -1,0 +1,52 @@
+,State,ABV,IBU,State_Name
+1, AK,0.056,46,alaska
+2, AL,0.06,43,alabama
+3, AR,0.052,39,arkansas
+4, AZ,0.055,20.5,arizona
+5, CA,0.058,42,california
+6, CO,0.0605,40,colorado
+7, CT,0.06,29,connecticut
+8, DC,0.0625,47.5,district of columbia
+9, DE,0.055,52,deleware
+10, FL,0.057,55,florida
+11, GA,0.055,55,georgia
+12, HI,0.054,22.5,hawaii
+13, IA,0.0555,26,iowa
+14, ID,0.0565,39,idaho
+15, IL,0.058,30,illinois
+16, IN,0.058,33,indiana
+17, KS,0.05,20,kansas
+18, KY,0.0625,31.5,kentucky
+19, LA,0.052,31.5,louisiana
+20, MA,0.054,35,massachusetts
+21, MD,0.058,29,maryland
+22, ME,0.051,61,maine
+23, MI,0.062,35,michigan
+24, MN,0.056,44.5,minnesota
+25, MO,0.052,24,missouri
+26, MS,0.058,45,mississippi
+27, MT,0.055,40,montana
+28, NC,0.057,33.5,north carolina
+29, ND,0.05,32,north dakota
+30, NE,0.056,35,nebraska
+31, NH,0.055,48.5,new hampshire
+32, NJ,0.046,34.5,new jersey
+33, NM,0.062,51,new mexico
+34, NV,0.06,41,nevada
+35, NY,0.055,47,new york
+36, OH,0.058,40,ohio
+37, OK,0.06,35,oklahoma
+38, OR,0.056,40,oregon
+39, PA,0.057,30,pennsylvania
+40, RI,0.055,24,rhode island
+41, SC,0.055,30,south carolina
+42, SD,0.06,0,south dakota
+43, TN,0.057,37,tennessee
+44, TX,0.055,33,texas
+45, UT,0.04,34,utah
+46, VA,0.0565,42,virginia
+47, VT,0.055,30,vermont
+48, WA,0.0555,38,washington
+49, WI,0.052,19,wisconsin
+50, WV,0.062,57.5,west virginia
+51, WY,0.05,21,wyoming
