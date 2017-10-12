@@ -31,7 +31,17 @@ names(BreweriesData)[2] = "Brewery.name"
 AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
 str(AllBeer)
 ```
+# Heade
 
+```{r head, echo=FALSE}
+head(AllBeer, 6)
+```
+
+# Tail
+
+```{r tail, echo=FALSE}
+tail(AllBeer, 6)
+```
 
 # Simple Plot
 
