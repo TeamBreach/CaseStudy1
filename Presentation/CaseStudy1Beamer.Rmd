@@ -2,18 +2,45 @@
 title: "Untitled"
 author: "Arturo Casillas"
 date: 
-output: beamer_presentation
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
 #keep_tex: true
 
 ---
 
 # R Markdown Dummy
 
+First
+
+# In the morning
+
+## Getting up
+
+- Turn off alarm
+- Get out of bed
+
+## Breakfast
+
+- Eat eggs
+- Drink coffee
+
+# In the evening
+
+## Dinner
+
+- Eat spaghetti
+- Drink wine
+
+# Data ##
 This is an R Markdown w/ Beamer test 
 
-```{r Beer, echo=FALSE}
+```{r cars}
+## Load Data ##
+#getwd()
 setwd("C:/Users/acasi/Downloads")
-
 BeersData <- read.csv("Beers.csv")
 BreweriesData <- read.csv("Breweries.csv")
 
@@ -30,18 +57,52 @@ names(BreweriesData)[2] = "Brewery.name"
 ## Merge Data ##
 AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
 str(AllBeer)
-```
-# Heade
 
-```{r head, echo=FALSE}
-head(AllBeer, 6)
 ```
+
+
+# Header
+
+First 6 rows
+
+```{r head, fig.align='center', error=FALSE}
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6))
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
+```
+
 
 # Tail
 
+last 6 rows
+
 ```{r tail, echo=FALSE}
-tail(AllBeer, 6)
+library(knitr)
+kable(tail(AllBeer, 6))
 ```
+
+# Tail2
+
+last 6 rows
+
+
+```{r tail2, echo=FALSE, size='vsmall', warning=FALSE }
+#library(xtable)
+#print(xtable(head(AllBeer, 6)))
+
+#library(pander)
+#panderOptions('graph.fontsize', .8)
+#pander(head(AllBeer, 6))
+
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6)) 
+#%>%
+#kable_styling(font_size = 7)
+```
+
 
 # Simple Plot
 
