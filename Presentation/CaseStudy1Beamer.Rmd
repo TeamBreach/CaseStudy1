@@ -1,6 +1,6 @@
 ---
-title: "Untitled"
-author: "Arturo Casillas"
+title: "Craft-Cans Case Study"
+author: "Arturo Casillas & Kevin Dickens"
 date: 
 output: 
   beamer_presentation:
@@ -15,29 +15,17 @@ output:
 
 First
 
-# In the morning
+# About the Data
+## Source
 
-## Getting up
+- The tables contain a list of 2410 US craft beers and 510 US breweries. 
+- The beer data corresponds to beers available in cans
+- This data was traced from CraftCans.com. 
 
-- Turn off alarm
-- Get out of bed
+# About the Data
+## View the data
 
-## Breakfast
-
-- Eat eggs
-- Drink coffee
-
-# In the evening
-
-## Dinner
-
-- Eat spaghetti
-- Drink wine
-
-# Data ##
-This is an R Markdown w/ Beamer test 
-
-```{r cars}
+```{r load}
 ## Load Data ##
 #getwd()
 setwd("C:/Users/acasi/Downloads")
@@ -46,7 +34,15 @@ BreweriesData <- read.csv("Breweries.csv")
 
 str(BeersData)
 str(BreweriesData)
+```
 
+# Munging
+## Basic alterations
+- Column names are altered for clarity and to minimize merging issues
+- The beers and breweries are linked by a numeric ID, which is used to merge the two tables
+  - 'Brew_ID'
+
+```{r munge}
 ## Prepare for merging ##
 names(BeersData)
 names(BeersData)[5] = "Brew_ID"
@@ -60,11 +56,10 @@ str(AllBeer)
 
 ```
 
+# Munging
+## View the final data
 
-# Header
-
-First 6 rows
-
+-first 6 rows
 ```{r head, fig.align='center', error=FALSE}
 library(knitr)
 #library(kableExtra)
@@ -73,19 +68,60 @@ kable(head(AllBeer, 6))
 #kable_styling(latex_options = c("striped", "scale_down"))
 ```
 
-
-# Tail
+# Munging
+### View the final data
 
 last 6 rows
 
-```{r tail, echo=FALSE}
+```{r tail, echo=TRUE}
 library(knitr)
 kable(tail(AllBeer, 6))
 ```
 
+
+# Data Integrity
+## Missing Vlaues
+- Check the missing values number and indicators
+```{r missing, echo=TRUE}
+## Check for missing values ##
+apply(apply(AllBeer, 2, is.na), 2, sum)
+
+t=sapply(AllBeer, function(y) sum(length(which(is.na(y)))))
+summary(t)
+```
+
+# Data Integrity
+## Notes and Observations
+- Only ABV and IBU have missing values
+  - Almost 50% of IBU values are missing
+  -This certainly affect any analysis that hinges on IBU values
+- Spot checks on the data suggest that character variables use blanks for missing values
+  - This needs to be verified
+
+# Data Integrity
+## Double Check Missing Vlaues
+- Check for blanks instead of NA's
+```{r missing2, echo=TRUE}
+## Double Check ##
+## Look at balnk Strings ##
+apply(AllBeer, 2, function(y) sum(y == ""))
+```
+- 'Stye', which represents style of beer, has 5 additional missing values
+
+# External Data
+
+- From R
+  - R contains additional region and division data per state in the package 'Datasets'
+  - This data is from a 1977 report from the chamber of commerce
+
+# External Data
+
+- From census
+  - This is a 2016 geography table
+
 # Tail2
 
-last 6 rows
+-experiment with plotting last 6 rows
 
 
 ```{r tail2, echo=FALSE, size='vsmall', warning=FALSE }
@@ -114,7 +150,7 @@ abline(lm(ABV~IBU, data=AllBeer))
 
 # Fancier Plot
 
-```{r plot2, echo=FALSE}
+```{r plot2, echo=FALSE, warning=FALSE}
 library(ggplot2)
 
 ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 

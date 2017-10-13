@@ -1,9 +1,9 @@
 
 ## Load Data ##
 getwd()
-setwd("C:/Users/acasi/Downloads")
-BeersData <- read.csv("Beers.csv")
-BreweriesData <- read.csv("Breweries.csv")
+#setwd("C:/Users/acasi/Downloads")
+BeersData <- read.csv("C:/Users/acasi/Downloads/Beers.csv")
+BreweriesData <- read.csv("C:/Users/acasi/Downloads/Breweries.csv")
 
 str(BeersData)
 str(BreweriesData)
@@ -29,6 +29,7 @@ apply(apply(AllBeer, 2, is.na), 2, sum)
 t=sapply(AllBeer, function(y) sum(length(which(is.na(y)))))
 summary(t)
 
+
 ## Double Check ##
 AllBeer[is.na(AllBeer$ABV), ]
 ## Look at balnk Strings ##
@@ -43,10 +44,16 @@ sum(AllBeer$State == "")
 sum(AllBeer$ABV == "", na.rm = TRUE)
 sum(AllBeer$IBU == "", na.rm = TRUE)
 apply(apply(AllBeer, c(1, 2), length), 2, min)
+apply(AllBeer, 2, function(y) sum(y == ""))
 
 # Summary Statistics #
 AllBeer$State[which.max(AllBeer$ABV)]
 AllBeer$State[which.max(AllBeer$IBU)]
+
+o1<-AllBeer[order(AllBeer$ABV, decreasing = TRUE),]
+o2<-AllBeer[order(AllBeer$IBU, decreasing = TRUE),]
+o1[1:5,]
+o2[1:5,]
 
 summary(AllBeer$ABV)
 str(AllBeer$ABV)
@@ -73,6 +80,10 @@ median_beer[is.na(median_beer)] <- 0
 median_beer<-?rename(median_beer, c('Group.1'='State'))
 barplot(median_beer$ABV, width=3, names.arg = median_beer$State, las=2)
 
+tABV=tapply(AllBeer$ABV, AllBeer$State, max)
+tIBU=tapply(AllBeer$IBU, AllBeer$State, max, na.rm = TRUE)
+tABV
+tIBU
 
 
 # ABV vs IBU #
@@ -90,14 +101,39 @@ ggplot(dat=na.omit(AllBeer), aes(x=IBU, y=ABV)) +
 
 
 ## Extra Data / Info
-library(xlsx)
-library(rJava)
-stategeo<-read.xlsx("state-geocodes-v2016.xls", sheetIndex=1, sheetName="CODES14", startRow=6, header=TRUE)
-allgeo<-read.xlsx("all-geocodes-v2016.xlsx", sheetIndex=1, sheetName=NULL, startRow=5, header=TRUE)
+#library(xlsx)
+#library(rJava)
+#stategeo<-read.xlsx("state-geocodes-v2016.xls", sheetIndex=1, sheetName="CODES14", startRow=6, header=TRUE)
+#allgeo<-read.xlsx("all-geocodes-v2016.xlsx", sheetIndex=1, sheetName=NULL, startRow=5, header=TRUE)
 
-stategeo<-read.csv("state-geocodes-v2016.csv", header=TRUE)
-allgeo<-read.csv("all-geocodes-v2016.csv", header=TRUE)
+stategeo<-read.csv("C:/Users/acasi/Downloads/state-geocodes-v2016.csv", header=TRUE)
+allgeo<-read.csv("C:/Users/acasi/Downloads/all-geocodes-v2016.csv", header=TRUE)
 
 tail(stategeo)
 tail(allgeo)
 
+str(AllBeer$State)
+sum(AllBeer$State == 24)
+
+states=stategeo[stategeo$State..FIPS. != 0, -3]
+names(states)[3] = "State.Name"
+#Name=State
+divisions=stategeo[stategeo$State..FIPS. == 0 & stategeo$Division != 0, c(2,4)]
+names(division)[2] = "Division.Name"
+#Name=divisions
+regions=stategeo[stategeo$State..FIPS. == 0 & stategeo$Division == 0, c(1,4)]
+names(regions)[2] = "Region.Name"
+#Name=regions
+
+length(states[,1])
+
+library(datasets)
+test=data.frame(state.abb, state.name, state.region, state.division)
+
+state.region
+state.abb
+state.division
+
+length(sort(unique(AllBeer$State)))
+
+state.dat=merge(x= merge(x=states, y=regions, by.x="Region"), y = divisions, by.x = "Division")
