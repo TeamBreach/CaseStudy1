@@ -28,9 +28,10 @@ apply(AllBeer, 2, function(y) sum(y == ""))
 ## Add region/division ##
 library(datasets)
 state.geo=data.frame(state.abb, state.region, state.division)
-levels(state.geo$state.abb)=c(levels(state.geo$state.abb), "DC")
+#align levels for merge
+levels(state.geo$state.abb)=levels(AllBeer$State)
+#rename for ease of merge
 names(state.geo)[1]='State'
-state.geo[51, ] = c('DC','South', 'South Atlantic')
 
 #Final Data#
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")

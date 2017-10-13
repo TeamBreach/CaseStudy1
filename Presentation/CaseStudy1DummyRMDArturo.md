@@ -1,20 +1,19 @@
-# Untitled
-Arturo Casillas  
+# Craft-Cans Case Study
+Arturo Casillas & Kevin Dickens  
 October 6, 2017  
 
 # R Markdown Dummy
 
 First
 
-# About the Data
-## Source
+## About the Data
+#### Source
 
 - The tables contain a list of 2410 US craft beers and 510 US breweries. 
 - The beer data corresponds to beers available in cans
-- This data was traced from CraftCans.com. 
+- This data was traced to CraftCans.com. 
 
-# About the Data
-## View the data
+#### View the data
 
 
 ```r
@@ -50,8 +49,8 @@ str(BreweriesData)
 ##  $ State  : Factor w/ 51 levels " AK"," AL"," AR",..: 24 18 20 5 5 41 6 23 23 23 ...
 ```
 
-# Munging
-## Basic alterations
+## Munging
+#### Basic alterations
 - Column names are altered for clarity and to minimize merging issues
 - The beers and breweries are linked by a numeric ID, which is used to merge the two tables
   - 'Brew_ID'
@@ -92,8 +91,7 @@ str(AllBeer)
 ##  $ State       : Factor w/ 51 levels " AK"," AL"," AR",..: 24 24 24 24 24 24 18 18 18 18 ...
 ```
 
-# Munging
-## View the final data
+#### View the data
 
 -first 6 rows
 
@@ -119,8 +117,8 @@ kable(head(AllBeer, 6))
 #kable_styling(latex_options = c("striped", "scale_down"))
 ```
 
-# Munging
-### View the final data
+## Munging
+#### View the final data
 
 last 6 rows
 
@@ -140,8 +138,8 @@ kable(tail(AllBeer, 6))
 2410        558  Urban Wilderness Pale Ale         30   0.049    NA  English Pale Ale               12  Sleeping Lady Brewing Company   Anchorage       AK    
 
 
-# Data Integrity
-## Missing Vlaues
+## Data Integrity
+#### Missing Vlaues
 - Check the missing values number and indicators
 
 ```r
@@ -166,16 +164,14 @@ summary(t)
 ##     0.0     0.0     0.0   106.7     0.0  1005.0
 ```
 
-# Data Integrity
-## Notes and Observations
+#### Notes and Observations
 - Only ABV and IBU have missing values
   - Almost 50% of IBU values are missing
   -This certainly affect any analysis that hinges on IBU values
 - Spot checks on the data suggest that character variables use blanks for missing values
   - This needs to be verified
 
-# Data Integrity
-## Double Check Missing Vlaues
+#### Double Check Missing Vlaues
 - Check for blanks instead of NA's
 
 ```r
@@ -190,20 +186,56 @@ apply(AllBeer, 2, function(y) sum(y == ""))
 ##        Style       Ounces Brewery.name         City        State 
 ##            5            0            0            0            0
 ```
+
+```r
+##Fancy table
+library(pander)
+#panderOptions('graph.fontsize', .8)
+pander(apply(AllBeer, 2, function(y) sum(y == "")))
+```
+
+
+---------------------------------------------------------------------------
+ Brew_ID   Beer.name   Beer_ID   ABV   IBU   Style   Ounces   Brewery.name 
+--------- ----------- --------- ----- ----- ------- -------- --------------
+    0          0          0      NA    NA      5       0           0       
+---------------------------------------------------------------------------
+
+Table: Table continues below
+
+ 
+--------------
+ City   State 
+------ -------
+  0       0   
+--------------
 - 'Stye', which represents style of beer, has 5 additional missing values
 
-# External Data
+#### External Data
 
 - From R
   - R contains additional region and division data per state in the package 'Datasets'
   - This data is from a 1977 report from the chamber of commerce
 
-# External Data
+  
 
-- From census
-  - This is a 2016 geography table
+```
+## 'data.frame':	0 obs. of  12 variables:
+##  $ State         : Factor w/ 51 levels " AK"," AL"," AR",..: 
+##  $ Brew_ID       : int 
+##  $ Beer.name     : Factor w/ 2305 levels "#001 Golden Amber Lager",..: 
+##  $ Beer_ID       : int 
+##  $ ABV           : num 
+##  $ IBU           : int 
+##  $ Style         : Factor w/ 100 levels "","Abbey Single Ale",..: 
+##  $ Ounces        : num 
+##  $ Brewery.name  : Factor w/ 551 levels "10 Barrel Brewing Company",..: 
+##  $ City          : Factor w/ 384 levels "Abingdon","Abita Springs",..: 
+##  $ state.region  : Factor w/ 4 levels "Northeast","South",..: 
+##  $ state.division: Factor w/ 9 levels "New England",..:
+```
 
-# Tail2
+#### Tail2
 
 -experiment with plotting last 6 rows
 
@@ -218,13 +250,39 @@ apply(AllBeer, 2, function(y) sum(y == ""))
        1  Stronghold          2688   0.060    25  American Porter                            16  NorthGate Brewing   Minneapolis   MN    
        1  Parapet ESB         2687   0.056    47  Extra Special / Strong Bitter (ESB)        16  NorthGate Brewing   Minneapolis   MN    
 
+#Analysis
 
-# Simple Plot
+- The primary variables of interest are ABV, IBU, Style, State, Region and Division
+
+##ABV Summary
+
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62
+```
+
+##IBU Summary
+
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    4.00   21.00   35.00   42.71   64.00  138.00    1005
+```
+
+##Beer Styles
+
+
+```
+##  Factor w/ 100 levels "","Abbey Single Ale",..: 16 77 48 83 22 57 12 46 77 18 ...
+```
+
+## Simple Plot
 
 ![](CaseStudy1DummyRMDArturo_files/figure-html/plot1-1.png)<!-- -->
 
 
-# Fancier Plot
+## Fancier Plot
 
 ![](CaseStudy1DummyRMDArturo_files/figure-html/plot2-1.png)<!-- -->
 
