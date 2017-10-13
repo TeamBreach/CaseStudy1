@@ -33,17 +33,17 @@ summary(t)
 ## Double Check ##
 AllBeer[is.na(AllBeer$ABV), ]
 ## Look at balnk Strings ##
-sum(AllBeer$Style == "")
-sum(AllBeer$Brew_ID == "")
-sum(AllBeer$Beer.name == "")
-sum(AllBeer$Beer_ID == "")
-sum(AllBeer$Ounces == "")
-sum(AllBeer$Brewery.name == "")
-sum(AllBeer$City == "")
-sum(AllBeer$State == "")
-sum(AllBeer$ABV == "", na.rm = TRUE)
-sum(AllBeer$IBU == "", na.rm = TRUE)
-apply(apply(AllBeer, c(1, 2), length), 2, min)
+# sum(AllBeer$Style == "")
+# sum(AllBeer$Brew_ID == "")
+# sum(AllBeer$Beer.name == "")
+# sum(AllBeer$Beer_ID == "")
+# sum(AllBeer$Ounces == "")
+# sum(AllBeer$Brewery.name == "")
+# sum(AllBeer$City == "")
+# sum(AllBeer$State == "")
+# sum(AllBeer$ABV == "", na.rm = TRUE)
+# sum(AllBeer$IBU == "", na.rm = TRUE)
+# apply(apply(AllBeer, c(1, 2), length), 2, min)
 apply(AllBeer, 2, function(y) sum(y == ""))
 
 # Summary Statistics #
