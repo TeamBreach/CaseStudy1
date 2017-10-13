@@ -2,21 +2,24 @@
 Arturo Casillas  
 October 6, 2017  
 
-## R Markdown Dummy
+# R Markdown Dummy
 
-- The tables contain a list of 2410 US craft beers and 510 US breweries respectively. The beers and breweries are linked together with an "id". This data was criginally from CraftCans.com. 
+First
+
+# About the Data
+## Source
+
+- The tables contain a list of 2410 US craft beers and 510 US breweries. 
+- The beer data corresponds to beers available in cans
+- This data was traced from CraftCans.com. 
+
+# About the Data
+## View the data
 
 
 ```r
 ## Load Data ##
-getwd()
-```
-
-```
-## [1] "C:/Users/acasi/Documents/CaseStudy1/Presentation"
-```
-
-```r
+#getwd()
 setwd("C:/Users/acasi/Downloads")
 BeersData <- read.csv("Beers.csv")
 BreweriesData <- read.csv("Breweries.csv")
@@ -46,6 +49,13 @@ str(BreweriesData)
 ##  $ City   : Factor w/ 384 levels "Abingdon","Abita Springs",..: 228 200 122 299 300 62 91 48 152 136 ...
 ##  $ State  : Factor w/ 51 levels " AK"," AL"," AR",..: 24 18 20 5 5 41 6 23 23 23 ...
 ```
+
+# Munging
+## Basic alterations
+- Column names are altered for clarity and to minimize merging issues
+- The beers and breweries are linked by a numeric ID, which is used to merge the two tables
+  - 'Brew_ID'
+
 
 ```r
 ## Prepare for merging ##
@@ -82,68 +92,139 @@ str(AllBeer)
 ##  $ State       : Factor w/ 51 levels " AK"," AL"," AR",..: 24 24 24 24 24 24 18 18 18 18 ...
 ```
 
-## Headers & Summary
+# Munging
+## View the final data
 
+-first 6 rows
 
-```
-##   Brew_ID     Beer.name Beer_ID   ABV IBU
-## 1       1  Get Together    2692 0.045  50
-## 2       1 Maggie's Leap    2691 0.049  26
-## 3       1    Wall's End    2690 0.048  19
-## 4       1       Pumpion    2689 0.060  38
-## 5       1    Stronghold    2688 0.060  25
-## 6       1   Parapet ESB    2687 0.056  47
-##                                 Style Ounces       Brewery.name
-## 1                        American IPA     16 NorthGate Brewing 
-## 2                  Milk / Sweet Stout     16 NorthGate Brewing 
-## 3                   English Brown Ale     16 NorthGate Brewing 
-## 4                         Pumpkin Ale     16 NorthGate Brewing 
-## 5                     American Porter     16 NorthGate Brewing 
-## 6 Extra Special / Strong Bitter (ESB)     16 NorthGate Brewing 
-##          City State
-## 1 Minneapolis    MN
-## 2 Minneapolis    MN
-## 3 Minneapolis    MN
-## 4 Minneapolis    MN
-## 5 Minneapolis    MN
-## 6 Minneapolis    MN
+```r
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6))
 ```
 
 
-```
-##      Brew_ID                 Beer.name Beer_ID   ABV IBU
-## 2405     556             Pilsner Ukiah      98 0.055  NA
-## 2406     557  Heinnieweisse Weissebier      52 0.049  NA
-## 2407     557           Snapperhead IPA      51 0.068  NA
-## 2408     557         Moo Thunder Stout      50 0.049  NA
-## 2409     557         Porkslap Pale Ale      49 0.043  NA
-## 2410     558 Urban Wilderness Pale Ale      30 0.049  NA
-##                        Style Ounces                  Brewery.name
-## 2405         German Pilsener     12         Ukiah Brewing Company
-## 2406              Hefeweizen     12       Butternuts Beer and Ale
-## 2407            American IPA     12       Butternuts Beer and Ale
-## 2408      Milk / Sweet Stout     12       Butternuts Beer and Ale
-## 2409 American Pale Ale (APA)     12       Butternuts Beer and Ale
-## 2410        English Pale Ale     12 Sleeping Lady Brewing Company
-##               City State
-## 2405         Ukiah    CA
-## 2406 Garrattsville    NY
-## 2407 Garrattsville    NY
-## 2408 Garrattsville    NY
-## 2409 Garrattsville    NY
-## 2410     Anchorage    AK
+
+ Brew_ID  Beer.name        Beer_ID     ABV   IBU  Style                                  Ounces  Brewery.name        City          State 
+--------  --------------  --------  ------  ----  ------------------------------------  -------  ------------------  ------------  ------
+       1  Get Together        2692   0.045    50  American IPA                               16  NorthGate Brewing   Minneapolis   MN    
+       1  Maggie's Leap       2691   0.049    26  Milk / Sweet Stout                         16  NorthGate Brewing   Minneapolis   MN    
+       1  Wall's End          2690   0.048    19  English Brown Ale                          16  NorthGate Brewing   Minneapolis   MN    
+       1  Pumpion             2689   0.060    38  Pumpkin Ale                                16  NorthGate Brewing   Minneapolis   MN    
+       1  Stronghold          2688   0.060    25  American Porter                            16  NorthGate Brewing   Minneapolis   MN    
+       1  Parapet ESB         2687   0.056    47  Extra Special / Strong Bitter (ESB)        16  NorthGate Brewing   Minneapolis   MN    
+
+```r
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
 ```
 
-## Including Plots
+# Munging
+### View the final data
 
-Simple Plot
+last 6 rows
+
+
+```r
+library(knitr)
+kable(tail(AllBeer, 6))
+```
+
+        Brew_ID  Beer.name                    Beer_ID     ABV   IBU  Style                      Ounces  Brewery.name                    City            State 
+-----  --------  --------------------------  --------  ------  ----  ------------------------  -------  ------------------------------  --------------  ------
+2405        556  Pilsner Ukiah                     98   0.055    NA  German Pilsener                12  Ukiah Brewing Company           Ukiah           CA    
+2406        557  Heinnieweisse Weissebier          52   0.049    NA  Hefeweizen                     12  Butternuts Beer and Ale         Garrattsville   NY    
+2407        557  Snapperhead IPA                   51   0.068    NA  American IPA                   12  Butternuts Beer and Ale         Garrattsville   NY    
+2408        557  Moo Thunder Stout                 50   0.049    NA  Milk / Sweet Stout             12  Butternuts Beer and Ale         Garrattsville   NY    
+2409        557  Porkslap Pale Ale                 49   0.043    NA  American Pale Ale (APA)        12  Butternuts Beer and Ale         Garrattsville   NY    
+2410        558  Urban Wilderness Pale Ale         30   0.049    NA  English Pale Ale               12  Sleeping Lady Brewing Company   Anchorage       AK    
+
+
+# Data Integrity
+## Missing Vlaues
+- Check the missing values number and indicators
+
+```r
+## Check for missing values ##
+apply(apply(AllBeer, 2, is.na), 2, sum)
+```
+
+```
+##      Brew_ID    Beer.name      Beer_ID          ABV          IBU 
+##            0            0            0           62         1005 
+##        Style       Ounces Brewery.name         City        State 
+##            0            0            0            0            0
+```
+
+```r
+t=sapply(AllBeer, function(y) sum(length(which(is.na(y)))))
+summary(t)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0     0.0     0.0   106.7     0.0  1005.0
+```
+
+# Data Integrity
+## Notes and Observations
+- Only ABV and IBU have missing values
+  - Almost 50% of IBU values are missing
+  -This certainly affect any analysis that hinges on IBU values
+- Spot checks on the data suggest that character variables use blanks for missing values
+  - This needs to be verified
+
+# Data Integrity
+## Double Check Missing Vlaues
+- Check for blanks instead of NA's
+
+```r
+## Double Check ##
+## Look at balnk Strings ##
+apply(AllBeer, 2, function(y) sum(y == ""))
+```
+
+```
+##      Brew_ID    Beer.name      Beer_ID          ABV          IBU 
+##            0            0            0           NA           NA 
+##        Style       Ounces Brewery.name         City        State 
+##            5            0            0            0            0
+```
+- 'Stye', which represents style of beer, has 5 additional missing values
+
+# External Data
+
+- From R
+  - R contains additional region and division data per state in the package 'Datasets'
+  - This data is from a 1977 report from the chamber of commerce
+
+# External Data
+
+- From census
+  - This is a 2016 geography table
+
+# Tail2
+
+-experiment with plotting last 6 rows
+
+
+
+ Brew_ID  Beer.name        Beer_ID     ABV   IBU  Style                                  Ounces  Brewery.name        City          State 
+--------  --------------  --------  ------  ----  ------------------------------------  -------  ------------------  ------------  ------
+       1  Get Together        2692   0.045    50  American IPA                               16  NorthGate Brewing   Minneapolis   MN    
+       1  Maggie's Leap       2691   0.049    26  Milk / Sweet Stout                         16  NorthGate Brewing   Minneapolis   MN    
+       1  Wall's End          2690   0.048    19  English Brown Ale                          16  NorthGate Brewing   Minneapolis   MN    
+       1  Pumpion             2689   0.060    38  Pumpkin Ale                                16  NorthGate Brewing   Minneapolis   MN    
+       1  Stronghold          2688   0.060    25  American Porter                            16  NorthGate Brewing   Minneapolis   MN    
+       1  Parapet ESB         2687   0.056    47  Extra Special / Strong Bitter (ESB)        16  NorthGate Brewing   Minneapolis   MN    
+
+
+# Simple Plot
 
 ![](CaseStudy1DummyRMDArturo_files/figure-html/plot1-1.png)<!-- -->
 
 
-Simple Plot
+# Fancier Plot
 
 ![](CaseStudy1DummyRMDArturo_files/figure-html/plot2-1.png)<!-- -->
 
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
