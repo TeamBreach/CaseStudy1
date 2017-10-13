@@ -104,8 +104,15 @@ pander(apply(AllBeer, 2, function(y) sum(y == "")))
 ```
 - 'Stye', which represents style of beer, has 5 additional missing values
 
-#### External Data
+#### Notes and Observations
+- There are:
+  - 1005 missing entries for IBU
+  - 67 missing entries for ABV
+  - 5 missing entries for Style
 
+## External Data
+
+#### Region and Division Data
 - From R
   - R contains additional region and division data per state in the package 'Datasets'
   - This data is from a 1977 report from the chamber of commerce
@@ -115,9 +122,10 @@ pander(apply(AllBeer, 2, function(y) sum(y == "")))
 ## Add region/division ##
 library(datasets)
 state.geo=data.frame(state.abb, state.region, state.division)
-levels(state.geo$state.abb)=c(levels(state.geo$state.abb), "DC")
+#align levels for merge
+levels(state.geo$state.abb)=levels(AllBeer$State)
+#rename for ease of merge
 names(state.geo)[1]='State'
-state.geo[51, ] = c('DC','South', 'South Atlantic')
 
 #Final Data#
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")
@@ -131,15 +139,15 @@ str(AllBeerReg)
 
 ```{r tail2, echo=FALSE, size='vsmall', warning=FALSE }
 #library(xtable)
-#print(xtable(head(AllBeer, 6)))
+#print(xtable(head(AllBeerReg, 6)))
 
 #library(pander)
 #panderOptions('graph.fontsize', .8)
-#pander(head(AllBeer, 6))
+#pander(head(AllBeerReg, 6))
 
 library(knitr)
 #library(kableExtra)
-kable(head(AllBeer, 6)) 
+kable(head(AllBeerReg, 6)) 
 #%>%
 #kable_styling(font_size = 7)
 ```
@@ -150,37 +158,70 @@ kable(head(AllBeer, 6))
 
 ##ABV Summary
 
+- Summary of the ABV variable
+- 50% of canned beers are between 5% and 6.7% alcohol per volume
+
 ```{r summaryABV, echo=FALSE}
-summary(AllBeer$ABV)
+summary(AllBeerReg$ABV)
 ```
 
 ##IBU Summary
 
+- Summary of the IBU variable
+
 ```{r summaryIBU, echo=FALSE}
-summary(AllBeer$IBU)
+summary(AllBeerReg$IBU)
 ```
 
 ##Beer Styles
 
+- 10 most popular beer styles
+
 ```{r summarystyles, echo=FALSE}
-str(AllBeer$Style)
-sort(table(AllBeer$Style))[100:90]
+str(AllBeerReg$Style)
+#10 most popular beer styles
+##use table to get frequencies and then sort
+sort(table(AllBeerReg$Style))[100:90]
+```
+
+#### Beers with most alcohol
+
+- 'Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer
+- Frout 
+- Two out of the five most alcoholic beers come from 'Upslope Brewing Company'
+
+```{r highABV, echo=FALSE}
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style", "Brewery.name", "City")]
+o1[1:10,]
+```
+
+#### Beers with highest IBU
+
+- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
+- Nine out of the 10 most bitter beers are IPAs
+
+```{r highIBU, echo=FALSE}
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
+o2[1:10,]
 ```
 
 ## Simple Plot
 
 ```{r plot1, echo=FALSE}
-plot(ABV~IBU, data=AllBeer)
-abline(lm(ABV~IBU, data=AllBeer))
+plot(ABV~IBU, data=AllBeerReg)
+abline(lm(ABV~IBU, data=AllBeerReg))
 ```
 
 
 ## Fancier Plot
 
+- ABV and IBU appear to be related
+- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
+
 ```{r plot2, echo=FALSE, warning=FALSE}
 library(ggplot2)
 
-ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 
+ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
   geom_point(shape=16) + 
   geom_smooth(method=lm) + theme_minimal() 
 ```

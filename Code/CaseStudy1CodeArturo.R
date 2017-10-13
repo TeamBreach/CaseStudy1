@@ -76,10 +76,11 @@ mode(AllBeerReg)
 AllBeerReg$State[which.max(AllBeerReg$ABV)]
 AllBeerReg$State[which.max(AllBeerReg$IBU)]
 
-o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),]
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),]
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
 o1[1:5,]
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
 o2[1:5,]
+
 
 summary(AllBeerReg$ABV)
 summary(AllBeerReg$ABV)

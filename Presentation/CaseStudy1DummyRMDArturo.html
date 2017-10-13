@@ -413,10 +413,6 @@ apply(apply(AllBeer, 2, is.na), 2, sum)</code></pre>
 ##            0            0            0           62         1005 
 ##        Style       Ounces Brewery.name         City        State 
 ##            0            0            0            0            0</code></pre>
-<pre class="r"><code>t=sapply(AllBeer, function(y) sum(length(which(is.na(y)))))
-summary(t)</code></pre>
-<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     0.0     0.0     0.0   106.7     0.0  1005.0</code></pre>
 </div>
 <div id="notes-and-observations" class="section level4">
 <h4>Notes and Observations</h4>
@@ -502,26 +498,38 @@ pander(apply(AllBeer, 2, function(y) sum(y == &quot;&quot;)))</code></pre>
 <li>‘Stye’, which represents style of beer, has 5 additional missing values</li>
 </ul>
 </div>
-<div id="external-data" class="section level4">
-<h4>External Data</h4>
+<div id="notes-and-observations-1" class="section level4">
+<h4>Notes and Observations</h4>
+<ul>
+<li>There are:</li>
+<li>1005 missing entries for IBU</li>
+<li>67 missing entries for ABV</li>
+<li>5 missing entries for Style</li>
+</ul>
+</div>
+</div>
+<div id="external-data" class="section level2">
+<h2>External Data</h2>
+<div id="region-and-division-data" class="section level4">
+<h4>Region and Division Data</h4>
 <ul>
 <li>From R</li>
 <li>R contains additional region and division data per state in the package ‘Datasets’</li>
 <li>This data is from a 1977 report from the chamber of commerce</li>
 </ul>
-<pre><code>## 'data.frame':    0 obs. of  12 variables:
-##  $ State         : Factor w/ 51 levels &quot; AK&quot;,&quot; AL&quot;,&quot; AR&quot;,..: 
-##  $ Brew_ID       : int 
-##  $ Beer.name     : Factor w/ 2305 levels &quot;#001 Golden Amber Lager&quot;,..: 
-##  $ Beer_ID       : int 
-##  $ ABV           : num 
-##  $ IBU           : int 
-##  $ Style         : Factor w/ 100 levels &quot;&quot;,&quot;Abbey Single Ale&quot;,..: 
-##  $ Ounces        : num 
-##  $ Brewery.name  : Factor w/ 551 levels &quot;10 Barrel Brewing Company&quot;,..: 
-##  $ City          : Factor w/ 384 levels &quot;Abingdon&quot;,&quot;Abita Springs&quot;,..: 
-##  $ state.region  : Factor w/ 4 levels &quot;Northeast&quot;,&quot;South&quot;,..: 
-##  $ state.division: Factor w/ 9 levels &quot;New England&quot;,..:</code></pre>
+<pre><code>## 'data.frame':    2395 obs. of  12 variables:
+##  $ State         : Factor w/ 51 levels &quot; AK&quot;,&quot; AL&quot;,&quot; AR&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ Brew_ID       : int  103 103 494 459 103 459 224 271 224 224 ...
+##  $ Beer.name     : Factor w/ 2305 levels &quot;#001 Golden Amber Lager&quot;,..: 1137 114 1604 1955 1138 1847 1878 94 1873 1584 ...
+##  $ Beer_ID       : int  1667 2436 920 349 1706 348 434 1920 587 1814 ...
+##  $ ABV           : num  0.06 0.051 0.052 0.068 0.055 0.058 0.057 0.053 0.048 0.063 ...
+##  $ IBU           : int  70 NA 17 NA NA NA 70 18 12 61 ...
+##  $ Style         : Factor w/ 100 levels &quot;&quot;,&quot;Abbey Single Ale&quot;,..: 16 5 18 16 41 93 16 3 100 16 ...
+##  $ Ounces        : num  12 12 12 12 12 12 12 12 12 12 ...
+##  $ Brewery.name  : Factor w/ 551 levels &quot;10 Barrel Brewing Company&quot;,..: 279 279 98 276 279 276 318 16 318 318 ...
+##  $ City          : Factor w/ 384 levels &quot;Abingdon&quot;,&quot;Abita Springs&quot;,..: 8 8 8 317 8 317 8 165 8 8 ...
+##  $ state.region  : Factor w/ 4 levels &quot;Northeast&quot;,&quot;South&quot;,..: 4 4 4 4 4 4 4 4 4 4 ...
+##  $ state.division: Factor w/ 9 levels &quot;New England&quot;,..: 9 9 9 9 9 9 9 9 9 9 ...</code></pre>
 </div>
 <div id="tail2" class="section level4">
 <h4>Tail2</h4>
@@ -529,6 +537,7 @@ pander(apply(AllBeer, 2, function(y) sum(y == &quot;&quot;)))</code></pre>
 <table>
 <thead>
 <tr class="header">
+<th align="left">State</th>
 <th align="right">Brew_ID</th>
 <th align="left">Beer.name</th>
 <th align="right">Beer_ID</th>
@@ -538,81 +547,94 @@ pander(apply(AllBeer, 2, function(y) sum(y == &quot;&quot;)))</code></pre>
 <th align="right">Ounces</th>
 <th align="left">Brewery.name</th>
 <th align="left">City</th>
-<th align="left">State</th>
+<th align="left">state.region</th>
+<th align="left">state.division</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">1</td>
-<td align="left">Get Together</td>
-<td align="right">2692</td>
-<td align="right">0.045</td>
-<td align="right">50</td>
+<td align="left">AK</td>
+<td align="right">103</td>
+<td align="left">King Street IPA</td>
+<td align="right">1667</td>
+<td align="right">0.060</td>
+<td align="right">70</td>
 <td align="left">American IPA</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="right">12</td>
+<td align="left">King Street Brewing Company</td>
+<td align="left">Anchorage</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="left">Maggie’s Leap</td>
-<td align="right">2691</td>
-<td align="right">0.049</td>
-<td align="right">26</td>
-<td align="left">Milk / Sweet Stout</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="left">AK</td>
+<td align="right">103</td>
+<td align="left">Amber Ale</td>
+<td align="right">2436</td>
+<td align="right">0.051</td>
+<td align="right">NA</td>
+<td align="left">American Amber / Red Ale</td>
+<td align="right">12</td>
+<td align="left">King Street Brewing Company</td>
+<td align="left">Anchorage</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="left">Wall’s End</td>
-<td align="right">2690</td>
-<td align="right">0.048</td>
-<td align="right">19</td>
-<td align="left">English Brown Ale</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="left">AK</td>
+<td align="right">494</td>
+<td align="left">Polar Pale Ale</td>
+<td align="right">920</td>
+<td align="right">0.052</td>
+<td align="right">17</td>
+<td align="left">American Pale Ale (APA)</td>
+<td align="right">12</td>
+<td align="left">Broken Tooth Brewing Company</td>
+<td align="left">Anchorage</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="left">Pumpion</td>
-<td align="right">2689</td>
-<td align="right">0.060</td>
-<td align="right">38</td>
-<td align="left">Pumpkin Ale</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="left">AK</td>
+<td align="right">459</td>
+<td align="left">Sunken Island IPA</td>
+<td align="right">349</td>
+<td align="right">0.068</td>
+<td align="right">NA</td>
+<td align="left">American IPA</td>
+<td align="right">12</td>
+<td align="left">Kenai River Brewing Company</td>
+<td align="left">Soldotna</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="left">Stronghold</td>
-<td align="right">2688</td>
-<td align="right">0.060</td>
-<td align="right">25</td>
-<td align="left">American Porter</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="left">AK</td>
+<td align="right">103</td>
+<td align="left">King Street Pilsner</td>
+<td align="right">1706</td>
+<td align="right">0.055</td>
+<td align="right">NA</td>
+<td align="left">Czech Pilsener</td>
+<td align="right">12</td>
+<td align="left">King Street Brewing Company</td>
+<td align="left">Anchorage</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="left">Parapet ESB</td>
-<td align="right">2687</td>
-<td align="right">0.056</td>
-<td align="right">47</td>
-<td align="left">Extra Special / Strong Bitter (ESB)</td>
-<td align="right">16</td>
-<td align="left">NorthGate Brewing</td>
-<td align="left">Minneapolis</td>
-<td align="left">MN</td>
+<td align="left">AK</td>
+<td align="right">459</td>
+<td align="left">Skilak Scottish Ale (2011)</td>
+<td align="right">348</td>
+<td align="right">0.058</td>
+<td align="right">NA</td>
+<td align="left">Scottish Ale</td>
+<td align="right">12</td>
+<td align="left">Kenai River Brewing Company</td>
+<td align="left">Soldotna</td>
+<td align="left">West</td>
+<td align="left">Pacific</td>
 </tr>
 </tbody>
 </table>
@@ -626,25 +648,347 @@ pander(apply(AllBeer, 2, function(y) sum(y == &quot;&quot;)))</code></pre>
 </ul>
 <div id="abv-summary" class="section level2">
 <h2>ABV Summary</h2>
+<ul>
+<li>Summary of the ABV variable</li>
+<li>50% of canned beers are between 5% and 6.7% alcohol per volume</li>
+</ul>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62</code></pre>
+##  0.0010  0.0500  0.0560  0.0598  0.0670  0.1280      62</code></pre>
 </div>
 <div id="ibu-summary" class="section level2">
 <h2>IBU Summary</h2>
+<ul>
+<li>Summary of the IBU variable</li>
+</ul>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-##    4.00   21.00   35.00   42.71   64.00  138.00    1005</code></pre>
+##     4.0    21.0    35.0    42.8    64.0   138.0    1002</code></pre>
 </div>
 <div id="beer-styles" class="section level2">
 <h2>Beer Styles</h2>
-<pre><code>##  Factor w/ 100 levels &quot;&quot;,&quot;Abbey Single Ale&quot;,..: 16 77 48 83 22 57 12 46 77 18 ...</code></pre>
+<ul>
+<li>10 most popular beer styles</li>
+</ul>
+<pre><code>##  Factor w/ 100 levels &quot;&quot;,&quot;Abbey Single Ale&quot;,..: 16 5 18 16 41 93 16 3 100 16 ...</code></pre>
+<pre><code>## 
+##                   American IPA        American Pale Ale (APA) 
+##                            422                            242 
+##       American Amber / Red Ale            American Blonde Ale 
+##                            131                            107 
+## American Double / Imperial IPA        American Pale Wheat Ale 
+##                            105                             96 
+##             American Brown Ale                American Porter 
+##                             69                             68 
+##         Saison / Farmhouse Ale                        Witbier 
+##                             52                             51 
+##         Fruit / Vegetable Beer 
+##                             49</code></pre>
+<div id="beers-with-most-alcohol" class="section level4">
+<h4>Beers with most alcohol</h4>
+<ul>
+<li>‘Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale’ out of Colorado is the most alcoholic beer</li>
+<li>Frout</li>
+<li>Two out of the five most alcoholic beers come from ‘Upslope Brewing Company’</li>
+</ul>
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">State</th>
+<th align="left">Beer.name</th>
+<th align="right">Beer_ID</th>
+<th align="right">ABV</th>
+<th align="right">IBU</th>
+<th align="right">Ounces</th>
+<th align="left">Style</th>
+<th align="left">Brewery.name</th>
+<th align="left">City</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>534</td>
+<td align="left">CO</td>
+<td align="left">Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale</td>
+<td align="right">2565</td>
+<td align="right">0.128</td>
+<td align="right">NA</td>
+<td align="right">19.2</td>
+<td align="left">Quadrupel (Quad)</td>
+<td align="left">Upslope Brewing Company</td>
+<td align="left">Boulder</td>
+</tr>
+<tr class="even">
+<td>989</td>
+<td align="left">KY</td>
+<td align="left">London Balling</td>
+<td align="right">2685</td>
+<td align="right">0.125</td>
+<td align="right">80</td>
+<td align="right">16.0</td>
+<td align="left">English Barleywine</td>
+<td align="left">Against the Grain Brewery</td>
+<td align="left">Louisville</td>
+</tr>
+<tr class="odd">
+<td>885</td>
+<td align="left">IN</td>
+<td align="left">Csar</td>
+<td align="right">2621</td>
+<td align="right">0.120</td>
+<td align="right">90</td>
+<td align="right">16.0</td>
+<td align="left">Russian Imperial Stout</td>
+<td align="left">Tin Man Brewing Company</td>
+<td align="left">Evansville</td>
+</tr>
+<tr class="even">
+<td>494</td>
+<td align="left">CO</td>
+<td align="left">Lee Hill Series Vol. 4 - Manhattan Style Rye Ale</td>
+<td align="right">2564</td>
+<td align="right">0.104</td>
+<td align="right">NA</td>
+<td align="right">19.2</td>
+<td align="left">Rye Beer</td>
+<td align="left">Upslope Brewing Company</td>
+<td align="left">Boulder</td>
+</tr>
+<tr class="odd">
+<td>1655</td>
+<td align="left">NY</td>
+<td align="left">4Beans</td>
+<td align="right">2574</td>
+<td align="right">0.100</td>
+<td align="right">52</td>
+<td align="right">12.0</td>
+<td align="left">Baltic Porter</td>
+<td align="left">Sixpoint Craft Ales</td>
+<td align="left">Brooklyn</td>
+</tr>
+<tr class="even">
+<td>121</td>
+<td align="left">CA</td>
+<td align="left">Lower De Boom</td>
+<td align="right">1036</td>
+<td align="right">0.099</td>
+<td align="right">92</td>
+<td align="right">8.4</td>
+<td align="left">American Barleywine</td>
+<td align="left">21st Amendment Brewery</td>
+<td align="left">San Francisco</td>
+</tr>
+<tr class="odd">
+<td>142</td>
+<td align="left">CA</td>
+<td align="left">Chaotic Double IPA</td>
+<td align="right">1674</td>
+<td align="right">0.099</td>
+<td align="right">93</td>
+<td align="right">12.0</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Manzanita Brewing Company</td>
+<td align="left">Santee</td>
+</tr>
+<tr class="even">
+<td>146</td>
+<td align="left">CA</td>
+<td align="left">Ex Umbris Rye Imperial Stout</td>
+<td align="right">904</td>
+<td align="right">0.099</td>
+<td align="right">85</td>
+<td align="right">16.0</td>
+<td align="left">American Double / Imperial Stout</td>
+<td align="left">Hess Brewing Company</td>
+<td align="left">San Diego</td>
+</tr>
+<tr class="odd">
+<td>235</td>
+<td align="left">CA</td>
+<td align="left">Double Trunk</td>
+<td align="right">1561</td>
+<td align="right">0.099</td>
+<td align="right">101</td>
+<td align="right">16.0</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">The Dudes’ Brewing Company</td>
+<td align="left">Torrance</td>
+</tr>
+<tr class="even">
+<td>479</td>
+<td align="left">CO</td>
+<td align="left">GUBNA Imperial IPA</td>
+<td align="right">6</td>
+<td align="right">0.099</td>
+<td align="right">100</td>
+<td align="right">12.0</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Oskar Blues Brewery</td>
+<td align="left">Longmont</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="beers-with-highest-ibu" class="section level4">
+<h4>Beers with highest IBU</h4>
+<ul>
+<li>‘Bitter Bitch Imperial IPA’ out of Oregon is the most bitter beer</li>
+<li>Nine out of the 10 most bitter beers are IPAs</li>
+</ul>
+<div class="kable-table">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">State</th>
+<th align="left">Beer.name</th>
+<th align="right">Beer_ID</th>
+<th align="right">ABV</th>
+<th align="right">IBU</th>
+<th align="right">Ounces</th>
+<th align="left">Style</th>
+<th align="left">Brewery.name</th>
+<th align="left">City</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1824</td>
+<td align="left">OR</td>
+<td align="left">Bitter Bitch Imperial IPA</td>
+<td align="right">980</td>
+<td align="right">0.082</td>
+<td align="right">138</td>
+<td align="right">12</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Astoria Brewing Company</td>
+<td align="left">Astoria</td>
+</tr>
+<tr class="even">
+<td>2206</td>
+<td align="left">VA</td>
+<td align="left">Troopers Alley IPA</td>
+<td align="right">1676</td>
+<td align="right">0.059</td>
+<td align="right">135</td>
+<td align="right">12</td>
+<td align="left">American IPA</td>
+<td align="left">Wolf Hills Brewing Company</td>
+<td align="left">Abingdon</td>
+</tr>
+<tr class="odd">
+<td>1081</td>
+<td align="left">MA</td>
+<td align="left">Dead-Eye DIPA</td>
+<td align="right">2067</td>
+<td align="right">0.090</td>
+<td align="right">130</td>
+<td align="right">16</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Cape Ann Brewing Company</td>
+<td align="left">Gloucester</td>
+</tr>
+<tr class="even">
+<td>1691</td>
+<td align="left">OH</td>
+<td align="left">Bay of Bengal Double IPA (2014)</td>
+<td align="right">2440</td>
+<td align="right">0.089</td>
+<td align="right">126</td>
+<td align="right">12</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Christian Moerlein Brewing Company</td>
+<td align="left">Cincinnati</td>
+</tr>
+<tr class="odd">
+<td>1343</td>
+<td align="left">MN</td>
+<td align="left">Abrasive Ale</td>
+<td align="right">15</td>
+<td align="right">0.097</td>
+<td align="right">120</td>
+<td align="right">16</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Surly Brewing Company</td>
+<td align="left">Brooklyn Center</td>
+</tr>
+<tr class="even">
+<td>2213</td>
+<td align="left">VT</td>
+<td align="left">Heady Topper</td>
+<td align="right">1111</td>
+<td align="right">0.080</td>
+<td align="right">120</td>
+<td align="right">16</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">The Alchemist</td>
+<td align="left">Waterbury</td>
+</tr>
+<tr class="odd">
+<td>2218</td>
+<td align="left">VT</td>
+<td align="left">Heady Topper</td>
+<td align="right">379</td>
+<td align="right">0.080</td>
+<td align="right">120</td>
+<td align="right">16</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">The Alchemist</td>
+<td align="left">Waterbury</td>
+</tr>
+<tr class="even">
+<td>2033</td>
+<td align="left">TX</td>
+<td align="left">More Cowbell</td>
+<td align="right">2123</td>
+<td align="right">0.090</td>
+<td align="right">118</td>
+<td align="right">16</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">Buffalo Bayou Brewing Company</td>
+<td align="left">Houston</td>
+</tr>
+<tr class="odd">
+<td>200</td>
+<td align="left">CA</td>
+<td align="left">Blazing World</td>
+<td align="right">1492</td>
+<td align="right">0.065</td>
+<td align="right">115</td>
+<td align="right">16</td>
+<td align="left">American Amber / Red Ale</td>
+<td align="left">Modern Times Beer</td>
+<td align="left">San Diego</td>
+</tr>
+<tr class="even">
+<td>570</td>
+<td align="left">DC</td>
+<td align="left">On the Wings of Armageddon</td>
+<td align="right">851</td>
+<td align="right">0.092</td>
+<td align="right">115</td>
+<td align="right">12</td>
+<td align="left">American Double / Imperial IPA</td>
+<td align="left">DC Brau Brewing Company</td>
+<td align="left">Washington</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="simple-plot" class="section level2">
 <h2>Simple Plot</h2>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 <div id="fancier-plot" class="section level2">
 <h2>Fancier Plot</h2>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+<ul>
+<li>ABV and IBU appear to be related</li>
+<li>The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV</li>
+</ul>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
 </div>
 </div>
 
