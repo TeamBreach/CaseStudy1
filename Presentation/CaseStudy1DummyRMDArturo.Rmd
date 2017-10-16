@@ -1,28 +1,45 @@
 ---
-title: "Untitled"
-author: "Arturo Casillas"
+title: "Craft-Cans Case Study"
+author: "Arturo Casillas & Kevin Dickens"
 date: "October 6, 2017"
 output: 
   html_document:
+    df_print: kable
+    theme: "readable"
     keep_md: true
 ---
 
-## R Markdown Dummy
+# R Markdown Dummy
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+First
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## About the Data
+#### Source
 
-```{r cars}
+- The tables contain a list of 2410 US craft beers and 510 US breweries. 
+- The beer data corresponds to beers available in cans
+- This data was traced to CraftCans.com. 
+
+#### View the data
+
+```{r load}
 ## Load Data ##
-getwd()
+#getwd()
 setwd("C:/Users/acasi/Downloads")
 BeersData <- read.csv("Beers.csv")
 BreweriesData <- read.csv("Breweries.csv")
 
 str(BeersData)
 str(BreweriesData)
+```
 
+## Munging
+#### Basic alterations
+- Column names are altered for clarity and to minimize merging issues
+- The beers and breweries are linked by a numeric ID, which is used to merge the two tables
+  - 'Brew_ID'
+
+```{r munge}
 ## Prepare for merging ##
 names(BeersData)
 names(BeersData)[5] = "Brew_ID"
@@ -33,38 +50,179 @@ names(BreweriesData)[2] = "Brewery.name"
 ## Merge Data ##
 AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
 str(AllBeer)
+
 ```
 
-## Headers & Summary
+#### View the data
 
-```{r head, echo=FALSE}
-head(AllBeer, 6)
+-first 6 rows
+```{r head, fig.align='center', error=FALSE}
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6))
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
 ```
 
-```{r tail, echo=FALSE}
-tail(AllBeer, 6)
+## Munging
+#### View the final data
+
+last 6 rows
+
+```{r tail, echo=TRUE}
+library(knitr)
+kable(tail(AllBeer, 6))
 ```
 
-## Including Plots
 
-Simple Plot
+## Data Integrity
+#### Missing Vlaues
+- Check the missing values number and indicators
+```{r missing, echo=TRUE}
+## Check for missing values ##
+apply(apply(AllBeer, 2, is.na), 2, sum)
+```
+
+#### Notes and Observations
+- Only ABV and IBU have missing values
+  - Almost 50% of IBU values are missing
+  -This certainly affect any analysis that hinges on IBU values
+- Spot checks on the data suggest that character variables use blanks for missing values
+  - This needs to be verified
+
+#### Double Check Missing Vlaues
+- Check for blanks instead of NA's
+```{r missing2, echo=TRUE, warning=FALSE}
+## Double Check ##
+## Look at balnk Strings ##
+apply(AllBeer, 2, function(y) sum(y == ""))
+
+##Fancy table
+library(pander)
+#panderOptions('graph.fontsize', .8)
+pander(apply(AllBeer, 2, function(y) sum(y == "")))
+```
+- 'Stye', which represents style of beer, has 5 additional missing values
+
+#### Notes and Observations
+- There are:
+  - 1005 missing entries for IBU
+  - 67 missing entries for ABV
+  - 5 missing entries for Style
+
+## External Data
+
+#### Region and Division Data
+- From R
+  - R contains additional region and division data per state in the package 'Datasets'
+  - This data is from a 1977 report from the chamber of commerce
+
+  
+```{r external, echo=FALSE}
+## Add region/division ##
+library(datasets)
+state.geo=data.frame(state.abb, state.region, state.division)
+#align levels for merge
+levels(state.geo$state.abb)=levels(AllBeer$State)
+#rename for ease of merge
+names(state.geo)[1]='State'
+
+#Final Data#
+AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")
+str(AllBeerReg)
+```
+
+#### Tail2
+
+-experiment with plotting last 6 rows
+
+
+```{r tail2, echo=FALSE, size='vsmall', warning=FALSE }
+#library(xtable)
+#print(xtable(head(AllBeerReg, 6)))
+
+#library(pander)
+#panderOptions('graph.fontsize', .8)
+#pander(head(AllBeerReg, 6))
+
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeerReg, 6)) 
+#%>%
+#kable_styling(font_size = 7)
+```
+
+#Analysis
+
+- The primary variables of interest are ABV, IBU, Style, State, Region and Division
+
+##ABV Summary
+
+- Summary of the ABV variable
+- 50% of canned beers are between 5% and 6.7% alcohol per volume
+
+```{r summaryABV, echo=FALSE}
+summary(AllBeerReg$ABV)
+```
+
+##IBU Summary
+
+- Summary of the IBU variable
+
+```{r summaryIBU, echo=FALSE}
+summary(AllBeerReg$IBU)
+```
+
+##Beer Styles
+
+- 10 most popular beer styles
+
+```{r summarystyles, echo=FALSE}
+str(AllBeerReg$Style)
+#10 most popular beer styles
+##use table to get frequencies and then sort
+sort(table(AllBeerReg$Style))[100:90]
+```
+
+#### Beers with most alcohol
+
+- 'Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer
+- Frout 
+- Two out of the five most alcoholic beers come from 'Upslope Brewing Company'
+
+```{r highABV, echo=FALSE}
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style", "Brewery.name", "City")]
+o1[1:10,]
+```
+
+#### Beers with highest IBU
+
+- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
+- Nine out of the 10 most bitter beers are IPAs
+
+```{r highIBU, echo=FALSE}
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
+o2[1:10,]
+```
+
+## Simple Plot
 
 ```{r plot1, echo=FALSE}
-plot(ABV~IBU, data=AllBeer)
-abline(lm(ABV~IBU, data=AllBeer))
+plot(ABV~IBU, data=AllBeerReg)
+abline(lm(ABV~IBU, data=AllBeerReg))
 ```
 
 
-Simple Plot
+## Fancier Plot
 
-```{r plot2, echo=FALSE}
+- ABV and IBU appear to be related
+- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
+
+```{r plot2, echo=FALSE, warning=FALSE}
 library(ggplot2)
-ggplot(dat=na.omit(AllBeer), aes(x=IBU, y=ABV)) + 
-  geom_point(shape=16) + 
-  geom_smooth(method=lm) + theme_minimal()
 
-#abline(lm(ABV~IBU, data=AllBeer))
+ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
 ```
 
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
