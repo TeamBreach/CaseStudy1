@@ -2,7 +2,9 @@
 ##Codebook for Case Study 1
 
 ### Data Selection
-<Enter Data Source(s) here>
+The original data came in two files:  Beer.csv & Breweries.csv.  The tables contain a list of 2410 US craft beers and 510 US breweries.  These tables contain header information.   The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID.The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members.
+
+To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables.
 
 ###Variables & Descriptions
 Brew_ID - A unique brewery ID given to each brewery for tracking purposes.
