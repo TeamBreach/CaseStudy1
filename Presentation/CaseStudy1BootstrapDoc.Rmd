@@ -576,6 +576,7 @@ During analysis of the data the researchers discussed many additional questions.
 * Why is there a correlation between ABV and IBU?  What causes it?
 * What is the best place to open a canned craft beer brewery?
 * What is the worst place to open a canned craft beer brewery?
+* This data focused on canned beer, what about bottled beer?
 
 In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
 
