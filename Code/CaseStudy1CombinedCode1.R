@@ -341,7 +341,7 @@ brew_map
 
 str(AllBeerReg[,5:6])
 
-median_beer<-aggregate(AllBeerReg[,5:6], list(AllBeerReg$State), median, na.rm=TRUE)    #Creates a new object which stores the median IBU and ABV per state
+median_beer<-aggregate(AllBeerReg[,c("ABV","IBU")], list(AllBeerReg$State), median, na.rm=TRUE)    #Creates a new object which stores the median IBU and ABV per state
 names(median_beer)[1]="State"
 
 
@@ -443,10 +443,10 @@ AllBeerReg$State[which.max(AllBeerReg$IBU)]  #Returns the state name with the hi
 ##Top Ten alcoholic beers and highest IBU beers ##
 ## use order() to index ##
 
-o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","ABV","IBU","Ounces","Brewery_Name", "City")]
 o1[1:10,]
 
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","ABV","IBU","Ounces","Brewery_Name", "City")]
 o2[1:10,]
 
 #####################################################################
@@ -487,6 +487,10 @@ abline(lm(ABV~IBU, data=AllBeerReg))
 ggplot(dat=na.omit(AllBeerReg), aes(x=IBU, y=ABV)) + 
   geom_point(shape=16) + 
   geom_smooth(method=lm) + theme_minimal() 
+
+ summary(lm(ABV~IBU, data=AllBeerReg))
+
+
 
 #####################################################################
 

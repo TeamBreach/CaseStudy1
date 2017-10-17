@@ -3,14 +3,25 @@ title: "Craft-Cans Case Study"
 author: "Arturo Casillas & Kevin Dickens"
 date: "October 6, 2017"
 output: 
+   #md_document:
+   #  variant: markdown_github
    knitrBootstrap::bootstrap_document:
-        title: "Chapter 4: Alternatives to the t-Tools"
         theme: "spacelab"
-        highlight: xcode
+        highlight: Visual Studio
         theme.chooser: TRUE
         highlight.chooser: TRUE
         #menu: FALSE
         custom.header: NULL
+       # knit_bootstrap_md:(input="CaseStudy1BootstrapDoc.Rmd", output="CaseStudy1BootstrapDoc.md")
+   # html_document:
+   #  #template: quarterly_report.html
+   #  toc: true
+   #  toc_float: true
+   #  code_folding: hide
+   #  #df_print: kable
+   #  #df_print: paged
+   #  theme: "readable"
+   #  keep_md: true
 ---
 
 #Intro
@@ -288,9 +299,20 @@ apply(apply(AllBeerReg, 2, is.na), 2, sum)
 ```
 
 #Analysis
-##Analysis
 
-- The total number of breweries per state (horizontal)
+###Syles
+
+-The ten most popular canned beer styles
+```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+#10 most popular beer styles
+##use table to get frequencies and then sort
+pop1=sort(table(AllBeerReg$Style))[100:90]
+pop1
+
+```
+
+-The total number of breweries per state (horizontal)
 
 ```{r state.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 #Horizontal Table#
@@ -365,29 +387,155 @@ brew_map
 
  - Map of total number of breweries per state
  
-### Beers with highest IBU
+### ABV and IBU Summary
 
--'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
--Nine out of the 10 most bitter beers are IPAs
--Eight our of the 10 most bitter beers are Imperial IPAs
+Alcohol per volume and international bitterness units.
 
-```{r shigh.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer_Name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery_Name", "City")]
-#kable(o2[1:10,])
-o2[1:10,]
+ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
+
+-Summary Statistics for ABV below
+```{r summ.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+summary(AllBeerReg$ABV)
+```
+
+-List of 10 most alcoholic beers
+```{r shigh.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE), c("State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City")]
+kable(o1[1:10,])
+#o1[1:10,]
 ```
 
 
-### ABV IBU Relationship
+The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 0.056% and only one is below the mean ABV of 0.05977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU. 
+
+-Summary statistics for IBU
+```{r summ.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+summary(AllBeerReg$IBU)
+```
+
+-The 10 most bitter beers
+```{r shigh.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City")]
+kable(o2[1:10,])
+#o2[1:10,]
+```
+
 
 ABV and IBU appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increase of IBU values are associated with a small increase in ABV despite being very likely to be associated with higher ABV.
 
+-Barplot of median ABV and IBU per state
+```{r med.ABV.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE, fig.width=12}
+
+median_beer<-aggregate(AllBeerReg[,c("ABV","IBU")], list(AllBeerReg$State), median, na.rm=TRUE)    #Creates a new object which stores the median IBU and ABV per state
+names(median_beer)[1]="State"
+
+
+#barplot of median ABV and IBU per state in one graphic
+
+par(mfrow=(c(2,1)), las=2, mar=c(2,2,1,1))
+
+barplot(median_beer$ABV, names.arg = median_beer$State, cex.names = 0.7, cex.axis = 0.9, main="Median ABV by State", ylab="Alcohol By Volume (ABV)", las=2, col=c("lightgoldenrod2")) #ABV Bar Plot
+
+barplot(median_beer$IBU, names.arg = median_beer$State, cex.names = 0.7, cex.axis = 0.9, main="Median IBU by State", ylab="International Bitterness Units (IBU)", las=2, col=c("lightblue3")) #IBU Bar Plot
+
+```
+
+
+-Map of median ABV per state
+```{r map.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+median_beer2<-median_beer
+
+median_beer2<-StateName(median_beer2)
+
+
+# Start of the call to create the median ABV by state map
+
+abv_map<- ggplot(median_beer2, aes(map_id=State))+      #sets the data and the primary key to link map and data
+  
+  geom_map(aes(fill=ABV), map=fifty_states)+                #sets the fill value that will determine color and the geographic map data
+  
+  expand_limits(x=fifty_states$long, y=fifty_states$lat)+   #Sets the latitude and longitudinal extents
+  
+  coord_map()+                                              #Sets the base geographic projection (mercator in this case)
+  
+  scale_x_continuous(breaks=NULL)+                          
+  
+  scale_y_continuous(breaks=NULL)+                          
+  
+  labs(x = "", y = "") +
+  
+  ggtitle("Median Alcohol By Volume (ABV) By State") +      # Sets the title of the map
+  
+  scale_fill_gradient(low = "lightgoldenrod1", high = "lightgoldenrod4", space = "Lab",na.value = "grey70", guide = guide_colourbar(title.position="top", barwidth=10, title.hjust=0.5))+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  
+  theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.875, .27),legend.text=element_text(size=8),legend.direction="horizontal", legend.margin=margin(t = 0, unit='cm'), panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+   #Theme elements such as the border around the map plot, the position of map components like the legend
+  
+  borders("state")+                                         #Adds colored state borders
+  
+  fifty_states_inset_boxes()                                #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
+
+
+
+#Plots the ABV map
+
+abv_map
+```
+
+-Map of median IBU per state
+```{r map.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+
+# Start of the call to create the median IBU by state map
+
+ibu_map<- ggplot(median_beer2, aes(map_id=State))+           #sets the data and the primary key to link map and data
+  
+  geom_map(aes(fill=IBU), map=fifty_states)+              #sets the fill value that will determine color and the geographic map data
+  
+  expand_limits(x=fifty_states$long, y=fifty_states$lat)+ #Sets the latitude and longitudinal extents
+  
+  coord_map()+                                            #Sets the base geographic projection (mercator in this case)
+  
+  scale_x_continuous(breaks=NULL)+
+  
+  scale_y_continuous(breaks=NULL)+
+  
+  labs(x = "", y = "") +
+  
+  ggtitle("Median International Bitter Units (IBU) By State") + # Sets the title of the map
+  
+  scale_fill_gradient(low = "lightcyan2", high = "lightblue4", space = "Lab",na.value = "gray70", guide = guide_colourbar(title.position="top", barwidth=10, title.hjust=0.5))+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  
+  theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.87, .25),legend.direction="horizontal",panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+    #Theme elements such as the border around the map plot, the position of map components like the legend
+  
+  borders("state")+                #Adds colored state borders
+  
+  fifty_states_inset_boxes()        #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
+
+
+
+#Plots the IBU map
+
+ibu_map
+
+```
+
+
+-Scatter plot of ABV and IBU
 ```{r ABV.v.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
   geom_point(shape=16) + 
   geom_smooth(method=lm) + theme_minimal() 
+
+
 ```
- 
+
+-ABV to IBU regression equation
+```{r ABV.v.IBU.eq, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+   L=lm(ABV~IBU, data=AllBeerReg)
+  # L$coeff
+  bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
+```
+
 ##Summary and Conclusions
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
