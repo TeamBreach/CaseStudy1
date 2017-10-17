@@ -1,7 +1,7 @@
 # Necessary library calls
 library(ggplot2)
 library(fiftystater)
-library(plyer)
+library(plyr)
 
 #Reading in the raw data on beers and breweries
 rawbeers<-read.csv("beers.csv", header=TRUE)
@@ -78,6 +78,21 @@ StateName<-function(test){
 #####################################################################
 count_brew<-data.frame(table(rawbreweries$State))  #counts breweries per state
 
+#####################################################################
+#Question 2. Merge Beer & Brewery data.  Print the first 6 and the last 6 observations to check merge
+#####################################################################
+newbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
+mergeddrunk<-merge(newbeers,rawbreweries, by='Brew_ID')  # merge tables based on the renamed Brew_ID field above
+mergeddrunk<-rename(mergeddrunk, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
+
+#data checks
+head(mergeddrunk, 6)
+tail(mergeddrunk, 6)
+
+#####################################################################
+#Question 1a. How many breweries are in each state - The Map
+#####################################################################
+
 ####Count Unique Breweries by State####
 
 #Initializes a new object with State, Brewery Name, and City
@@ -97,25 +112,15 @@ brew_map<- ggplot(newbrewery2, aes(map_id=State))+    #sets the data (newbrewery
   coord_map()+                        #Sets the base geographic projection (mercator in this case)
   scale_x_continuous(breaks=NULL)+
   scale_y_continuous(breaks=NULL)+
+  labs(x = "", y = "") +
   ggtitle("Number of Breweries By State") + # Sets the title of the map
-  scale_fill_gradient(low = "seagreen1", high = "seagreen4", space = "Lab",na.value = "gray70", guide = "colourbar")+     #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  scale_fill_gradient(low = "seagreen1", high = "seagreen4", space = "Lab",na.value = "gray70", guide=guide_colourbar(title.position="top", barwidth=10, title="Number of Breweries",  title.hjust=0.5))+     #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
   theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.87, .25),legend.direction="horizontal",panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+   #Theme elements such as the border around the map plot, the position of map components like the legend
   borders("state")+     #Adds colored state borders
   fifty_states_inset_boxes()     #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
 
 #Plots the map for total number of breweries by state
 brew_map
-
-#####################################################################
-#Question 2. Merge Beer & Brewery data.  Print the first 6 and the last 6 observations to check merge
-#####################################################################
-newbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
-mergeddrunk<-merge(newbeers,rawbreweries, by='Brew_ID')  # merge tables based on the renamed Brew_ID field above
-mergeddrunk<-rename(mergeddrunk, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
-
-#data checks
-head(mergeddrunk, 6)
-tail(mergeddrunk, 6)
 
 #####################################################################
 ##############################Question 3. Get NA's in each column
@@ -139,15 +144,16 @@ barplot(median_beer$IBU, width=4, names.arg = median_beer$State, main="Median IB
 median_beer<-StateName(median_beer)
 
 # Start of the call to create the median ABV by state map
-abv_map<- ggplot(median_beer, aes(map_id=State_Name))+      #sets the data and the primary key to link map and data
+abv_map<- ggplot(median_beer, aes(map_id=State))+      #sets the data and the primary key to link map and data
   geom_map(aes(fill=ABV), map=fifty_states)+                #sets the fill value that will determine color and the geographic map data
   expand_limits(x=fifty_states$long, y=fifty_states$lat)+   #Sets the latitude and longitudinal extents
   coord_map()+                                              #Sets the base geographic projection (mercator in this case)
   scale_x_continuous(breaks=NULL)+                          
   scale_y_continuous(breaks=NULL)+                          
+  labs(x = "", y = "") +
   ggtitle("Median Alcohol By Volume (ABV) By State") +      # Sets the title of the map
-  scale_fill_gradient(low = "lightgoldenrod1", high = "lightgoldenrod4", space = "Lab",na.value = "grey70", guide = guide_colourbar(barwidth=8.4))+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
-  theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.865, .27),legend.text=element_text(size=8),legend.direction="horizontal", legend.margin=margin(t = 0, unit='cm'), panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+   #Theme elements such as the border around the map plot, the position of map components like the legend
+  scale_fill_gradient(low = "lightgoldenrod1", high = "lightgoldenrod4", space = "Lab",na.value = "grey70", guide = guide_colourbar(title.position="top", barwidth=10, title.hjust=0.5))+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.875, .27),legend.text=element_text(size=8),legend.direction="horizontal", legend.margin=margin(t = 0, unit='cm'), panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+   #Theme elements such as the border around the map plot, the position of map components like the legend
   borders("state")+                                         #Adds colored state borders
   fifty_states_inset_boxes()                                #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
 
@@ -161,8 +167,9 @@ ibu_map<- ggplot(median_beer, aes(map_id=State))+           #sets the data and t
   coord_map()+                                            #Sets the base geographic projection (mercator in this case)
   scale_x_continuous(breaks=NULL)+
   scale_y_continuous(breaks=NULL)+
+  labs(x = "", y = "") +
   ggtitle("Median International Bitter Units (IBU) By State") + # Sets the title of the map
-  scale_fill_gradient(low = "lightcyan2", high = "lightblue4", space = "Lab",na.value = "gray70", guide = "colourbar")+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  scale_fill_gradient(low = "lightcyan2", high = "lightblue4", space = "Lab",na.value = "gray70", guide = guide_colourbar(title.position="top", barwidth=10, title.hjust=0.5))+ #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
   theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.87, .25),legend.direction="horizontal",panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+    #Theme elements such as the border around the map plot, the position of map components like the legend
   borders("state")+                #Adds colored state borders
   fifty_states_inset_boxes()        #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
