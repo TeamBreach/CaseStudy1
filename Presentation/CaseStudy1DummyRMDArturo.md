@@ -2,27 +2,45 @@
 Arturo Casillas & Kevin Dickens  
 October 6, 2017  
 
+
+
 # R Markdown Dummy
 
 First
 
-## About the Data
-#### Source
+# About the Data
+## Source
 
 - The tables contain a list of 2410 US craft beers and 510 US breweries. 
 - The beer data corresponds to beers available in cans
 - This data was traced to CraftCans.com. 
 
-#### View the data
+## View the data
+
+
+```
+## Warning: package 'xtable' was built under R version 3.4.2
+```
+
+```
+## 
+## Please cite as:
+```
+
+```
+##  Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics Tables.
+```
+
+```
+##  R package version 5.2. http://CRAN.R-project.org/package=stargazer
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.4.2
+```
 
 
 ```r
-## Load Data ##
-#getwd()
-setwd("C:/Users/acasi/Downloads")
-BeersData <- read.csv("Beers.csv")
-BreweriesData <- read.csv("Breweries.csv")
-
 str(BeersData)
 ```
 
@@ -49,7 +67,7 @@ str(BreweriesData)
 ##  $ State  : Factor w/ 51 levels " AK"," AL"," AR",..: 24 18 20 5 5 41 6 23 23 23 ...
 ```
 
-## Munging
+### Munging
 #### Basic alterations
 - Column names are altered for clarity and to minimize merging issues
 - The beers and breweries are linked by a numeric ID, which is used to merge the two tables
@@ -91,14 +109,12 @@ str(AllBeer)
 ##  $ State       : Factor w/ 51 levels " AK"," AL"," AR",..: 24 24 24 24 24 24 18 18 18 18 ...
 ```
 
-#### View the data
+#### View the final data
 
 -first 6 rows
 
 ```r
-library(knitr)
-#library(kableExtra)
-kable(head(AllBeer, 6))
+kable(head(AllBeer, 6), row.names = FALSE)
 ```
 
 
@@ -112,15 +128,40 @@ kable(head(AllBeer, 6))
        1  Stronghold          2688   0.060    25  American Porter                            16  NorthGate Brewing   Minneapolis   MN    
        1  Parapet ESB         2687   0.056    47  Extra Special / Strong Bitter (ESB)        16  NorthGate Brewing   Minneapolis   MN    
 
+
+
+
 ```r
-#%>%
-#kable_styling(latex_options = c("striped", "scale_down"))
+#print(xtable(head(AllBeer)), comment=F, type='html', html.table.attributes = "border=0")
+head(AllBeer, 6)
 ```
 
-## Munging
-#### View the final data
+```
+##   Brew_ID     Beer.name Beer_ID   ABV IBU
+## 1       1  Get Together    2692 0.045  50
+## 2       1 Maggie's Leap    2691 0.049  26
+## 3       1    Wall's End    2690 0.048  19
+## 4       1       Pumpion    2689 0.060  38
+## 5       1    Stronghold    2688 0.060  25
+## 6       1   Parapet ESB    2687 0.056  47
+##                                 Style Ounces       Brewery.name
+## 1                        American IPA     16 NorthGate Brewing 
+## 2                  Milk / Sweet Stout     16 NorthGate Brewing 
+## 3                   English Brown Ale     16 NorthGate Brewing 
+## 4                         Pumpkin Ale     16 NorthGate Brewing 
+## 5                     American Porter     16 NorthGate Brewing 
+## 6 Extra Special / Strong Bitter (ESB)     16 NorthGate Brewing 
+##          City State
+## 1 Minneapolis    MN
+## 2 Minneapolis    MN
+## 3 Minneapolis    MN
+## 4 Minneapolis    MN
+## 5 Minneapolis    MN
+## 6 Minneapolis    MN
+```
 
-last 6 rows
+
+-last 6 rows
 
 
 ```r
@@ -139,7 +180,8 @@ kable(tail(AllBeer, 6))
 
 
 ## Data Integrity
-#### Missing Vlaues
+### Missing Vlaues
+#### Look for missing or nonsense values
 - Check the missing values number and indicators
 
 ```r
@@ -232,49 +274,165 @@ Table: Table continues below
 ##  $ state.division: Factor w/ 9 levels "New England",..: 9 9 9 9 9 9 9 9 9 9 ...
 ```
 
-#### Tail2
 
--experiment with plotting last 6 rows
-
-
-
-State    Brew_ID  Beer.name                     Beer_ID     ABV   IBU  Style                       Ounces  Brewery.name                   City        state.region   state.division 
-------  --------  ---------------------------  --------  ------  ----  -------------------------  -------  -----------------------------  ----------  -------------  ---------------
-AK           103  King Street IPA                  1667   0.060    70  American IPA                    12  King Street Brewing Company    Anchorage   West           Pacific        
-AK           103  Amber Ale                        2436   0.051    NA  American Amber / Red Ale        12  King Street Brewing Company    Anchorage   West           Pacific        
-AK           494  Polar Pale Ale                    920   0.052    17  American Pale Ale (APA)         12  Broken Tooth Brewing Company   Anchorage   West           Pacific        
-AK           459  Sunken Island IPA                 349   0.068    NA  American IPA                    12  Kenai River Brewing Company    Soldotna    West           Pacific        
-AK           103  King Street Pilsner              1706   0.055    NA  Czech Pilsener                  12  King Street Brewing Company    Anchorage   West           Pacific        
-AK           459  Skilak Scottish Ale (2011)        348   0.058    NA  Scottish Ale                    12  Kenai River Brewing Company    Soldotna    West           Pacific        
 
 #Analysis
 
 - The primary variables of interest are ABV, IBU, Style, State, Region and Division
 
-##ABV Summary
+## State Summary
 
-- Summary of the ABV variable
-- 50% of canned beers are between 5% and 6.7% alcohol per volume
+- The total number of breweries per state
 
 
+```r
+library(pander)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length)
+pander(StBrews)
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-##  0.0010  0.0500  0.0560  0.0598  0.0670  0.1280      62
+
+
+---------------------------------------------------------------------------------------------------
+ AK   AL   AR   AZ   CA   CO   CT   DC   DE   FL   GA   HI   IA   ID   IL   IN   KS   KY   LA   MA 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 7    3    2    11   39   47   8    1    2    15   7    4    5    5    18   22   3    4    5    23 
+---------------------------------------------------------------------------------------------------
+
+ 
+---------------------------------------------------------------------------------------------------
+ MD   ME   MI   MN   MO   MS   MT   NC   ND   NE   NH   NJ   NM   NV   NY   OH   OK   OR   PA   RI 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 7    9    32   12   9    2    9    19   1    5    3    3    4    2    16   15   6    29   25   5  
+---------------------------------------------------------------------------------------------------
+
+ 
+------------------------------------------------------
+ SC   SD   TN   TX   UT   VA   VT   WA   WI   WV   WY 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 4    1    3    28   4    16   10   23   20   1    0  
+------------------------------------------------------
+
+- The differnet number of styles brewed per state
+
+
+```r
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$State, unique), length)
+pander(StStyle)
 ```
 
-##IBU Summary
 
-- Summary of the IBU variable
+---------------------------------------------------------------------------------------------------
+ AK   AL   AR   AZ   CA   CO   CT   DC   DE   FL   GA   HI   IA   ID   IL   IN   KS   KY   LA   MA 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 14   8    5    19   46   61   15   8    2    19   9    15   17   19   34   47   15   17   12   33 
+---------------------------------------------------------------------------------------------------
+
+ 
+---------------------------------------------------------------------------------------------------
+ MD   ME   MI   MN   MO   MS   MT   NC   ND   NE   NH   NJ   NM   NV   NY   OH   OK   OR   PA   RI 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 16   17   46   25   21   8    18   25   3    17   5    6    10   10   35   24   12   29   42   17 
+---------------------------------------------------------------------------------------------------
+
+ 
+------------------------------------------------------
+ SC   SD   TN   TX   UT   VA   VT   WA   WI   WV   WY 
+---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+ 11   7    5    46   17   21   16   23   30   2    0  
+------------------------------------------------------
+
+- The total number of breweries per region
+- Prior to June 1984, the Midwest Region was designated as the North Central Region
 
 
+```r
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$state.region, unique), length)
+pander(StBrews)
 ```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-##     4.0    21.0    35.0    42.8    64.0   138.0    1002
+
+
+------------------------------------------
+ Northeast   South   North Central   West 
+----------- ------- --------------- ------
+    100       119         165        170  
+------------------------------------------
+
+- The differnet number of styles brewed per state
+
+
+```r
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$state.division, unique), length)
+pander(StBrews)
 ```
+
+
+------------------------------------------------------------------------------------------
+ New England   Middle Atlantic   South Atlantic   East South Central   West South Central 
+------------- ----------------- ---------------- -------------------- --------------------
+     66              34                79                 16                   24         
+------------------------------------------------------------------------------------------
+
+ 
+--------------------------------------------------------------
+ East North Central   West North Central   Mountain   Pacific 
+-------------------- -------------------- ---------- ---------
+         71                   94             101        69    
+--------------------------------------------------------------
+
+
 
 ##Beer Styles
 
-- 10 most popular beer styles
+- The different number of styles brewed per region
+
+
+```r
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$state.region, unique), length)
+pander(StStyle)
+```
+
+
+------------------------------------------
+ Northeast   South   North Central   West 
+----------- ------- --------------- ------
+    62        65          83          85  
+------------------------------------------
+
+- The differnet number of styles brewed per division
+
+
+```r
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$state.division, unique), length)
+pander(StStyle)
+```
+
+
+------------------------------------------------------------------------------------------
+ New England   Middle Atlantic   South Atlantic   East South Central   West South Central 
+------------- ----------------- ---------------- -------------------- --------------------
+     55              35                57                 32                   33         
+------------------------------------------------------------------------------------------
+
+ 
+--------------------------------------------------------------
+ East North Central   West North Central   Mountain   Pacific 
+-------------------- -------------------- ---------- ---------
+         60                   70              77        58    
+--------------------------------------------------------------
+
+- 10 most popular beer styles 
 
 
 ```
@@ -297,54 +455,161 @@ AK           459  Skilak Scottish Ale (2011)        348   0.058    NA  Scottish 
 ##                             49
 ```
 
+- Boxplot of median ABV per state
+
+
+```r
+m=data.frame(aggregate(ABV~State, data=AllBeerReg, median))
+par(las=2, mar=c(2,2,1,1))
+barplot(m$ABV, names.arg = m$State, cex.names = 0.7, ylim=c(0.00, 0.08))
+```
+
+![](CaseStudy1DummyRMDArturo_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+
+
+```r
+library(ggplot2)
+p=data.frame(aggregate(ABV~State+state.region, data=AllBeerReg, median))
+ggplot(p, aes(x=State, y=ABV)) +
+  geom_bar(stat="identity", fill="steelblue") 
+```
+
+![](CaseStudy1DummyRMDArturo_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
+#+
+#  facet_wrap(~state.region)
+
+#ggplot2.barplot(data=m, xName="clarity", 
+#              faceting=TRUE, facetingVarNames="State", facetingDirection="horizontal")
+
+par(mfrow=c(4,1))
+par(mar = c(2,2,1,0))
+for(i in 1:4){
+  sub=m[p$state.region==unique(p$state.region)[i],]
+  barplot(sub$ABV, names.arg = sub$State, ylim=c(0,0.10))
+}
+```
+
+![](CaseStudy1DummyRMDArturo_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
+
+- Boxplot of median IBU per state
+
+
+```r
+n=data.frame(aggregate(IBU~State, data=AllBeerReg, median))
+par(las=2, mar=c(2,2,1,1))
+barplot(n$IBU, names.arg = n$State, cex.names = 0.7)
+```
+
+![](CaseStudy1DummyRMDArturo_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+##ABV Summary
+
+- Summary of the ABV variable
+- 50% of canned beers are between 5% and 6.7% alcohol per volume
+
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##  0.0010  0.0500  0.0560  0.0598  0.0670  0.1280      62
+```
+
 #### Beers with most alcohol
 
 - 'Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer
 - Frout 
 - Two out of the five most alcoholic beers come from 'Upslope Brewing Company'
 
-<div class="kable-table">
 
-       State   Beer.name                                               Beer_ID     ABV   IBU   Ounces  Style                              Brewery.name                 City          
------  ------  -----------------------------------------------------  --------  ------  ----  -------  ---------------------------------  ---------------------------  --------------
-534    CO      Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale       2565   0.128    NA     19.2  Quadrupel (Quad)                   Upslope Brewing Company      Boulder       
-989    KY      London Balling                                             2685   0.125    80     16.0  English Barleywine                 Against the Grain Brewery    Louisville    
-885    IN      Csar                                                       2621   0.120    90     16.0  Russian Imperial Stout             Tin Man Brewing Company      Evansville    
-494    CO      Lee Hill Series Vol. 4 - Manhattan Style Rye Ale           2564   0.104    NA     19.2  Rye Beer                           Upslope Brewing Company      Boulder       
-1655   NY      4Beans                                                     2574   0.100    52     12.0  Baltic Porter                      Sixpoint Craft Ales          Brooklyn      
-121    CA      Lower De Boom                                              1036   0.099    92      8.4  American Barleywine                21st Amendment Brewery       San Francisco 
-142    CA      Chaotic Double IPA                                         1674   0.099    93     12.0  American Double / Imperial IPA     Manzanita Brewing Company    Santee        
-146    CA      Ex Umbris Rye Imperial Stout                                904   0.099    85     16.0  American Double / Imperial Stout   Hess Brewing Company         San Diego     
-235    CA      Double Trunk                                               1561   0.099   101     16.0  American Double / Imperial IPA     The Dudes' Brewing Company   Torrance      
-479    CO      GUBNA Imperial IPA                                            6   0.099   100     12.0  American Double / Imperial IPA     Oskar Blues Brewery          Longmont      
+```
+##      State                                            Beer.name Beer_ID
+## 534     CO Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale    2565
+## 989     KY                                       London Balling    2685
+## 885     IN                                                 Csar    2621
+## 494     CO     Lee Hill Series Vol. 4 - Manhattan Style Rye Ale    2564
+## 1655    NY                                               4Beans    2574
+## 121     CA                                        Lower De Boom    1036
+## 142     CA                                   Chaotic Double IPA    1674
+## 146     CA                         Ex Umbris Rye Imperial Stout     904
+## 235     CA                                         Double Trunk    1561
+## 479     CO                                   GUBNA Imperial IPA       6
+##        ABV IBU Ounces                            Style
+## 534  0.128  NA   19.2                 Quadrupel (Quad)
+## 989  0.125  80   16.0               English Barleywine
+## 885  0.120  90   16.0           Russian Imperial Stout
+## 494  0.104  NA   19.2                         Rye Beer
+## 1655 0.100  52   12.0                    Baltic Porter
+## 121  0.099  92    8.4              American Barleywine
+## 142  0.099  93   12.0   American Double / Imperial IPA
+## 146  0.099  85   16.0 American Double / Imperial Stout
+## 235  0.099 101   16.0   American Double / Imperial IPA
+## 479  0.099 100   12.0   American Double / Imperial IPA
+##                    Brewery.name          City
+## 534     Upslope Brewing Company       Boulder
+## 989   Against the Grain Brewery    Louisville
+## 885     Tin Man Brewing Company    Evansville
+## 494     Upslope Brewing Company       Boulder
+## 1655        Sixpoint Craft Ales      Brooklyn
+## 121      21st Amendment Brewery San Francisco
+## 142   Manzanita Brewing Company        Santee
+## 146        Hess Brewing Company     San Diego
+## 235  The Dudes' Brewing Company      Torrance
+## 479         Oskar Blues Brewery      Longmont
+```
 
-</div>
+##IBU Summary
+
+- Summary of the IBU variable
+
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##     4.0    21.0    35.0    42.8    64.0   138.0    1002
+```
 
 #### Beers with highest IBU
 
 - 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
 - Nine out of the 10 most bitter beers are IPAs
+- Eight our of the 10 most bitter beers are Imperial IPAs
 
-<div class="kable-table">
 
-       State   Beer.name                          Beer_ID     ABV   IBU   Ounces  Style                            Brewery.name                         City            
------  ------  --------------------------------  --------  ------  ----  -------  -------------------------------  -----------------------------------  ----------------
-1824   OR      Bitter Bitch Imperial IPA              980   0.082   138       12  American Double / Imperial IPA   Astoria Brewing Company              Astoria         
-2206   VA      Troopers Alley IPA                    1676   0.059   135       12  American IPA                     Wolf Hills Brewing Company           Abingdon        
-1081   MA      Dead-Eye DIPA                         2067   0.090   130       16  American Double / Imperial IPA   Cape Ann Brewing Company             Gloucester      
-1691   OH      Bay of Bengal Double IPA (2014)       2440   0.089   126       12  American Double / Imperial IPA   Christian Moerlein Brewing Company   Cincinnati      
-1343   MN      Abrasive Ale                            15   0.097   120       16  American Double / Imperial IPA   Surly Brewing Company                Brooklyn Center 
-2213   VT      Heady Topper                          1111   0.080   120       16  American Double / Imperial IPA   The Alchemist                        Waterbury       
-2218   VT      Heady Topper                           379   0.080   120       16  American Double / Imperial IPA   The Alchemist                        Waterbury       
-2033   TX      More Cowbell                          2123   0.090   118       16  American Double / Imperial IPA   Buffalo Bayou Brewing Company        Houston         
-200    CA      Blazing World                         1492   0.065   115       16  American Amber / Red Ale         Modern Times Beer                    San Diego       
-570    DC      On the Wings of Armageddon             851   0.092   115       12  American Double / Imperial IPA   DC Brau Brewing Company              Washington      
-
-</div>
-
-## Simple Plot
-
-![](CaseStudy1DummyRMDArturo_files/figure-html/plot1-1.png)<!-- -->
+```
+##      State                       Beer.name Beer_ID   ABV IBU Ounces
+## 1824    OR       Bitter Bitch Imperial IPA     980 0.082 138     12
+## 2206    VA              Troopers Alley IPA    1676 0.059 135     12
+## 1081    MA                   Dead-Eye DIPA    2067 0.090 130     16
+## 1691    OH Bay of Bengal Double IPA (2014)    2440 0.089 126     12
+## 1343    MN                    Abrasive Ale      15 0.097 120     16
+## 2213    VT                    Heady Topper    1111 0.080 120     16
+## 2218    VT                    Heady Topper     379 0.080 120     16
+## 2033    TX                    More Cowbell    2123 0.090 118     16
+## 200     CA                   Blazing World    1492 0.065 115     16
+## 570     DC      On the Wings of Armageddon     851 0.092 115     12
+##                               Style                       Brewery.name
+## 1824 American Double / Imperial IPA            Astoria Brewing Company
+## 2206                   American IPA         Wolf Hills Brewing Company
+## 1081 American Double / Imperial IPA           Cape Ann Brewing Company
+## 1691 American Double / Imperial IPA Christian Moerlein Brewing Company
+## 1343 American Double / Imperial IPA              Surly Brewing Company
+## 2213 American Double / Imperial IPA                      The Alchemist
+## 2218 American Double / Imperial IPA                      The Alchemist
+## 2033 American Double / Imperial IPA      Buffalo Bayou Brewing Company
+## 200        American Amber / Red Ale                  Modern Times Beer
+## 570  American Double / Imperial IPA            DC Brau Brewing Company
+##                 City
+## 1824         Astoria
+## 2206        Abingdon
+## 1081      Gloucester
+## 1691      Cincinnati
+## 1343 Brooklyn Center
+## 2213       Waterbury
+## 2218       Waterbury
+## 2033         Houston
+## 200        San Diego
+## 570       Washington
+```
 
 
 ## Fancier Plot
@@ -354,3 +619,99 @@ AK           459  Skilak Scottish Ale (2011)        348   0.058    NA  Scottish 
 
 ![](CaseStudy1DummyRMDArturo_files/figure-html/plot2-1.png)<!-- -->
 
+#Conclusion
+
+
+#Appendix
+
+### Alt Code
+-First 6 again
+
+
+```r
+#print(xtable(head(AllBeer)), comment=F, type='html', html.table.attributes = "border=0")
+#head(AllBeer, 6)
+pandoc.table(head(AllBeer, 6), style="simple")
+```
+
+
+
+ Brew_ID     Beer.name     Beer_ID    ABV    IBU                  Style                  Ounces 
+--------- --------------- --------- ------- ----- ------------------------------------- --------
+    1      Get Together     2692     0.045   50               American IPA                 16   
+    1      Maggie's Leap    2691     0.049   26            Milk / Sweet Stout              16   
+    1       Wall's End      2690     0.048   19             English Brown Ale              16   
+    1         Pumpion       2689     0.06    38                Pumpkin Ale                 16   
+    1       Stronghold      2688     0.06    25              American Porter               16   
+    1       Parapet ESB     2687     0.056   47    Extra Special / Strong Bitter (ESB)     16   
+
+ 
+
+   Brewery.name         City       State 
+------------------- ------------- -------
+ NorthGate Brewing   Minneapolis    MN   
+ NorthGate Brewing   Minneapolis    MN   
+ NorthGate Brewing   Minneapolis    MN   
+ NorthGate Brewing   Minneapolis    MN   
+ NorthGate Brewing   Minneapolis    MN   
+ NorthGate Brewing   Minneapolis    MN   
+
+```r
+#library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6), row.names = FALSE)
+```
+
+
+
+ Brew_ID  Beer.name        Beer_ID     ABV   IBU  Style                                  Ounces  Brewery.name        City          State 
+--------  --------------  --------  ------  ----  ------------------------------------  -------  ------------------  ------------  ------
+       1  Get Together        2692   0.045    50  American IPA                               16  NorthGate Brewing   Minneapolis   MN    
+       1  Maggie's Leap       2691   0.049    26  Milk / Sweet Stout                         16  NorthGate Brewing   Minneapolis   MN    
+       1  Wall's End          2690   0.048    19  English Brown Ale                          16  NorthGate Brewing   Minneapolis   MN    
+       1  Pumpion             2689   0.060    38  Pumpkin Ale                                16  NorthGate Brewing   Minneapolis   MN    
+       1  Stronghold          2688   0.060    25  American Porter                            16  NorthGate Brewing   Minneapolis   MN    
+       1  Parapet ESB         2687   0.056    47  Extra Special / Strong Bitter (ESB)        16  NorthGate Brewing   Minneapolis   MN    
+
+```r
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
+#print(xtable(head(AllBeer, 6)), comment = F, type='html')
+```
+
+#### Tail2
+
+-experiment with plotting last 6 rows
+
+
+
+State    Brew_ID  Beer.name                     Beer_ID     ABV   IBU  Style                       Ounces  Brewery.name                   City        state.region   state.division 
+------  --------  ---------------------------  --------  ------  ----  -------------------------  -------  -----------------------------  ----------  -------------  ---------------
+AK           103  King Street IPA                  1667   0.060    70  American IPA                    12  King Street Brewing Company    Anchorage   West           Pacific        
+AK           103  Amber Ale                        2436   0.051    NA  American Amber / Red Ale        12  King Street Brewing Company    Anchorage   West           Pacific        
+AK           494  Polar Pale Ale                    920   0.052    17  American Pale Ale (APA)         12  Broken Tooth Brewing Company   Anchorage   West           Pacific        
+AK           459  Sunken Island IPA                 349   0.068    NA  American IPA                    12  Kenai River Brewing Company    Soldotna    West           Pacific        
+AK           103  King Street Pilsner              1706   0.055    NA  Czech Pilsener                  12  King Street Brewing Company    Anchorage   West           Pacific        
+AK           459  Skilak Scottish Ale (2011)        348   0.058    NA  Scottish Ale                    12  Kenai River Brewing Company    Soldotna    West           Pacific        
+
+
+```r
+stargazer::stargazer(xtable(head(AllBeer)), type = "html", summary = FALSE, 
+                     #align = TRUE,
+ title = "First 6 rows", column.sep.width = "12pt")
+```
+
+
+<table style="text-align:center"><caption><strong>First 6 rows</strong></caption>
+<tr><td colspan="11" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td>Brew_ID</td><td>Beer.name</td><td>Beer_ID</td><td>ABV</td><td>IBU</td><td>Style</td><td>Ounces</td><td>Brewery.name</td><td>City</td><td>State</td></tr>
+<tr><td colspan="11" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">1</td><td>1</td><td>Get Together</td><td>2,692</td><td>0.045</td><td>50</td><td>American IPA</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td style="text-align:left">2</td><td>1</td><td>Maggie's Leap</td><td>2,691</td><td>0.049</td><td>26</td><td>Milk / Sweet Stout</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td style="text-align:left">3</td><td>1</td><td>Wall's End</td><td>2,690</td><td>0.048</td><td>19</td><td>English Brown Ale</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td style="text-align:left">4</td><td>1</td><td>Pumpion</td><td>2,689</td><td>0.060</td><td>38</td><td>Pumpkin Ale</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td style="text-align:left">5</td><td>1</td><td>Stronghold</td><td>2,688</td><td>0.060</td><td>25</td><td>American Porter</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td style="text-align:left">6</td><td>1</td><td>Parapet ESB</td><td>2,687</td><td>0.056</td><td>47</td><td>Extra Special / Strong Bitter (ESB)</td><td>16</td><td>NorthGate Brewing</td><td>Minneapolis</td><td>MN</td></tr>
+<tr><td colspan="11" style="border-bottom: 1px solid black"></td></tr></table>
+
+## Simple Plot
+
+![](CaseStudy1DummyRMDArturo_files/figure-html/plot1-1.png)<!-- -->

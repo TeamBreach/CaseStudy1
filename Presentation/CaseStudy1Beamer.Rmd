@@ -34,6 +34,11 @@ BreweriesData <- read.csv("Breweries.csv")
 
 str(BeersData)
 str(BreweriesData)
+
+library(knitr)
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
 ```
 
 # Munging
@@ -66,6 +71,13 @@ library(knitr)
 kable(head(AllBeer, 6))
 #%>%
 #kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+# Munging
+## View the final data
+-Try an xtable
+```{r xtablez, results = 'asis'}
+print(xtable(head(AllBeer)), comment=F, auto = TRUE)
 ```
 
 # Munging

@@ -33,18 +33,6 @@ summary(t)
 
 ## Double Check ##
 AllBeer[is.na(AllBeer$ABV), ]
-## Look at balnk Strings ##
-# sum(AllBeer$Style == "")
-# sum(AllBeer$Brew_ID == "")
-# sum(AllBeer$Beer.name == "")
-# sum(AllBeer$Beer_ID == "")
-# sum(AllBeer$Ounces == "")
-# sum(AllBeer$Brewery.name == "")
-# sum(AllBeer$City == "")
-# sum(AllBeer$State == "")
-# sum(AllBeer$ABV == "", na.rm = TRUE)
-# sum(AllBeer$IBU == "", na.rm = TRUE)
-# apply(apply(AllBeer, c(1, 2), length), 2, min)
 apply(AllBeer, 2, function(y) sum(y == ""))
 
 ## Add region/division ##
@@ -54,71 +42,72 @@ state.geo=data.frame(state.abb, state.region, state.division)
 #trimws(levels(AllBeer$State), which = c("left"))
 levels(state.geo$state.abb)=levels(AllBeer$State)
 names(state.geo)[1]='State'
-#state.geo[51, ] = c('DC','South', 'South Atlantic')
+state.geo[51, ] = c(' DC','South', 'South Atlantic')
 
 #Final Data#
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", by.y = "State", all.x = TRUE)
 str(AllBeerReg)
 str(AllBeer)
 str(state.geo)
-
-sum(AllBeer$State == state.geo$State[1])
-levels()
-
-class(AllBeer)
-mode(AllBeer)
-class(AllBeerReg)
-mode(AllBeerReg)
+apply(AllBeerReg, 2, function(y) sum(y == ""))
+apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 # Summary Statistics #
+
+## Breweries per State ##
+data.frame(table(BreweriesData$State))
+
+sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length)
+sapply(tapply(AllBeerReg$Style, AllBeerReg$State, unique), length)
+
+apply(table(AllBeerReg[, c("State", "Brew_ID")]), 1, sum)
+
+##Double CHeck
+TT=table(AllBeerReg[, c("State", "Brew_ID")])
+TTT=TT != 0
+apply(TTT, 1, sum)
+
 
 ##First most alcoholic beers and highest IBU beers
 AllBeerReg$State[which.max(AllBeerReg$ABV)]
 AllBeerReg$State[which.max(AllBeerReg$IBU)]
 
+
+##Top Ten alcoholic beers and highest IBU beers ##
+## use order() to index ##
 o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
-o1[1:5,]
+o1[1:10,]
 o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Brewery.name", "City")]
-o2[1:5,]
+o2[1:10,]
 
 
+## Summary Statistics of ABV and IBU
 summary(AllBeerReg$ABV)
-summary(AllBeerReg$ABV)
-str(AllBeerReg$Style)
-sort(table(AllBeerReg$Style))[100:90]
+summary(AllBeerReg$IBU)
 
 
-# str(table(AllBeerReg$Style))
-# sort(table(AllBeerReg$Style, AllBeerReg$Beer_ID), descending=TRUE)[1:10]
-# TT=table(AllBeerReg$Style, AllBeerReg$Beer_ID)
-# margin.table(TT, 1) # A frequencies (summed over B) 
-# sort(margin.table(TT, 1))[100:90]
-
-# indexes=sort.list(table(AllBeerReg$Style), decreasing = FALSE)
-# table(AllBeerReg$Style)[1:10]
-
-
-#sapply(AllBeerReg[,c(4,5,7)], mean, na.rm=TRUE)
-#sapply(AllBeerReg[,c(4,5,7)], median, na.rm=TRUE)
-#test[1]
-
-#library(psych)
-#describeBy(AllBeerReg, group = "State")
-
-##
+## Create median tables for boxplots
 m=data.frame(aggregate(ABV~State, data=AllBeerReg, median))
 n=data.frame(aggregate(IBU~State, data=AllBeerReg, median))
-str(n)
 
-par(mfcol=(c(1,2)), las=1)
-barplot(m$ABV, names.arg = m$State, horiz = TRUE)
-barplot(n$IBU, names.arg = n$State, horiz = TRUE)
+# par(las=2, mar=c(2,2,1,1))
+# barplot(m$ABV, names.arg = m$State, cex.names = 0.7, ylim=c(0.00, 0.08))
+
+par(mfrow=(c(2,1)), las=2, mar=c(2,2,1,1))
+barplot(m$ABV, names.arg = m$State, cex.names = 0.7)
+barplot(n$IBU, names.arg = n$State, cex.names = 0.7)
 
 
-median_beer<-aggregate(AllBeerReg[, 4:5], list(AllBeerReg$State), median, na.rm=TRUE)
+median_beer<-aggregate(AllBeerReg[, c("ABV", "IBU")], list(AllBeerReg$State), median, na.rm=TRUE)
 median_beer[is.na(median_beer)] <- 0
 median_beer<-?rename(median_beer, c('Group.1'='State'))
 barplot(median_beer$ABV, width=3, names.arg = median_beer$State, las=2)
+
+par(mfrow=c(1,1))
+par(mfrow=c(8,7))
+for(i in 1:4){
+  barplot(m$ABV[1], names.arg = m$State[1], ylim=c(0,0.10))
+}
 
 tABV=tapply(AllBeerReg$ABV, AllBeerReg$State, max)
 tIBU=tapply(AllBeerReg$IBU, AllBeerReg$State, max, na.rm = TRUE)
@@ -140,40 +129,18 @@ ggplot(dat=na.omit(AllBeerReg), aes(x=IBU, y=ABV)) +
 #scale_color_gradient(low = "#00000000", high = "#0091ff")
 
 
-## Extra Data / Info
-#library(xlsx)
-#library(rJava)
-#stategeo<-read.xlsx("state-geocodes-v2016.xls", sheetIndex=1, sheetName="CODES14", startRow=6, header=TRUE)
-#allgeo<-read.xlsx("all-geocodes-v2016.xlsx", sheetIndex=1, sheetName=NULL, startRow=5, header=TRUE)
+p=data.frame(aggregate(ABV~State+state.region, data=AllBeerReg, median))
+p[,4]="Median"
+names(p)[4]="Stat"
+ggplot(p, aes(x=Stat, y=ABV)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  facet_wrap(~State) + coord_cartesian(ylim=c(.020,.100))
 
-# stategeo<-read.csv("C:/Users/acasi/Downloads/state-geocodes-v2016.csv", header=TRUE)
-# allgeo<-read.csv("C:/Users/acasi/Downloads/all-geocodes-v2016.csv", header=TRUE)
-# 
-# tail(stategeo)
-# tail(allgeo)
-# 
-# str(AllBeerReg$State)
-# sum(AllBeerReg$State == 24)
-# 
-# states=stategeo[stategeo$State..FIPS. != 0, -3]
-# names(states)[3] = "State.Name"
-# #Name=State
-# divisions=stategeo[stategeo$State..FIPS. == 0 & stategeo$Division != 0, c(2,4)]
-# names(division)[2] = "Division.Name"
-# #Name=divisions
-# regions=stategeo[stategeo$State..FIPS. == 0 & stategeo$Division == 0, c(1,4)]
-# names(regions)[2] = "Region.Name"
-# #Name=regions
-# 
-# length(states[,1])
-# 
-# library(datasets)
-# test=data.frame(state.abb, state.name, state.region, state.division)
-# 
-# state.region
-# state.abb
-# state.division
-# 
-# length(sort(unique(AllBeerReg$State)))
-# 
-# state.dat=merge(x= merge(x=states, y=regions, by.x="Region"), y = divisions, by.x = "Division")
+par(mfrow=c(4,1))
+for(i in 1:4){
+  sub=m[p$state.region==unique(p$state.region)[i],]
+  barplot(sub$ABV, names.arg = sub$State, ylim=c(0,0.10))
+}
+
+
+

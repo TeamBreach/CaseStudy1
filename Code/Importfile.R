@@ -32,6 +32,7 @@ state.geo=data.frame(state.abb, state.region, state.division)
 levels(state.geo$state.abb)=levels(AllBeer$State)
 #rename for ease of merge
 names(state.geo)[1]='State'
+state.geo[51, ] = c(' DC','South', 'South Atlantic')
 
 #Final Data#
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")
@@ -45,5 +46,7 @@ library(ggmap)
 # For analysis
 library("fiftystater")
 
-# For Beamer
+# For Beamer/RMD
 library(knitr)
+#library(rticles)
+library(xtable)

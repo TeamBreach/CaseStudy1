@@ -4,36 +4,51 @@ author: "Arturo Casillas & Kevin Dickens"
 date: "October 6, 2017"
 output: 
   html_document:
-    df_print: kable
+    #template: quarterly_report.html
+    toc: true
+    toc_float: true
+    code_folding: hide
+    #df_print: kable
+    #df_print: paged
     theme: "readable"
     keep_md: true
 ---
+
+
 
 # R Markdown Dummy
 
 First
 
-## About the Data
-#### Source
+# About the Data
+## Source
 
 - The tables contain a list of 2410 US craft beers and 510 US breweries. 
 - The beer data corresponds to beers available in cans
 - This data was traced to CraftCans.com. 
 
-#### View the data
+## View the data
 
-```{r load}
+```{r load, echo=FALSE}
 ## Load Data ##
 #getwd()
-setwd("C:/Users/acasi/Downloads")
-BeersData <- read.csv("Beers.csv")
-BreweriesData <- read.csv("Breweries.csv")
+BeersData <- read.csv("C:/Users/acasi/Downloads/Beers.csv")
+BreweriesData <- read.csv("C:/Users/acasi/Downloads/Breweries.csv")
+library(knitr)
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+library(stargazer)
+library(ggplot2)
 
+```
+
+```{r view}
 str(BeersData)
 str(BreweriesData)
 ```
 
-## Munging
+### Munging
 #### Basic alterations
 - Column names are altered for clarity and to minimize merging issues
 - The beers and breweries are linked by a numeric ID, which is used to merge the two tables
@@ -53,21 +68,22 @@ str(AllBeer)
 
 ```
 
-#### View the data
-
--first 6 rows
-```{r head, fig.align='center', error=FALSE}
-library(knitr)
-#library(kableExtra)
-kable(head(AllBeer, 6))
-#%>%
-#kable_styling(latex_options = c("striped", "scale_down"))
-```
-
-## Munging
 #### View the final data
 
-last 6 rows
+-first 6 rows
+```{r head, error=FALSE, results="asis",cache=FALSE}
+kable(head(AllBeer, 6), row.names = FALSE)
+```
+
+
+
+```{r raw}
+#print(xtable(head(AllBeer)), comment=F, type='html', html.table.attributes = "border=0")
+head(AllBeer, 6)
+```
+
+
+-last 6 rows
 
 ```{r tail, echo=TRUE}
 library(knitr)
@@ -76,7 +92,8 @@ kable(tail(AllBeer, 6))
 
 
 ## Data Integrity
-#### Missing Vlaues
+### Missing Vlaues
+#### Look for missing or nonsense values
 - Check the missing values number and indicators
 ```{r missing, echo=TRUE}
 ## Check for missing values ##
@@ -132,6 +149,200 @@ AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")
 str(AllBeerReg)
 ```
 
+
+
+#Analysis
+
+- The primary variables of interest are ABV, IBU, Style, State, Region and Division
+
+## State Summary
+
+- The total number of breweries per state
+
+```{r stateBrew, message=FALSE, warning=FALSE}
+library(pander)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length)
+pander(StBrews)
+
+```
+
+- The differnet number of styles brewed per state
+
+```{r stateStyle, message=FALSE, warning=FALSE}
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$State, unique), length)
+pander(StStyle)
+
+```
+
+- The total number of breweries per region
+- Prior to June 1984, the Midwest Region was designated as the North Central Region
+
+```{r region.Brew, message=FALSE, warning=FALSE}
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$state.region, unique), length)
+pander(StBrews)
+
+```
+
+- The differnet number of styles brewed per state
+
+```{r division.Brew, message=FALSE, warning=FALSE}
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$state.division, unique), length)
+pander(StBrews)
+
+```
+
+
+
+##Beer Styles
+
+- The different number of styles brewed per region
+
+```{r region.Style, message=FALSE, warning=FALSE}
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$state.region, unique), length)
+pander(StStyle)
+
+```
+
+- The differnet number of styles brewed per division
+
+```{r division.Style, message=FALSE, warning=FALSE}
+library(pander)
+#panderOptions('graph.fontsize', .8)
+StStyle=sapply(tapply(AllBeerReg$Style, AllBeerReg$state.division, unique), length)
+pander(StStyle)
+
+```
+
+- 10 most popular beer styles 
+
+```{r summarystyles, echo=FALSE}
+str(AllBeerReg$Style)
+#10 most popular beer styles
+##use table to get frequencies and then sort
+sort(table(AllBeerReg$Style))[100:90]
+```
+
+- Boxplot of median ABV per state
+
+```{r}
+m=data.frame(aggregate(ABV~State, data=AllBeerReg, median))
+par(las=2, mar=c(2,2,1,1))
+barplot(m$ABV, names.arg = m$State, cex.names = 0.7, ylim=c(0.00, 0.08))
+```
+
+```{r}
+library(ggplot2)
+p=data.frame(aggregate(ABV~State+state.region, data=AllBeerReg, median))
+ggplot(p, aes(x=State, y=ABV)) +
+  geom_bar(stat="identity", fill="steelblue") 
+#+
+#  facet_wrap(~state.region)
+
+#ggplot2.barplot(data=m, xName="clarity", 
+#              faceting=TRUE, facetingVarNames="State", facetingDirection="horizontal")
+
+par(mfrow=c(4,1))
+par(mar = c(2,2,1,0))
+for(i in 1:4){
+  sub=m[p$state.region==unique(p$state.region)[i],]
+  barplot(sub$ABV, names.arg = sub$State, ylim=c(0,0.10))
+}
+```
+
+- Boxplot of median IBU per state
+
+```{r}
+n=data.frame(aggregate(IBU~State, data=AllBeerReg, median))
+par(las=2, mar=c(2,2,1,1))
+barplot(n$IBU, names.arg = n$State, cex.names = 0.7)
+```
+
+##ABV Summary
+
+- Summary of the ABV variable
+- 50% of canned beers are between 5% and 6.7% alcohol per volume
+
+```{r summaryABV, echo=FALSE}
+summary(AllBeerReg$ABV)
+```
+
+#### Beers with most alcohol
+
+- 'Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer
+- Frout 
+- Two out of the five most alcoholic beers come from 'Upslope Brewing Company'
+
+```{r highABV, echo=FALSE}
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style", "Brewery.name", "City")]
+o1[1:10,]
+```
+
+##IBU Summary
+
+- Summary of the IBU variable
+
+```{r summaryIBU, echo=FALSE}
+summary(AllBeerReg$IBU)
+```
+
+#### Beers with highest IBU
+
+- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
+- Nine out of the 10 most bitter beers are IPAs
+- Eight our of the 10 most bitter beers are Imperial IPAs
+
+```{r highIBU, echo=FALSE}
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
+o2[1:10,]
+```
+
+
+## Fancier Plot
+
+- ABV and IBU appear to be related
+- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
+
+```{r plot2, echo=FALSE, warning=FALSE}
+#library(ggplot2)
+
+ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+```
+
+#Conclusion
+
+
+#Appendix
+
+### Alt Code
+-First 6 again
+
+```{r xtablez, results = 'asis'}
+#print(xtable(head(AllBeer)), comment=F, type='html', html.table.attributes = "border=0")
+#head(AllBeer, 6)
+pandoc.table(head(AllBeer, 6), style="simple")
+
+```
+```{r head2, error=FALSE, results="asis",cache=FALSE}
+#library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6), row.names = FALSE)
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
+#print(xtable(head(AllBeer, 6)), comment = F, type='html')
+```
+
 #### Tail2
 
 -experiment with plotting last 6 rows
@@ -152,57 +363,10 @@ kable(head(AllBeerReg, 6))
 #kable_styling(font_size = 7)
 ```
 
-#Analysis
-
-- The primary variables of interest are ABV, IBU, Style, State, Region and Division
-
-##ABV Summary
-
-- Summary of the ABV variable
-- 50% of canned beers are between 5% and 6.7% alcohol per volume
-
-```{r summaryABV, echo=FALSE}
-summary(AllBeerReg$ABV)
-```
-
-##IBU Summary
-
-- Summary of the IBU variable
-
-```{r summaryIBU, echo=FALSE}
-summary(AllBeerReg$IBU)
-```
-
-##Beer Styles
-
-- 10 most popular beer styles
-
-```{r summarystyles, echo=FALSE}
-str(AllBeerReg$Style)
-#10 most popular beer styles
-##use table to get frequencies and then sort
-sort(table(AllBeerReg$Style))[100:90]
-```
-
-#### Beers with most alcohol
-
-- 'Lee Hill Series Vol. 5 - Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer
-- Frout 
-- Two out of the five most alcoholic beers come from 'Upslope Brewing Company'
-
-```{r highABV, echo=FALSE}
-o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style", "Brewery.name", "City")]
-o1[1:10,]
-```
-
-#### Beers with highest IBU
-
-- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
-- Nine out of the 10 most bitter beers are IPAs
-
-```{r highIBU, echo=FALSE}
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
-o2[1:10,]
+```{r results = "asis"}
+stargazer::stargazer(xtable(head(AllBeer)), type = "html", summary = FALSE, 
+                     #align = TRUE,
+ title = "First 6 rows", column.sep.width = "12pt")
 ```
 
 ## Simple Plot
@@ -211,18 +375,3 @@ o2[1:10,]
 plot(ABV~IBU, data=AllBeerReg)
 abline(lm(ABV~IBU, data=AllBeerReg))
 ```
-
-
-## Fancier Plot
-
-- ABV and IBU appear to be related
-- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
-
-```{r plot2, echo=FALSE, warning=FALSE}
-library(ggplot2)
-
-ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
-  geom_point(shape=16) + 
-  geom_smooth(method=lm) + theme_minimal() 
-```
-
