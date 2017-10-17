@@ -1,4 +1,4 @@
-## CaseStudy1
+## Case Study 1 - Beer Research
 
 ### Created October 3rd, 2017
 
