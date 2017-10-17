@@ -24,11 +24,24 @@ output:
    #  keep_md: true
 ---
 
-#Intro
-##Intro
+# Introduction
+In recent years the craft brewery movement has exploded across the United States.  New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer.  The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness.  At the end of the day, they all manufacture beer.  Of particular interest to this study are the relationships of canned craft beer breweries and the common ber characteristics.  Do these characteristics show any relationships spatially or statistically?  This study hopes to answer that basic question and provide a foundation for future research on the topic.
 
--Intro goes here
+Of particular interest to the researchers requesting the analysis and those involved in the study are the spatial relationships and distributions of the canned craft beer movement.  This study will look at how the breweries are distributed across the country and look at the spatial distributions of other beer characteristics to better understand trends and popularity of various beer styles.  The spatial interpretation of data will inform readers of hot spots of craft brewery activity.
 
+This study will also perform basic statistical analysis to better understand and interpret the both the spatial data and the underlying canned craft beer data as well.  The findings will inform readers on the distributions of the data and allow them to look at the included maps to determine which states lie above or below median values as well as determine underlying relationships between such characteristics as alcohol by volume and international bitterness units.
+
+Fundamentally, this study will seek to answer the following questions:
+* How many breweries are in each state?
+* What is the median ABV and IBU for each state?
+* What is the spatial distribution of the data of interest?
+* Are there any statistical or spatial relationships between the variables presented in thw data?
+
+## Abstract
+This study seeks to evaluate the distribution of beer and certain beer characterstics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characterstics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characterstics.
+
+## Scope
+The scope of this analytical research is limited to the data originally provided by the requestor.  As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015.  It is unclear if this data contains all craft breweries that create a brewed product, or only a sample.  The scope is further limited to only the 50 States and the District of Columbia.  No U.S. territories are included in the underlying data.  
 
 ```{r echo=FALSE, include = FALSE}
 #bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE
@@ -528,6 +541,7 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 
 
 ```
+<<<<<<< HEAD
 
 -ABV to IBU regression equation
 ```{r ABV.v.IBU.eq, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -537,5 +551,29 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ```
 
 ##Summary and Conclusions
+=======
+ 
+# Summary and Conclusions
+
+## Conclusions
+
+## Additional Questions
+During analysis of the data the researchers discussed many additional questions.  These questions ultimately did not resolution in this tudy due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles.  Questions include:
+
+* What is the most popular beer style by Region/State/City?
+* What are the median ABV/IBU by Beer Style?
+* Is there any relationship to ABV or IBU and the size of the beer (ounces)?
+* Why is there a correlation between ABV and IBU?  What causes it?
+* What is the best place to open a canned craft beer brewery?
+* What is the worst place to open a canned craft beer brewery?
+
+In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
+
+### What's Next?
+Leverage the current data to perform more analysis of distribution of various beer styles by state or region.  Use of the city variable did not come up in this research but could create an added component to show true hotspots if added to the plot for the number of breweries.
+
+Since the IBU data contained many blank fields, that data could be researched further to fill in wholes to ensure the data represented in this study truly reflects the actual median and maximum values.  Additional data on actual volumes and sales of canned craft brew could show a better understanding of which styles are popular in various states and regions.  Aditionally, deeper statistical analysis could be performed with market anlaysis to better aid the industry as a whole and answer questions about optimal locations for new breweries and demand.
+
+>>>>>>> 29076ff94b4c37d5399fee3e90a43fefcc99d51e
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
