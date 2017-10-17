@@ -336,7 +336,7 @@ names(rawbreweries)[2] = "Brewery_Name"
 
 ```
 
-- The total number of breweries per state (vertical)
+-The total number of breweries per state (vertical)
 
 ```{r state.Brew.V, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
@@ -398,7 +398,33 @@ brew_map
 
 ```
 
- - Map of total number of breweries per state
+ -Map of total number of breweries per state
+ 
+```{r state.Brew.pop, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+#Initializes a new object with State, Brewery Name, and City
+
+newbrewery<-AllBeerReg[,c("Brewery_Name", "City", "State")]
+str(newbrewery)
+
+newbrewery2<-aggregate(newbrewery$Brewery_Name, list(newbrewery$State), function(x) length(unique(x)))   #Returns a count of the unique breweries by state
+
+names(newbrewery2) = c("State", "Freq")
+
+```
+
+-Table of most popular beer style per state
+
+```{r state.Brew.pop2, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+TTT=table(AllBeerReg[, c("Style", "State")]) #Get frequency of style and state
+TT=apply(TTT, 2, which.max)  #This gets the most brewed style per State
+
+pop2=data.frame("State" =colnames(TTT),
+            "Style" = row.names(TTT)[apply(TTT, 2, which.max)])
+pop2
+
+```
  
 ### ABV and IBU Summary
 
