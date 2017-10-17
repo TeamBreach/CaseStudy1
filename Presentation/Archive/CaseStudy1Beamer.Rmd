@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "Craft-Cans Case Study"
 author: "Arturo Casillas & Kevin Dickens"
@@ -170,3 +171,177 @@ ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) +
   geom_smooth(method=lm) + theme_minimal() 
 ```
 
+=======
+---
+title: "Craft-Cans Case Study"
+author: "Arturo Casillas & Kevin Dickens"
+date: 
+output: 
+  beamer_presentation:
+    theme: "AnnArbor"
+    colortheme: "dolphin"
+    fonttheme: "structurebold"
+#keep_tex: true
+
+---
+
+# R Markdown Dummy
+
+First
+
+# About the Data
+## Source
+
+- The tables contain a list of 2410 US craft beers and 510 US breweries. 
+- The beer data corresponds to beers available in cans
+- This data was traced from CraftCans.com. 
+
+# About the Data
+## View the data
+
+```{r load}
+## Load Data ##
+#getwd()
+setwd("C:/Users/acasi/Downloads")
+BeersData <- read.csv("Beers.csv")
+BreweriesData <- read.csv("Breweries.csv")
+
+str(BeersData)
+str(BreweriesData)
+
+library(knitr)
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+```
+
+# Munging
+## Basic alterations
+- Column names are altered for clarity and to minimize merging issues
+- The beers and breweries are linked by a numeric ID, which is used to merge the two tables
+  - 'Brew_ID'
+
+```{r munge}
+## Prepare for merging ##
+names(BeersData)
+names(BeersData)[5] = "Brew_ID"
+names(BeersData)[1] = "Beer.name"
+names(BreweriesData)[2] = "Brewery.name"
+
+
+## Merge Data ##
+AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
+str(AllBeer)
+
+```
+
+# Munging
+## View the final data
+
+-first 6 rows
+```{r head, fig.align='center', error=FALSE}
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6))
+#%>%
+#kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+# Munging
+## View the final data
+-Try an xtable
+```{r xtablez, results = 'asis'}
+print(xtable(head(AllBeer)), comment=F, auto = TRUE)
+```
+
+# Munging
+### View the final data
+
+last 6 rows
+
+```{r tail, echo=TRUE}
+library(knitr)
+kable(tail(AllBeer, 6))
+```
+
+
+# Data Integrity
+## Missing Vlaues
+- Check the missing values number and indicators
+```{r missing, echo=TRUE}
+## Check for missing values ##
+apply(apply(AllBeer, 2, is.na), 2, sum)
+
+t=sapply(AllBeer, function(y) sum(length(which(is.na(y)))))
+summary(t)
+```
+
+# Data Integrity
+## Notes and Observations
+- Only ABV and IBU have missing values
+  - Almost 50% of IBU values are missing
+  -This certainly affect any analysis that hinges on IBU values
+- Spot checks on the data suggest that character variables use blanks for missing values
+  - This needs to be verified
+
+# Data Integrity
+## Double Check Missing Vlaues
+- Check for blanks instead of NA's
+```{r missing2, echo=TRUE}
+## Double Check ##
+## Look at balnk Strings ##
+apply(AllBeer, 2, function(y) sum(y == ""))
+```
+- 'Stye', which represents style of beer, has 5 additional missing values
+
+# External Data
+
+- From R
+  - R contains additional region and division data per state in the package 'Datasets'
+  - This data is from a 1977 report from the chamber of commerce
+
+# External Data
+
+- From census
+  - This is a 2016 geography table
+
+# Tail2
+
+-experiment with plotting last 6 rows
+
+
+```{r tail2, echo=FALSE, size='vsmall', warning=FALSE }
+#library(xtable)
+#print(xtable(head(AllBeer, 6)))
+
+#library(pander)
+#panderOptions('graph.fontsize', .8)
+#pander(head(AllBeer, 6))
+
+library(knitr)
+#library(kableExtra)
+kable(head(AllBeer, 6)) 
+#%>%
+#kable_styling(font_size = 7)
+```
+
+
+# Simple Plot
+
+```{r plot1, echo=FALSE}
+plot(ABV~IBU, data=AllBeer)
+abline(lm(ABV~IBU, data=AllBeer))
+```
+
+
+# Fancier Plot
+
+```{r plot2, echo=FALSE, warning=FALSE}
+library(ggplot2)
+
+ggplot(dat=AllBeer, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+```
+
+>>>>>>> a066e399ce0dfe5518357a9a5e89346cdb71a4c7
