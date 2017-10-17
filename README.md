@@ -42,10 +42,6 @@ The following files are located within the Archive subfolder:
 The presentation folder contains numerous files used for knitting together the file presentation such as:
 * ABV_Map.jpeg - Image of the ABV by State map.
 * Breweries.jpeg	- Image of the Breweries by State map.
-* CaseStudy1Beamer.Rmd
-* CaseStudy1Beamer.html
-* CaseStudy1Beamer.md
-* CaseStudy1Beamer.pdf
 * CaseStudy1BootstrapDoc.Rmd
 * CaseStudy1BootstrapDoc.html
 * CaseStudy1DummyRMDArturo.Rmd
@@ -54,6 +50,13 @@ The presentation folder contains numerous files used for knitting together the f
 * IBU_Map.jpeg - Image of the IBU by State map.
 * TestPresentation.Rpres
 * TestPresentation.md
+
+#### Presentation/Archive Folder
+The following files are located within the Archive subfolder:
+* CaseStudy1Beamer.Rmd
+* CaseStudy1Beamer.html
+* CaseStudy1Beamer.md
+* CaseStudy1Beamer.pdf
 
 #### CaseStudy1DummyRMDArturo_files/figure-html Folder
 * plot1-1.png - Presentation graphics (scatter plot).
