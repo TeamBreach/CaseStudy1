@@ -313,21 +313,25 @@ apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 #Analysis
 
-###Syles
+###Breweries and Syles
 
--The ten most popular canned beer styles
+There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. In fact, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the title. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
+
+-The ten most popular canned beer styles, expand to see.
 ```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
 #10 most popular beer styles
 ##use table to get frequencies and then sort
-pop1=sort(table(AllBeerReg$Style))[100:90]
+pop1=sort(table(AllBeerReg$Style))[100:91]
 pop1
 
 ```
 
--The total number of breweries per state (horizontal)
+
+-The total number of breweries per state
 
 ```{r state.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
 #Horizontal Table#
 
 StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length)
@@ -336,9 +340,9 @@ names(rawbreweries)[2] = "Brewery_Name"
 
 ```
 
--The total number of breweries per state (vertical)
+-Map of total number of breweries per state
 
-```{r state.Brew.V, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+```{r state.Brew.map, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
 #Initializes a new object with State, Brewery Name, and City
 
@@ -349,11 +353,6 @@ newbrewery2<-aggregate(newbrewery$Brewery_Name, list(newbrewery$State), function
 
 names(newbrewery2) = c("State", "Freq")
 
-```
-
--Map of total number of breweries per state
-
-```{r state.Brew.map, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 #Runs the StateName function to replace abbreviations with state names and then calls tolower to make certain they are lower case
 
 newbrewery2<-StateName(newbrewery2)
@@ -395,21 +394,6 @@ brew_map<- ggplot(newbrewery2, aes(map_id=State))+    #sets the data (newbrewery
 
 brew_map
   
-
-```
-
- -Map of total number of breweries per state
- 
-```{r state.Brew.pop, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-
-#Initializes a new object with State, Brewery Name, and City
-
-newbrewery<-AllBeerReg[,c("Brewery_Name", "City", "State")]
-str(newbrewery)
-
-newbrewery2<-aggregate(newbrewery$Brewery_Name, list(newbrewery$State), function(x) length(unique(x)))   #Returns a count of the unique breweries by state
-
-names(newbrewery2) = c("State", "Freq")
 
 ```
 

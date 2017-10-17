@@ -272,6 +272,9 @@ nastrings
 #####################################################################
 
 
+## Breweries in total ##
+
+length(unique(AllBeerReg$Brew_ID))
 
 ####Count Unique Breweries by State####
 
@@ -443,10 +446,10 @@ AllBeerReg$State[which.max(AllBeerReg$IBU)]  #Returns the state name with the hi
 ##Top Ten alcoholic beers and highest IBU beers ##
 ## use order() to index ##
 
-o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer.name","ABV","IBU","Ounces","Brewery_Name", "City")]
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE),c("State", "Beer_Name","ABV","IBU","Ounces","Brewery_Name", "City")]
 o1[1:10,]
 
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","ABV","IBU","Ounces","Brewery_Name", "City")]
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer_Name","ABV","IBU","Ounces","Brewery_Name", "City")]
 o2[1:10,]
 
 #####################################################################
@@ -530,7 +533,7 @@ pop2=data.frame("State" =colnames(TTT),
             "Style" = row.names(TTT)[apply(TTT, 2, which.max)])
 pop2
 
-T
+
 
 
 #Question A4:  Most Popular Brewed Style By City
