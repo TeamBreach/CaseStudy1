@@ -19,6 +19,33 @@ First
 
 
 ```
+## Warning: package 'ggplot2' was built under R version 3.4.2
+```
+
+```
+## Warning: package 'fiftystater' was built under R version 3.4.2
+```
+
+```
+## Warning: package 'maps' was built under R version 3.4.2
+```
+
+```
+## 
+## Attaching package: 'maps'
+```
+
+```
+## The following object is masked from 'package:plyr':
+## 
+##     ozone
+```
+
+```
+## Warning: package 'mapproj' was built under R version 3.4.2
+```
+
+```
 ## Warning: package 'xtable' was built under R version 3.4.2
 ```
 
@@ -33,10 +60,6 @@ First
 
 ```
 ##  R package version 5.2. http://CRAN.R-project.org/package=stargazer
-```
-
-```
-## Warning: package 'ggplot2' was built under R version 3.4.2
 ```
 
 
@@ -208,7 +231,7 @@ apply(apply(AllBeer, 2, is.na), 2, sum)
 
 ```r
 ## Double Check ##
-## Look at balnk Strings ##
+## Look at blankk Strings ##
 apply(AllBeer, 2, function(y) sum(y == ""))
 ```
 

@@ -30,6 +30,19 @@ First
 ## View the data
 
 ```{r load, echo=FALSE}
+## Load Packages ##
+library(ggplot2)
+
+library(fiftystater)
+
+library(plyr)
+
+library(datasets)
+
+library(maps)
+
+library(mapproj)
+
 ## Load Data ##
 #getwd()
 BeersData <- read.csv("C:/Users/acasi/Downloads/Beers.csv")
@@ -39,7 +52,6 @@ library(xtable)
 options(xtable.floating = FALSE)
 options(xtable.timestamp = "")
 library(stargazer)
-library(ggplot2)
 
 ```
 
@@ -111,7 +123,7 @@ apply(apply(AllBeer, 2, is.na), 2, sum)
 - Check for blanks instead of NA's
 ```{r missing2, echo=TRUE, warning=FALSE}
 ## Double Check ##
-## Look at balnk Strings ##
+## Look at blankk Strings ##
 apply(AllBeer, 2, function(y) sum(y == ""))
 
 ##Fancy table

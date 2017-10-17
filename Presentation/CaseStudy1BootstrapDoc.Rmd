@@ -9,15 +9,18 @@ output:
         highlight: xcode
         theme.chooser: TRUE
         highlight.chooser: TRUE
+        #menu: FALSE
+        custom.header: NULL
 ---
 
-
+#Intro
 ##Intro
 
 -Intro goes here
 
 
-```{r bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE}
+```{r echo=FALSE, include = FALSE}
+#bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE
 ## Load Packages ##
 library(ggplot2)
 library(fiftystater)
@@ -176,13 +179,14 @@ StateName<-function(test){
 }
 ```
 
+#Data
 ##About the Data
 
 ###Source
 
 The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID.The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
 
- To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
+To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
 
 -View the original data. Expand below to see details.
 
@@ -219,21 +223,24 @@ str(AllBeer)
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))  #Trim the leadig spaces from state abbreviation
 ```
 
--Expand below to see the first 6 rows and perform a spot check for integrity
+-Expand below to see the first 6 rows and perform a spot check for integrity (raw)
 ```{r head, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-kable(head(AllBeer, 6), row.names = FALSE)
+#kable(head(AllBeer, 6), row.names = FALSE)
+head(AllBeer, 6)
 ```
 
--Also expand below to see the last 6 rows and perform a spot check for integrity
+-Also expand below to see the last 6 rows and perform a spot check for integrity (pander)
 ```{r tail, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-kable(tail(AllBeer, 6), row.names = FALSE)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '...')
+pander(tail(AllBeer, 6), row.names = FALSE)
 ```
 
 ###Data Integrity
 
-The data were examined for missing values and nonsense entries through formal methods in addtion to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. ONly 3% of ABV values and 5 Style entries are missing. 
+The data were examined for missing values and nonsense entries through formal methods in addtion to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing. 
 
-- Confirm numeric missing values
+-Confirm numeric missing values
 ```{r num.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ## Prepare for merging ##
 
@@ -242,7 +249,7 @@ panderOptions('table.continues', '')
 pander(apply(apply(AllBeer, 2, is.na), 2, sum))
 ```
 
-- Confirm character missing values
+-Confirm character missing values
 ```{r char.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ## Double Check ##
 ## Look at blank Strings ##
@@ -252,9 +259,7 @@ panderOptions('table.continues', '')
 pander(apply(AllBeer, 2, function(y) sum(y == "")))
 ```
 
-
 ###Add Region & Division
-
 R contains additional region and division data per state in the package 'datasets'. These data are from a 1977 report from the chamber of commerce. The state classifications for region and division have not changed. Prior to June 1984 however, the Midwest Region was designated as the North Central Region. These data were added to expand analysis options and segmenting the states and cities geographically. 
 
 ```{r reg1, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -282,6 +287,7 @@ apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 ```
 
+#Analysis
 ##Analysis
 
 - The total number of breweries per state (horizontal)
@@ -310,7 +316,7 @@ names(newbrewery2) = c("State", "Freq")
 
 ```
 
- - Map of total number of breweries per state
+-Map of total number of breweries per state
 
 ```{r state.Brew.map, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 #Runs the StateName function to replace abbreviations with state names and then calls tolower to make certain they are lower case
@@ -361,20 +367,26 @@ brew_map
  
 ### Beers with highest IBU
 
-- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
-- Nine out of the 10 most bitter beers are IPAs
-- Eight our of the 10 most bitter beers are Imperial IPAs
+-'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
+-Nine out of the 10 most bitter beers are IPAs
+-Eight our of the 10 most bitter beers are Imperial IPAs
 
 ```{r shigh.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
-kable(o2[1:10,])
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer_Name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery_Name", "City")]
+#kable(o2[1:10,])
+o2[1:10,]
 ```
 
 
 ### ABV IBU Relationship
 
-- ABV and IBU appear to be related
-- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
+ABV and IBU appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increase of IBU values are associated with a small increase in ABV despite being very likely to be associated with higher ABV.
+
+```{r ABV.v.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
+  geom_point(shape=16) + 
+  geom_smooth(method=lm) + theme_minimal() 
+```
  
 ##Summary and Conclusions
 

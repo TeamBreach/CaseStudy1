@@ -254,12 +254,20 @@ div.tocify {
 </div>
 <div id="view-the-data" class="section level2">
 <h2>View the data</h2>
+<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.2</code></pre>
+<pre><code>## Warning: package 'fiftystater' was built under R version 3.4.2</code></pre>
+<pre><code>## Warning: package 'maps' was built under R version 3.4.2</code></pre>
+<pre><code>## 
+## Attaching package: 'maps'</code></pre>
+<pre><code>## The following object is masked from 'package:plyr':
+## 
+##     ozone</code></pre>
+<pre><code>## Warning: package 'mapproj' was built under R version 3.4.2</code></pre>
 <pre><code>## Warning: package 'xtable' was built under R version 3.4.2</code></pre>
 <pre><code>## 
 ## Please cite as:</code></pre>
 <pre><code>##  Hlavac, Marek (2015). stargazer: Well-Formatted Regression and Summary Statistics Tables.</code></pre>
 <pre><code>##  R package version 5.2. http://CRAN.R-project.org/package=stargazer</code></pre>
-<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.2</code></pre>
 <pre class="r"><code>str(BeersData)</code></pre>
 <pre><code>## 'data.frame':    2410 obs. of  7 variables:
 ##  $ Name      : Factor w/ 2305 levels &quot;#001 Golden Amber Lager&quot;,..: 1638 577 1705 1842 1819 268 1160 758 1093 486 ...
@@ -559,7 +567,7 @@ apply(apply(AllBeer, 2, is.na), 2, sum)</code></pre>
 <li>Check for blanks instead of NA’s</li>
 </ul>
 <pre class="r"><code>## Double Check ##
-## Look at balnk Strings ##
+## Look at blankk Strings ##
 apply(AllBeer, 2, function(y) sum(y == &quot;&quot;))</code></pre>
 <pre><code>##      Brew_ID    Beer.name      Beer_ID          ABV          IBU 
 ##            0            0            0           NA           NA 
