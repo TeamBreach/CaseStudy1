@@ -276,6 +276,7 @@ nastrings
 ####Count Unique Breweries by State####
 
 sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length) #horizontal table
+
 sapply(tapply(AllBeerReg$Style, AllBeerReg$State, unique), length) #horizontal table for style
 
 ## For Maps ##
@@ -339,8 +340,10 @@ brew_map
 #####################################################################
 
 str(AllBeerReg[,5:6])
+
 median_beer<-aggregate(AllBeerReg[,5:6], list(AllBeerReg$State), median, na.rm=TRUE)    #Creates a new object which stores the median IBU and ABV per state
 names(median_beer)[1]="State"
+
 
 #barplot of median ABV and IBU per state in one graphic
 
@@ -353,6 +356,7 @@ barplot(median_beer$IBU, names.arg = median_beer$State, cex.names = 0.7, cex.axi
 
 # Calls the StateName function to convert state abbreviations to lowercase state names
 median_beer2<-median_beer
+
 median_beer2<-StateName(median_beer2)
 
 

@@ -1,0 +1,381 @@
+---
+title: "Craft-Cans Case Study"
+author: "Arturo Casillas & Kevin Dickens"
+date: "October 6, 2017"
+output: 
+   knitrBootstrap::bootstrap_document:
+        title: "Chapter 4: Alternatives to the t-Tools"
+        theme: "spacelab"
+        highlight: xcode
+        theme.chooser: TRUE
+        highlight.chooser: TRUE
+---
+
+
+##Intro
+
+-Intro goes here
+
+
+```{r bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE}
+## Load Packages ##
+library(ggplot2)
+library(fiftystater)
+library(plyr)
+library(datasets)
+library(maps)
+library(mapproj)
+
+
+library(knitr)
+opts_chunk$set(bootstrap.show.code=FALSE, bootstrap.thumbnail=FALSE, bootstrap.show.message=FALSE)
+library(ggplot2)
+theme_set(new = theme_minimal())
+
+#use color brewer as default discrete colors
+scale_colour_discrete <- function(...) scale_color_brewer(palette="Set1", ...)
+scale_fill_discrete <- function(...) scale_fill_brewer(palette="Set1", ...)
+
+library(plyr)
+## Load Data ##
+#getwd()
+rawbeers <- read.csv("C:/Users/acasi/Downloads/Beers.csv")
+rawbreweries <- read.csv("C:/Users/acasi/Downloads/Breweries.csv")
+library(xtable)
+options(xtable.floating = FALSE)
+options(xtable.timestamp = "")
+library(pander)
+
+
+##### State Name Function #####
+
+StateName<-function(test){
+  
+  
+  
+  #Checks to factors, converts them to characters, and then trims any white space before or after the characters
+  
+  i <- sapply(test, is.factor)
+  
+  test[i] <- lapply(test[i], as.character)
+  
+  test$State<-sapply(test$State, trimws, which="both")
+  
+  
+  
+  #Replaces each state code with the corresponding state name.  Note that the df must have a column named State that contains the state codes for this code to work.
+  
+  test$State[test$State =="AL"]<-"alabama"
+  
+  test$State[test$State =="AK"]<-"alaska"
+  
+  test$State[test$State =="AZ"]<-"arizona"
+  
+  test$State[test$State =="AR"]<-"arkansas"
+  
+  test$State[test$State =="CA"]<-"california"
+  
+  test$State[test$State =="CO"]<-"colorado"
+  
+  test$State[test$State =="CT"]<-"connecticut"
+  
+  test$State[test$State =="DC"]<-"district of columbia"
+  
+  test$State[test$State =="DE"]<-"deleware"
+  
+  test$State[test$State =="FL"]<-"florida"
+  
+  test$State[test$State =="GA"]<-"georgia"
+  
+  test$State[test$State =="HI"]<-"hawaii"
+  
+  test$State[test$State =="ID"]<-"idaho"
+  
+  test$State[test$State =="IL"]<-"illinois"
+  
+  test$State[test$State =="IN"]<-"indiana"
+  
+  test$State[test$State =="IA"]<-"iowa"
+  
+  test$State[test$State =="KS"]<-"kansas"
+  
+  test$State[test$State =="KY"]<-"kentucky"
+  
+  test$State[test$State =="LA"]<-"louisiana"
+  
+  test$State[test$State =="ME"]<-"maine"
+  
+  test$State[test$State =="MD"]<-"maryland"
+  
+  test$State[test$State =="MA"]<-"massachusetts"
+  
+  test$State[test$State =="MI"]<-"michigan"
+  
+  test$State[test$State =="MN"]<-"minnesota"
+  
+  test$State[test$State =="MS"]<-"mississippi"
+  
+  test$State[test$State =="MO"]<-"missouri"
+  
+  test$State[test$State =="MT"]<-"montana"
+  
+  test$State[test$State =="NE"]<-"nebraska"
+  
+  test$State[test$State =="NV"]<-"nevada"
+  
+  test$State[test$State =="NH"]<-"new hampshire"
+  
+  test$State[test$State =="NJ"]<-"new jersey"
+  
+  test$State[test$State =="NM"]<-"new mexico"
+  
+  test$State[test$State =="NY"]<-"new york"
+  
+  test$State[test$State =="NC"]<-"north carolina"
+  
+  test$State[test$State =="ND"]<-"north dakota"
+  
+  test$State[test$State =="OH"]<-"ohio"
+  
+  test$State[test$State =="OK"]<-"oklahoma"
+  
+  test$State[test$State =="OR"]<-"oregon"
+  
+  test$State[test$State =="PA"]<-"pennsylvania"
+  
+  test$State[test$State =="RI"]<-"rhode island"
+  
+  test$State[test$State =="SC"]<-"south carolina"
+  
+  test$State[test$State =="SD"]<-"south dakota"
+  
+  test$State[test$State =="TN"]<-"tennessee"
+  
+  test$State[test$State =="TX"]<-"texas"
+  
+  test$State[test$State =="UT"]<-"utah"
+  
+  test$State[test$State =="VT"]<-"vermont"
+  
+  test$State[test$State =="VA"]<-"virginia"
+  
+  test$State[test$State =="WA"]<-"washington"
+  
+  test$State[test$State =="WV"]<-"west virginia"
+  
+  test$State[test$State =="WI"]<-"wisconsin"
+  
+  test$State[test$State =="WY"]<-"wyoming"
+  
+  
+  
+  #returns the new dataframe with the state names.
+
+  return(test)
+  
+}
+```
+
+##About the Data
+
+###Source
+
+The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID.The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
+
+ To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
+
+-View the original data. Expand below to see details.
+
+```{r view, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+str(rawbeers)
+
+str(rawbreweries)
+
+```
+
+-Prepare for merging. Expand below to see details.
+
+```{r prep, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+## Prepare for merging ##
+
+names(rawbeers)[5] = "Brew_ID"  #Rename 'Brewery_id' to ease merging
+
+names(rawbeers)[1] = "Beer_Name" #Rename 'Name' to 'Beer_Name' to avoid confusion with brewery name or state
+
+names(rawbreweries)[2] = "Brewery_Name"  #Rename 'Name' to 'Brewery_Name' avoid confusion and ease merging
+
+```
+
+-Merged to create a single table, details below.
+
+```{r merge, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+## Merge Data ##
+
+AllBeer <- merge(rawbeers, rawbreweries, by="Brew_ID")
+
+str(AllBeer)
+
+levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))  #Trim the leadig spaces from state abbreviation
+```
+
+-Expand below to see the first 6 rows and perform a spot check for integrity
+```{r head, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+kable(head(AllBeer, 6), row.names = FALSE)
+```
+
+-Also expand below to see the last 6 rows and perform a spot check for integrity
+```{r tail, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+kable(tail(AllBeer, 6), row.names = FALSE)
+```
+
+###Data Integrity
+
+The data were examined for missing values and nonsense entries through formal methods in addtion to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. ONly 3% of ABV values and 5 Style entries are missing. 
+
+- Confirm numeric missing values
+```{r num.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+## Prepare for merging ##
+
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(apply(AllBeer, 2, is.na), 2, sum))
+```
+
+- Confirm character missing values
+```{r char.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+## Double Check ##
+## Look at blank Strings ##
+
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(AllBeer, 2, function(y) sum(y == "")))
+```
+
+
+###Add Region & Division
+
+R contains additional region and division data per state in the package 'datasets'. These data are from a 1977 report from the chamber of commerce. The state classifications for region and division have not changed. Prior to June 1984 however, the Midwest Region was designated as the North Central Region. These data were added to expand analysis options and segmenting the states and cities geographically. 
+
+```{r reg1, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+## Add region/division ##
+
+state.geo=data.frame(state.abb, state.region, state.division)
+
+#rename for ease of merge
+#length(levels(state.geo$state.abb))
+levels(state.geo$state.abb) = c(levels(state.geo$state.abb),"DC")
+names(state.geo)[1]='State'
+state.geo[51, ] = c('DC','South', 'South Atlantic')
+
+#align levels for merge
+levels(state.geo$State)=levels(AllBeer$State)
+
+
+#Final Data#
+levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))
+AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", all.x = TRUE)
+str(AllBeerReg)
+
+apply(AllBeerReg, 2, function(y) sum(y == ""))
+apply(apply(AllBeerReg, 2, is.na), 2, sum)
+
+```
+
+##Analysis
+
+- The total number of breweries per state (horizontal)
+
+```{r state.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+#Horizontal Table#
+
+StBrews=sapply(tapply(AllBeerReg$Brew_ID, AllBeerReg$State, unique), length)
+pander(StBrews)
+names(rawbreweries)[2] = "Brewery_Name"  
+
+```
+
+- The total number of breweries per state (vertical)
+
+```{r state.Brew.V, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+#Initializes a new object with State, Brewery Name, and City
+
+newbrewery<-AllBeerReg[,c("Brewery_Name", "City", "State")]
+str(newbrewery)
+
+newbrewery2<-aggregate(newbrewery$Brewery_Name, list(newbrewery$State), function(x) length(unique(x)))   #Returns a count of the unique breweries by state
+
+names(newbrewery2) = c("State", "Freq")
+
+```
+
+ - Map of total number of breweries per state
+
+```{r state.Brew.map, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+#Runs the StateName function to replace abbreviations with state names and then calls tolower to make certain they are lower case
+
+newbrewery2<-StateName(newbrewery2)
+
+newbrewery2$State<-tolower(newbrewery2$State)
+
+str(newbrewery2)
+
+
+# Start of the call to vreate the median IBU by state map
+
+brew_map<- ggplot(newbrewery2, aes(map_id=State))+    #sets the data (newbrewery2) and the primary key (State variable) to link map and data
+  
+  geom_map(aes(fill=Freq), map=fifty_states)+         #sets the fill value (Freq) that will determine color and the geographic map data
+  
+  expand_limits(x=fifty_states$long, y=fifty_states$lat)+ #Sets the latitude and longitudinal extents
+  
+  coord_map() +                        #Sets the base geographic projection (mercator in this case)
+  
+  scale_x_continuous(breaks=NULL)+
+  
+  scale_y_continuous(breaks=NULL)+
+  
+  labs(x = "", y = "") +
+  
+  ggtitle("Number of Breweries By State") + # Sets the title of the map
+  
+  scale_fill_gradient(low = "seagreen1", high = "seagreen4", space = "Lab",na.value = "gray70", guide=guide_colourbar(title.position="top", barwidth=10, title="Number of Breweries",  title.hjust=0.5))+     #contols legend elements such as color gradiant, colors for NA values, and the size of the legend bar
+  
+  theme(plot.title = element_text(lineheight=.8, face="bold"),legend.position=c(.87, .25),legend.direction="horizontal",panel.background=element_blank(), panel.border=element_rect(colour="Grey50", fill=NA, size=2))+   #Theme elements such as the border around the map plot, the position of map components like the legend
+  
+  borders("state")+     #Adds colored state borders
+  
+  fifty_states_inset_boxes()     #Creates the insert boxes around Alaska and Hawaii so people don't mistake them for Mexican states or other Central American countries.
+
+
+
+#Plots the map for total number of breweries by state
+
+brew_map
+  
+
+```
+
+ - Map of total number of breweries per state
+ 
+### Beers with highest IBU
+
+- 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer
+- Nine out of the 10 most bitter beers are IPAs
+- Eight our of the 10 most bitter beers are Imperial IPAs
+
+```{r shigh.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer.name","Beer_ID" ,"ABV","IBU","Ounces","Style","Brewery.name", "City")]
+kable(o2[1:10,])
+```
+
+
+### ABV IBU Relationship
+
+- ABV and IBU appear to be related
+- The relationship is not very strong in the sense that a large increase of IBU values are associated with a small increase in ABV
+ 
+##Summary and Conclusions
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
