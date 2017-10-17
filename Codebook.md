@@ -32,5 +32,8 @@ Ounces - The number of fluid ounces for a single can of the described beer.
 ### Obtaining 'tidy' variable names
 
 ### Table of variable names
-Variable Number | Original Name | Valid Name | Cleaned Name
-:-------: | --------| --------- | ------------------------- 
+| Variable Number | Original Name | Cleaned Name |
+| :-------------: | :------------:| :----------: |
+| 1 | Brewery_ID | Brew_ID |
+| 2 | Name | Brew_Name |
+| 3 | Name | Brewery_Name |
