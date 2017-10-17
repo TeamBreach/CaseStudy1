@@ -19,11 +19,11 @@ This repo contains the following folders:
 
 ### Code Folder
 The code folder contains the following files:
-*CaseStudy1CodeArturo.R
-*CaseStudy1CombinedCode1.R
-*Dickens_casestudy1.R
-*Importfile.R
-*Makefile.R
+* CaseStudy1CodeArturo.R
+* CaseStudy1CombinedCode1.R
+* Dickens_casestudy1.R
+* Importfile.R
+* Makefile.R
 
 #### Code/Archive Folder
 The following files are located within the Archive subfolder:
