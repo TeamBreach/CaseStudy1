@@ -20,6 +20,12 @@ Of particular interest to the researchers requesting the analysis and those invo
 
 This study will also perform basic statistical analysis to better understand and interpret the both the spatial data and the underlying canned craft beer data as well.  The findings will inform readers on the distributions of the data and allow them to look at the included maps to determine which states lie above or below median values as well as determine underlying relationships between such characteristics as alcohol by volume and international bitterness units.
 
+Fundamentally, this study will seek to answer the following questions:
+* How many breweries are in each state?
+* What is the median ABV and IBU for each state?
+* What is the spatial distribution of the data of interest?
+* Are there any statistical or spatial relationships between the variables presented in thw data?
+
 ## Abstract
 This study seeks to evaluate the distribution of beer and certain beer characterstics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characterstics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characterstics.
 
