@@ -128,7 +128,12 @@ namergeddrunk <-sapply(mergeddrunk, function(y) sum(length(which(is.na(y)))))  #
 median_beer<-aggregate(mergeddrunk[, 4:5], list(mergeddrunk$State), median, na.rm=TRUE)    #Creates a new object which stores the median IBU and ABV per state
 median_beer[is.na(median_beer)] <- 0 #Replaces NA values with zeroes
 median_beer<-rename(median_beer, c('Group.1'='State'))  #Column rename from after the aggregation
-barplot(median_beer$ABV, width=3, names.arg = median_beer$State, las=2)  #barplot of median ABV and IBU per state in one chart
+
+#barplot of median ABV and IBU per state in one graphic
+
+par(mfrow=c(1,2))    #sets parameter for side-by-side plots
+barplot(median_beer$ABV, width=4, names.arg = median_beer$State, main="Median ABV by State", xlab="State", ylab="Alcohol By Volume (ABV)", las=2, col=c("lightgoldenrod2") )   #ABV Bar Plot
+barplot(median_beer$IBU, width=4, names.arg = median_beer$State, main="Median IBU by State", xlab="State", ylab="International Bitterness Units (IBU)", las=2, col=c("lightblue3"))    #IBU Bar Plot
 
 # Calls the StateName function to convert state abbreviations to lowercase state names
 median_beer<-StateName(median_beer)
