@@ -2,6 +2,9 @@
 Arturo Casillas & Kevin Dickens  
 October 6, 2017  
 
+# Abstract
+This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.
+
 # Introduction
 In recent years the craft brewery movement has exploded across the United States.  New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer.  The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness.  At the end of the day, they all manufacture beer.  Of particular interest to this study are the relationships of canned craft beer breweries and the common beer characteristics.  Do these characteristics show any relationships spatially or statistically?  This study hopes to answer that basic question and provide a foundation for future research on the topic.
 
@@ -10,13 +13,11 @@ Of particular interest to the researchers requesting the analysis and those invo
 This study will also perform basic statistical analysis to better understand and interpret the both the spatial data and the underlying canned craft beer data as well.  The findings will inform readers on the distributions of the data and allow them to look at the included maps to determine which states lie above or below median values as well as determine underlying relationships between such characteristics as alcohol by volume and international bitterness units.
 
 Fundamentally, this study will seek to answer the following questions:
+
 * How many breweries are in each state?
 * What is the median ABV and IBU for each state?
 * What is the spatial distribution of the data of interest?
 * Are there any statistical or spatial relationships between the variables presented in the data?
-
-## Abstract
-This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.
 
 ## Scope
 The scope of this analytical research is limited to the data originally provided by the requestor.  As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015.  It is unclear if this data contains all craft breweries that create a brewed product, or only a sample.  The scope is further limited to only the 50 States and the District of Columbia.  No U.S. territories are included in the underlying data.  
@@ -24,15 +25,18 @@ The scope of this analytical research is limited to the data originally provided
 
 
 # Data
+This section will describe the original data and discuss methods used to convert the raw data into a tidy dataset ready for analysis.  These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.
+
 ## About the Data
+For more information on the raw data, see the codebook [here.](https://github.com/TeamBreach/CaseStudy1/blob/master/Codebook.md)
 
 ### Source
 
-The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
+The original data came in two files: Beer.csv & Breweries.csv. The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
 
 To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
 
--View the original data. Expand below to see details.
+-View the structure of the original data. Expand below to see details.
 
 
 ```r
@@ -62,13 +66,13 @@ str(rawbreweries)
 ##  $ State  : Factor w/ 51 levels " AK"," AL"," AR",..: 24 18 20 5 5 41 6 23 23 23 ...
 ```
 
--Prepare for merging. Expand below to see details.
+-Prepare the data for merging, such as rename columns. Expand below to see details.
 
 
 ```r
 ## Prepare for merging ##
 
-names(rawbeers)[5] = "Brew_ID"  #Rename 'Brewery_id' to ease merging
+names(rawbeers)[5] = "Brew_ID"  #Rename from 'Brewery_id' to ease merging
 
 names(rawbeers)[1] = "Beer_Name" #Rename 'Name' to 'Beer_Name' to avoid confusion with brewery name or state
 
@@ -104,38 +108,53 @@ str(AllBeer)
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))  #Trim the leadig spaces from state abbreviation
 ```
 
--Expand below to see the first 6 rows and perform a spot check for integrity (raw)
+-Perform a spot check for integrity, view the first six rows
 
 ```r
 #kable(head(AllBeer, 6), row.names = FALSE)
-head(AllBeer, 6)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '...')
+pander(head(AllBeer, 6), row.names = FALSE)
 ```
 
-```
-##   Brew_ID     Beer_Name Beer_ID   ABV IBU
-## 1       1  Get Together    2692 0.045  50
-## 2       1 Maggie's Leap    2691 0.049  26
-## 3       1    Wall's End    2690 0.048  19
-## 4       1       Pumpion    2689 0.060  38
-## 5       1    Stronghold    2688 0.060  25
-## 6       1   Parapet ESB    2687 0.056  47
-##                                 Style Ounces       Brewery_Name
-## 1                        American IPA     16 NorthGate Brewing 
-## 2                  Milk / Sweet Stout     16 NorthGate Brewing 
-## 3                   English Brown Ale     16 NorthGate Brewing 
-## 4                         Pumpkin Ale     16 NorthGate Brewing 
-## 5                     American Porter     16 NorthGate Brewing 
-## 6 Extra Special / Strong Bitter (ESB)     16 NorthGate Brewing 
-##          City State
-## 1 Minneapolis    MN
-## 2 Minneapolis    MN
-## 3 Minneapolis    MN
-## 4 Minneapolis    MN
-## 5 Minneapolis    MN
-## 6 Minneapolis    MN
-```
 
--Also expand below to see the last 6 rows and perform a spot check for integrity (pander)
+------------------------------------------------------------------------------------------
+ Brew_ID     Beer_Name     Beer_ID    ABV    IBU               Style               Ounces 
+--------- --------------- --------- ------- ----- ------------------------------- --------
+    1      Get Together     2692     0.045   50            American IPA              16   
+
+    1      Maggie's Leap    2691     0.049   26         Milk / Sweet Stout           16   
+
+    1       Wall's End      2690     0.048   19          English Brown Ale           16   
+
+    1         Pumpion       2689     0.06    38             Pumpkin Ale              16   
+
+    1       Stronghold      2688     0.06    25           American Porter            16   
+
+    1       Parapet ESB     2687     0.056   47    Extra Special / Strong Bitter     16   
+                                                               (ESB)                      
+------------------------------------------------------------------------------------------
+
+Table: ...
+
+ 
+-----------------------------------------
+   Brewery_Name         City       State 
+------------------- ------------- -------
+ NorthGate Brewing   Minneapolis    MN   
+
+ NorthGate Brewing   Minneapolis    MN   
+
+ NorthGate Brewing   Minneapolis    MN   
+
+ NorthGate Brewing   Minneapolis    MN   
+
+ NorthGate Brewing   Minneapolis    MN   
+
+ NorthGate Brewing   Minneapolis    MN   
+-----------------------------------------
+
+-Perform a spot check for integrity, view the lasts six rows
 
 ```r
 panderOptions('table.split.table', 100)
@@ -183,7 +202,7 @@ Table: ...
 
 The data were examined for missing values and nonsense entries through formal methods in addition to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing. 
 
--Confirm numeric missing values
+  -Table of numeric missing values
 
 ```r
 ## Prepare for merging ##
@@ -200,7 +219,7 @@ pander(apply(apply(AllBeer, 2, is.na), 2, sum))
     0          0          0      62    1005     0       0           0          0       0   
 -------------------------------------------------------------------------------------------
 
--Confirm character missing values
+  -Table of character missing values
 
 ```r
 ## Double Check ##
@@ -240,7 +259,9 @@ levels(state.geo$State)=levels(AllBeer$State)
 #Final Data#
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", all.x = TRUE)
-str(AllBeerReg)
+
+#View Final Data#
+str(AllBeerReg); head(AllBeerReg, 6); tail(AllBeerReg, 6)
 ```
 
 ```
@@ -259,8 +280,64 @@ str(AllBeerReg)
 ##  $ state.division: Factor w/ 9 levels "New England",..: 9 9 9 9 9 9 9 9 9 9 ...
 ```
 
+```
+##   State Brew_ID                  Beer_Name Beer_ID   ABV IBU
+## 1    AK     103            King Street IPA    1667 0.060  70
+## 2    AK     103                  Amber Ale    2436 0.051  NA
+## 3    AK     494             Polar Pale Ale     920 0.052  17
+## 4    AK     459          Sunken Island IPA     349 0.068  NA
+## 5    AK     103        King Street Pilsner    1706 0.055  NA
+## 6    AK     459 Skilak Scottish Ale (2011)     348 0.058  NA
+##                      Style Ounces                 Brewery_Name      City
+## 1             American IPA     12  King Street Brewing Company Anchorage
+## 2 American Amber / Red Ale     12  King Street Brewing Company Anchorage
+## 3  American Pale Ale (APA)     12 Broken Tooth Brewing Company Anchorage
+## 4             American IPA     12  Kenai River Brewing Company  Soldotna
+## 5           Czech Pilsener     12  King Street Brewing Company Anchorage
+## 6             Scottish Ale     12  Kenai River Brewing Company  Soldotna
+##   state.region state.division
+## 1         West        Pacific
+## 2         West        Pacific
+## 3         West        Pacific
+## 4         West        Pacific
+## 5         West        Pacific
+## 6         West        Pacific
+```
+
+```
+##      State Brew_ID                        Beer_Name Beer_ID   ABV IBU
+## 2405    WY     458    Saddle Bronc Brown Ale (2013)    1198 0.048  16
+## 2406    WY     192                   Pakoâ<U+0080><U+0099>s EyePA     393 0.068  60
+## 2407    WY     192               Snow King Pale Ale    1606 0.060  55
+## 2408    WY     458             Wagon Box Wheat Beer    1197 0.059  15
+## 2409    WY     458            Indian Paintbrush IPA    1199 0.070  75
+## 2410    WY     458 Bomber Mountain Amber Ale (2013)    1200 0.046  20
+##                         Style Ounces                    Brewery_Name
+## 2405        English Brown Ale     12 The Black Tooth Brewing Company
+## 2406             American IPA     12     Snake River Brewing Company
+## 2407  American Pale Ale (APA)     12     Snake River Brewing Company
+## 2408  American Pale Wheat Ale     12 The Black Tooth Brewing Company
+## 2409             American IPA     12 The Black Tooth Brewing Company
+## 2410 American Amber / Red Ale     12 The Black Tooth Brewing Company
+##          City state.region state.division
+## 2405 Sheridan        South South Atlantic
+## 2406  Jackson        South South Atlantic
+## 2407  Jackson        South South Atlantic
+## 2408 Sheridan        South South Atlantic
+## 2409 Sheridan        South South Atlantic
+## 2410 Sheridan        South South Atlantic
+```
+
 ```r
-apply(AllBeerReg, 2, function(y) sum(y == ""))
+#Recheck for missing values
+apply(apply(AllBeer, 2, is.na), 2, sum); apply(AllBeerReg, 2, function(y) sum(y == ""))
+```
+
+```
+##      Brew_ID    Beer_Name      Beer_ID          ABV          IBU 
+##            0            0            0           62         1005 
+##        Style       Ounces Brewery_Name         City        State 
+##            0            0            0            0            0
 ```
 
 ```
@@ -272,26 +349,52 @@ apply(AllBeerReg, 2, function(y) sum(y == ""))
 ##              0              0
 ```
 
+<!---
+-Confirm numeric missing values in updated data
+
 ```r
-apply(apply(AllBeerReg, 2, is.na), 2, sum)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(apply(AllBeer, 2, is.na), 2, sum))
 ```
 
+
+-------------------------------------------------------------------------------------------
+ Brew_ID   Beer_Name   Beer_ID   ABV   IBU    Style   Ounces   Brewery_Name   City   State 
+--------- ----------- --------- ----- ------ ------- -------- -------------- ------ -------
+    0          0          0      62    1005     0       0           0          0       0   
+-------------------------------------------------------------------------------------------
+
+-Confirm character missing values in updated data
+
+```r
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(AllBeerReg, 2, function(y) sum(y == "")))
 ```
-##          State        Brew_ID      Beer_Name        Beer_ID            ABV 
-##              0              0              0              0             62 
-##            IBU          Style         Ounces   Brewery_Name           City 
-##           1005              0              0              0              0 
-##   state.region state.division 
-##              0              0
-```
+
+
+------------------------------------------------------------------------------------------
+ State   Brew_ID   Beer_Name   Beer_ID   ABV   IBU   Style   Ounces   Brewery_Name   City 
+------- --------- ----------- --------- ----- ----- ------- -------- -------------- ------
+   0        0          0          0      NA    NA      5       0           0          0   
+------------------------------------------------------------------------------------------
+
+ 
+-------------------------------
+ state.region   state.division 
+-------------- ----------------
+      0               0        
+-------------------------------
+--->
 
 #Analysis
 
 ###Breweries and Syles
 
-There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
+There are 558 unique breweries and 100 different styles. The most popular style is 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greatest number of breweries. 
 
--The ten most popular canned beer styles are presented below, expand to see. 'Saison' and 'Witbier' are the only non-'American' styles in the top ten at positions nine and ten respectively. 
+  -The ten most popular canned beer styles are presented below, expand to see.  
 
 ```r
 #10 most popular beer styles
@@ -314,31 +417,25 @@ pop1
 ##                             52                             51
 ```
 
--23 of the 100 unique styles are 'American'. However, these 23 styles constitute 62% of all craft cans. Calculations may be confirmed below. However, only 37 out of 2410 beers have 'American' in their title.
+-23 of the 100 unique styles are 'American'. However, these 23 styles constitute 62% of all craft cans. Calculations may be confirmed below. Only 37 out of 2410 beers have 'America' in their name.
 
 
 ```r
-## Calculate percent of styles and beers that are American ##
+## Calculate percent of styles that are American ##
 
 AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
 AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
-sum(AMindex)/100  #Count percent of Beer styles that are 'American': sum / 100
+
+## Calculate percent of unique styles, total number of beers that are 'American', and percent number of beers that are 'American'
+sum(AMindex)/100; sum(AM[AMindex]); sum(AM[AMindex])/2410
 ```
 
 ```
 ## [1] 0.23
 ```
 
-```r
-sum(AM[AMindex])  #Calculate total number of beers that are 'American'
-```
-
 ```
 ## [1] 1492
-```
-
-```r
-sum(AM[AMindex])/2410  #Calculate percent number of beers that are 'American'
 ```
 
 ```
@@ -346,17 +443,16 @@ sum(AM[AMindex])/2410  #Calculate percent number of beers that are 'American'
 ```
 
 ```r
+## Calculate percent of beers that are have America in the name ##
 AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beer names
 ANindex<-grepl('America', row.names(AN))  #Check for 'America' in the title
-sum(AN[ANindex])/2410  #Count percent of Beer styles that are 'American': sum / 2410
+
+## Calculate percent of Beers that are 'American', total number of beers that are 'American'
+sum(AN[ANindex])/2410  ; sum(AN[ANindex])  
 ```
 
 ```
 ## [1] 0.0153527
-```
-
-```r
-sum(AN[ANindex])  #Calculate total number of beers that are 'American'
 ```
 
 ```
@@ -472,7 +568,7 @@ brew_map
 
 ![](CaseStudy1BootstrapDoc_files/figure-html/state.Brew.map-1.png)<!-- -->
 
--Table of most popular beer style per state
+-For a list of the most popular beer style per state, expand below
 
 
 ```r
@@ -541,22 +637,26 @@ pop2
  
 ### ABV and IBU Summary
 
-Alcohol per volume and international bitterness units.
-
-ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
+Alcohol by volume (ABV) does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
 
 -Summary Statistics for ABV below
 
 ```r
-summary(AllBeerReg$ABV)
+## Summary Statistics of ABV ##
+#summary(AllBeerReg$ABV)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$ABV))
 ```
 
-```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62
-```
 
--List of 10 most alcoholic beers
+-------------------------------------------------------------
+ Min.    1st Qu.   Median    Mean     3rd Qu.   Max.    NA's 
+------- --------- -------- --------- --------- ------- ------
+ 0.001    0.05     0.056    0.05977    0.067    0.128    62  
+-------------------------------------------------------------
+
+-The 10 most alcoholic beers are listed below
 
 ```r
 o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE), c("Beer_ID", "State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City", "Style")]
@@ -583,18 +683,24 @@ kable(o1[1:10,], row.names = FALSE)
 ```
 
 
-The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU. 
+The distribution of inernational bitterness units (IBU) is very right skewed. The most bitter beer is 'Bitter Bitch Imperial IPA' out of Oregon. Nine out of the 10 most bitter beers are IPAs and eight of the 10 most bitter beers are Double Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoholic beers lie above the mean and median IBU. 
 
 -Summary statistics for IBU
 
 ```r
-summary(AllBeerReg$IBU)
+## Summary Statistics of IBU ##
+#summary(AllBeerReg$IBU)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$IBU))
 ```
 
-```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-##    4.00   21.00   35.00   42.71   64.00  138.00    1005
-```
+
+---------------------------------------------------------
+ Min.   1st Qu.   Median   Mean    3rd Qu.   Max.   NA's 
+------ --------- -------- ------- --------- ------ ------
+  4       21        35     42.71     64      138    1005 
+---------------------------------------------------------
 
 -The 10 most bitter beers
 
@@ -727,7 +833,7 @@ ibu_map
 ![](CaseStudy1BootstrapDoc_files/figure-html/map.IBU-1.png)<!-- -->
 
 
-Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV. 
+Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV. 
 
 
 ```r
@@ -747,9 +853,11 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ![](CaseStudy1BootstrapDoc_files/figure-html/ABV.v.IBU-1.png)<!-- -->
 
 
--ABV to IBU regression summary below. 
+-For ABV to IBU regression summary details, expand below. 
 
 ```r
+  # L$coeff
+  #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
    L=lm(ABV~IBU, data=AllBeerReg)
    summary(L)
 ```
@@ -775,17 +883,14 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ## Multiple R-squared:  0.4497,	Adjusted R-squared:  0.4493 
 ## F-statistic:  1147 on 1 and 1403 DF,  p-value: < 2.2e-16
 ```
-
-```r
-  # L$coeff
-  #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
-```
-
 # Summary and Conclusions
 
-## Conclusions
+## Spatial Summary and Conclusions
+As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions.  Colorado contains more craft breweries than any other single state.  The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution.  In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions.  Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.
 
-Breweries appear to be distributed among the coast, likely related to population. However, Colorado brews more beers than any other state, especially considering its population relative to other states like Texas and California. Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
+## Statistical Summary and Conclusions
+
+Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American Pale Ale alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
 
 <!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
 
@@ -802,6 +907,8 @@ During analysis of the data the researchers discussed many additional questions.
 * What is the best place to open a canned craft beer brewery?
 * What is the worst place to open a canned craft beer brewery?
 * This data focused on canned beer, what about bottled beer or aggregate of all craft beer?
+* What is driving the opening of so many breweries in Colorado?
+* Utah shows significantly lower median ABV.  Why?
 
 In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
 
@@ -812,4 +919,3 @@ Since the IBU data contained many blank fields, that data could be researched fu
 
 >>>>>>> 29076ff94b4c37d5399fee3e90a43fefcc99d51e
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

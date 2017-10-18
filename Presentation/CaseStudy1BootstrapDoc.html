@@ -877,17 +877,23 @@
 <p>In recent years the craft brewery movement has exploded across the United States. New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer. The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness. At the end of the day, they all manufacture beer. Of particular interest to this study are the relationships of canned craft beer breweries and the common beer characteristics. Do these characteristics show any relationships spatially or statistically? This study hopes to answer that basic question and provide a foundation for future research on the topic.</p>
 <p>Of particular interest to the researchers requesting the analysis and those involved in the study are the spatial relationships and distributions of the canned craft beer movement. This study will look at how the breweries are distributed across the country and look at the spatial distributions of other beer characteristics to better understand trends and popularity of various beer styles. The spatial interpretation of data will inform readers of hot spots of craft brewery activity.</p>
 <p>This study will also perform basic statistical analysis to better understand and interpret the both the spatial data and the underlying canned craft beer data as well. The findings will inform readers on the distributions of the data and allow them to look at the included maps to determine which states lie above or below median values as well as determine underlying relationships between such characteristics as alcohol by volume and international bitterness units.</p>
-<p>Fundamentally, this study will seek to answer the following questions: * How many breweries are in each state? * What is the median ABV and IBU for each state? * What is the spatial distribution of the data of interest? * Are there any statistical or spatial relationships between the variables presented in the data?</p>
+<p>Fundamentally, this study will seek to answer the following questions:</p>
+<ul>
+<li>How many breweries are in each state?</li>
+<li>What is the median ABV and IBU for each state?</li>
+<li>What is the spatial distribution of the data of interest?</li>
+<li>Are there any statistical or spatial relationships between the variables presented in the data?</li>
+</ul>
 <h2 id="scope">Scope</h2>
 <p>The scope of this analytical research is limited to the data originally provided by the requestor. As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015. It is unclear if this data contains all craft breweries that create a brewed product, or only a sample. The scope is further limited to only the 50 States and the District of Columbia. No U.S. territories are included in the underlying data.</p>
 <h1 id="data">Data</h1>
-<p>This section will describe the originial data and discuss mthods used to convert the raw data into a tidy dataset ready for analysis. These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.</p>
+<p>This section will describe the original data and discuss methods used to convert the raw data into a tidy dataset ready for analysis. These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.</p>
 <h2 id="about-the-data">About the Data</h2>
 <p>For more information on the raw data, see the codebook <a href="https://github.com/TeamBreach/CaseStudy1/blob/master/Codebook.md">here.</a></p>
 <h3 id="source">Source</h3>
 <p>The original data came in two files: Beer.csv &amp; Breweries.csv. The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members.</p>
 <p>To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables.</p>
-<p>-View the original data. Expand below to see details.</p>
+<p>-View the structure of the original data. Expand below to see details.</p>
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -919,14 +925,14 @@
 ##  $ State  : Factor w/ 51 levels " AK"," AL"," AR",..: 24 18 20 5 5 41 6 23 23 23 ...
 </code></pre>
 </div>
-<p>-Prepare for merging. Expand below to see details.</p>
+<p>-Prepare the data for merging, such as rename columns. Expand below to see details.</p>
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
 <pre style="display:none"><code class="source r">## Prepare for merging ##
 
-names(rawbeers)[5] = "Brew_ID"  #Rename 'Brewery_id' to ease merging
+names(rawbeers)[5] = "Brew_ID"  #Rename from 'Brewery_id' to ease merging
 
 names(rawbeers)[1] = "Beer_Name" #Rename 'Name' to 'Beer_Name' to avoid confusion with brewery name or state
 
@@ -1233,7 +1239,7 @@ pander(tail(AllBeer, 6), row.names = FALSE)</code></pre>
 </div>
 <h3 id="data-integrity">Data Integrity</h3>
 <p>The data were examined for missing values and nonsense entries through formal methods in addition to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing.</p>
--Confirm numeric missing values
+-Table of numeric missing values
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -1286,7 +1292,7 @@ pander(apply(apply(AllBeer, 2, is.na), 2, sum))</code></pre>
 </tbody>
 </table>
 </div>
--Confirm character missing values
+-Table of character missing values
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -1491,7 +1497,7 @@ pander(apply(AllBeerReg, 2, function(y) sum(y == "")))</code></pre>
 --->
 <h1 id="analysis">Analysis</h1>
 <h3 id="breweries-and-syles">Breweries and Syles</h3>
-<p>There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greaterst number of breweries.</p>
+<p>There are 558 unique breweries and 100 different styles. The most popular style is 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greatest number of breweries.</p>
 -The ten most popular canned beer styles are presented below, expand to see.<br />
 
 <div class="row">
@@ -1518,34 +1524,28 @@ pop1</code></pre>
 ##                             52                             51
 </code></pre>
 </div>
-<p>-23 of the 100 unique styles are 'American'. However, these 23 styles constitute 62% of all craft cans. Calculations may be confirmed below. However, only 37 out of 2410 beers have 'American' in their title.</p>
+<p>-23 of the 100 unique styles are 'American'. However, these 23 styles constitute 62% of all craft cans. Calculations may be confirmed below. Only 37 out of 2410 beers have 'America' in their name.</p>
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">## Calculate percent of styles and beers that are American ##
+<pre style="display:none"><code class="source r">## Calculate percent of styles that are American ##
 
 AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
 AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
-sum(AMindex)/100  #Count percent of Beer styles that are 'American': sum / 100</code></pre>
+
+## Calculate percent of unique styles, total number of beers that are 'American', and percent number of beers that are 'American'
+sum(AMindex)/100; sum(AM[AMindex]); sum(AM[AMindex])/2410</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
 <pre style="display:none"><code class="output r">## [1] 0.23
 </code></pre>
-<button class="source R toggle btn btn-xs btn-primary">
-<span class="glyphicon glyphicon-chevron-up"></span> R source
-</button>
-<pre style="display:none"><code class="source r">sum(AM[AMindex])  #Calculate total number of beers that are 'American'</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
 <pre style="display:none"><code class="output r">## [1] 1492
 </code></pre>
-<button class="source R toggle btn btn-xs btn-primary">
-<span class="glyphicon glyphicon-chevron-up"></span> R source
-</button>
-<pre style="display:none"><code class="source r">sum(AM[AMindex])/2410  #Calculate percent number of beers that are 'American'</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
@@ -1554,18 +1554,17 @@ sum(AMindex)/100  #Count percent of Beer styles that are 'American': sum / 100</
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beer names
+<pre style="display:none"><code class="source r">## Calculate percent of beers that are have America in the name ##
+AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beer names
 ANindex<-grepl('America', row.names(AN))  #Check for 'America' in the title
-sum(AN[ANindex])/2410  #Count percent of Beer styles that are 'American': sum / 2410</code></pre>
+
+## Calculate percent of Beers that are 'American', total number of beers that are 'American'
+sum(AN[ANindex])/2410  ; sum(AN[ANindex])  </code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
 <pre style="display:none"><code class="output r">## [1] 0.0153527
 </code></pre>
-<button class="source R toggle btn btn-xs btn-primary">
-<span class="glyphicon glyphicon-chevron-up"></span> R source
-</button>
-<pre style="display:none"><code class="source r">sum(AN[ANindex])  #Calculate total number of beers that are 'American'</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
@@ -1920,8 +1919,7 @@ pop2</code></pre>
 </code></pre>
 </div>
 <h3 id="abv-and-ibu-summary">ABV and IBU Summary</h3>
-<p>Alcohol per volume and international bitterness units.</p>
-<p>ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.</p>
+<p>Alcohol by volume (ABV) does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.</p>
 -Summary Statistics for ABV below
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
@@ -1966,7 +1964,7 @@ pander(summary(AllBeerReg$ABV))</code></pre>
 </tbody>
 </table>
 </div>
--List of 10 most alcoholic beers
+-The 10 most alcoholic beers are listed below
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -2094,7 +2092,7 @@ kable(o1[1:10,], row.names = FALSE)</code></pre>
 </button>
 <pre style="display:none"><code class="source r">#o1[1:10,]</code></pre>
 </div>
-<p>The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU.</p>
+<p>The distribution of inernational bitterness units (IBU) is very right skewed. The most bitter beer is 'Bitter Bitch Imperial IPA' out of Oregon. Nine out of the 10 most bitter beers are IPAs and eight of the 10 most bitter beers are Double Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoholic beers lie above the mean and median IBU.</p>
 -Summary statistics for IBU
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
@@ -2373,7 +2371,7 @@ ibu_map</code></pre>
 <img src="data:image/png;base64,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7uFj8Bq8PDx4fVb2i+QkGT6hnr0Fm7SMOvBh9aSKXxT/Ulz5xuPqwX2Eh4/oUvbxm6z4ncC3O34fX74f3J3T/xE6olMD8tioPvyI8DKqjOqj7lnwiK5/s/Dd7D6LtQ7l15mrz4HHjPYCa+fKpy6yUGY3V6w1e0cbvvXYDoBfq+TbwXcL4aV8In06fNryCmY4lJ/g15EvBh87gJeTuMZd0x778HimAHznufy+WVz4lUq+1dm58QZpu+pntZ80qo/yp8M3nLYbV2ATfX2jrn74ZAx1RZY6h6Mfmr7cIXd3sV4/uJT1S/6Q8O7e3IJ3Hqn6/rTlorJpeFf+IPAddJklUNqdfpjzEwy8v+bD8Na9VojXKxYLfu+DOzcOvG8wp6oesVydu+AoP7qUkX6VZhfrF3wb+M7/mWfq+nvEcnUUuc8+YSmaPuPi+OWhAh9+mF3yuH38Anh1B9QGSv5w8MbVV+EHWmM85ODO09cnL6X9nO3wsoeF71Q3Hpyt0Y/S20jycuMps5SaMT4baa0VqAffJcHrg/uOFvzY2x/p7JyRyNDOethDxHIj2QG8ll/t48vrw3uO4eePowavPvn2mPAPxzna6CNRy3UyG+LtBn4197rwCaWetdxZ3IO6ncCvcAWQ+fLya5VRPd49H946ot8D/MqpCJ/jvgx+lGf4aOrBZ7nn7uMZHptqN03ifiNJ8nLB3LnyDB9NJfg89fhyPXHlGT6aWpde5a7PUvi7BUshlTqXXuWvz2L4u/ylkErlmTt0MpfLFY/N0eAXLYVSCsMv6OSDy42FD+ewKQmfewgXW25CnEtxGD6aJfD6Domi65NLxvDIHGQf75yhY/hoDgNfYSmHDsMTDcMTDcMTTTb8tlOptQ6UXHjOzsPwRMPwRMPwRMPwRMPwRMPwRMPwRBOB5xw4DE80DE80XngOgTA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80TA80fw/X/3v4smfsf8AAAAASUVORK5CYII=" />
 </div>
 </div>
-<p>Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV.</p>
+<p>Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV.</p>
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -2432,7 +2430,7 @@ ibu_map</code></pre>
 <h2 id="spatial-summary-and-conclusions">Spatial Summary and Conclusions</h2>
 <p>As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions. Colorado contains more craft breweries than any other single state. The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution. In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions. Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.</p>
 <h2 id="statistical-summary-and-conclusions">Statistical Summary and Conclusions</h2>
-<p>Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic.</p>
+<p>Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American Pale Ale alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic.</p>
 <!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
 <h2 id="additional-questions">Additional Questions</h2>
 <p>During analysis of the data the researchers discussed many additional questions. These questions ultimately did not see resolution in this study due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles. Questions include:</p>
@@ -2468,7 +2466,6 @@ ibu_map</code></pre>
 </blockquote>
 </blockquote>
 </blockquote>
-Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 </div>
 </div>
 <div class="navbar navbar-fixed-bottom navbar-inverse">
