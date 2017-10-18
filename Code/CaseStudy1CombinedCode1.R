@@ -565,3 +565,15 @@ pop3
 
 
 #Question A6: IBU By Style
+
+
+
+
+#Question A7: 'American' Beers
+
+AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
+AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
+sum(AMindex)  #Count percent of Beer styles that are 'American': sum / 100
+sum(AM[AMindex])  #Calculate total number of beers that are 'American'
+
+1492/2410
