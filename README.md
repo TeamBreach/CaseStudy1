@@ -44,9 +44,6 @@ The presentation folder contains numerous files used for knitting together the f
 * Breweries.jpeg	- Image of the Breweries by State map.
 * CaseStudy1BootstrapDoc.Rmd
 * CaseStudy1BootstrapDoc.html
-* CaseStudy1DummyRMDArturo.Rmd
-* CaseStudy1DummyRMDArturo.html
-* CaseStudy1DummyRMDArturo.md
 * IBU_Map.jpeg - Image of the IBU by State map.
 * TestPresentation.Rpres
 * TestPresentation.md
@@ -57,6 +54,9 @@ The following files are located within the Archive subfolder:
 * CaseStudy1Beamer.html
 * CaseStudy1Beamer.md
 * CaseStudy1Beamer.pdf
+* CaseStudy1DummyRMDArturo.Rmd
+* CaseStudy1DummyRMDArturo.html
+* CaseStudy1DummyRMDArturo.md
 
 #### CaseStudy1DummyRMDArturo_files/figure-html Folder
 * plot1-1.png - Presentation graphics (scatter plot).
