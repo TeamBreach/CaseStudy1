@@ -25,7 +25,7 @@ output:
 ---
 
 # Introduction
-In recent years the craft brewery movement has exploded across the United States.  New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer.  The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness.  At the end of the day, they all manufacture beer.  Of particular interest to this study are the relationships of canned craft beer breweries and the common ber characteristics.  Do these characteristics show any relationships spatially or statistically?  This study hopes to answer that basic question and provide a foundation for future research on the topic.
+In recent years the craft brewery movement has exploded across the United States.  New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer.  The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness.  At the end of the day, they all manufacture beer.  Of particular interest to this study are the relationships of canned craft beer breweries and the common beer characteristics.  Do these characteristics show any relationships spatially or statistically?  This study hopes to answer that basic question and provide a foundation for future research on the topic.
 
 Of particular interest to the researchers requesting the analysis and those involved in the study are the spatial relationships and distributions of the canned craft beer movement.  This study will look at how the breweries are distributed across the country and look at the spatial distributions of other beer characteristics to better understand trends and popularity of various beer styles.  The spatial interpretation of data will inform readers of hot spots of craft brewery activity.
 
@@ -35,10 +35,10 @@ Fundamentally, this study will seek to answer the following questions:
 * How many breweries are in each state?
 * What is the median ABV and IBU for each state?
 * What is the spatial distribution of the data of interest?
-* Are there any statistical or spatial relationships between the variables presented in thw data?
+* Are there any statistical or spatial relationships between the variables presented in the data?
 
 ## Abstract
-This study seeks to evaluate the distribution of beer and certain beer characterstics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characterstics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characterstics.
+This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.
 
 ## Scope
 The scope of this analytical research is limited to the data originally provided by the requestor.  As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015.  It is unclear if this data contains all craft breweries that create a brewed product, or only a sample.  The scope is further limited to only the 50 States and the District of Columbia.  No U.S. territories are included in the underlying data.  
@@ -203,12 +203,12 @@ StateName<-function(test){
 }
 ```
 
-#Data
-##About the Data
+# Data
+## About the Data
 
-###Source
+### Source
 
-The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID.The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
+The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
 
 To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
 
@@ -260,9 +260,9 @@ panderOptions('table.continues', '...')
 pander(tail(AllBeer, 6), row.names = FALSE)
 ```
 
-###Data Integrity
+### Data Integrity
 
-The data were examined for missing values and nonsense entries through formal methods in addtion to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing. 
+The data were examined for missing values and nonsense entries through formal methods in addition to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing. 
 
 -Confirm numeric missing values
 ```{r num.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -283,7 +283,7 @@ panderOptions('table.continues', '')
 pander(apply(AllBeer, 2, function(y) sum(y == "")))
 ```
 
-###Add Region & Division
+### Add Region & Division
 R contains additional region and division data per state in the package 'datasets'. These data are from a 1977 report from the chamber of commerce. The state classifications for region and division have not changed. Prior to June 1984 however, the Midwest Region was designated as the North Central Region. These data were added to expand analysis options and segmenting the states and cities geographically. 
 
 ```{r reg1, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -311,11 +311,11 @@ apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 ```
 
-#Analysis
+# Analysis
 
-###Breweries and Syles
+### Breweries and Styles
 
-There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. In fact, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the title. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
+There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. In fact, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the title. In addition, California, Colorado, and Michigan house the greatest number of breweries. 
 
 -The ten most popular canned beer styles, expand to see.
 ```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -414,7 +414,7 @@ pop2
 
 Alcohol per volume and international bitterness units.
 
-ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
+ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadruple Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
 
 -Summary Statistics for ABV below
 ```{r summ.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -429,7 +429,7 @@ kable(o1[1:10,])
 ```
 
 
-The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 0.056% and only one is below the mean ABV of 0.05977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU. 
+The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 0.056% and only one is below the mean ABV of 0.05977%. Similarly, all ten of the most alcoholic beers core above the mean and median IBU. 
 
 -Summary statistics for IBU
 ```{r summ.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -568,7 +568,7 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ## Conclusions
 
 ## Additional Questions
-During analysis of the data the researchers discussed many additional questions.  These questions ultimately did not resolution in this tudy due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles.  Questions include:
+During analysis of the data the researchers discussed many additional questions.  These questions ultimately did not see resolution in this study due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles.  Questions include:
 
 * What is the most popular beer style by Region/State/City?
 * What are the median ABV/IBU by Beer Style?
@@ -583,7 +583,7 @@ In turn these questions would likely open up additional avenues of research as l
 ### What's Next?
 Leverage the current data to perform more analysis of distribution of various beer styles by state or region.  Use of the city variable did not come up in this research but could create an added component to show true hotspots if added to the plot for the number of breweries.
 
-Since the IBU data contained many blank fields, that data could be researched further to fill in wholes to ensure the data represented in this study truly reflects the actual median and maximum values.  Additional data on actual volumes and sales of canned craft brew could show a better understanding of which styles are popular in various states and regions.  Aditionally, deeper statistical analysis could be performed with market anlaysis to better aid the industry as a whole and answer questions about optimal locations for new breweries and demand.
+Since the IBU data contained many blank fields, that data could be researched further to fill in wholes to ensure the data represented in this study truly reflects the actual median and maximum values.  Additional data on actual volumes and sales of canned craft brew could show a better understanding of which styles are popular in various states and regions.  Additionally, deeper statistical analysis could be performed with market analysis to better aid the industry as a whole and answer questions about optimal locations for new breweries and demand.
 
 >>>>>>> 29076ff94b4c37d5399fee3e90a43fefcc99d51e
 
