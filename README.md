@@ -54,7 +54,6 @@ The following files are located within the Archive subfolder:
 ---
 * Beers.csv - Raw dataset 1 of 2 used for the primary analysis questions of this project.
 * Breweries.csv - Raw dataset 2 of 2 used for the primary analysis questions of this project.
-* CaseStudy1DummyRMDArturo.Rmd
 * all-geocodes-v2016.csv - Geocodes.  Unused but kept for future analysis.
 * median_beer.csv - Edited Test dataset used for map generation testing prior to StateName function implementation.
 * mergeddata.csv - Final merged dataset of the two primary sources for analysis.
@@ -80,8 +79,19 @@ The following files are located within the Archive subfolder:
 * CaseStudy1DummyRMDArturo.Rmd
 * CaseStudy1DummyRMDArturo.html
 * CaseStudy1DummyRMDArturo.md
+* CS1minimalisticPresentation.Rmd
+* CS1minimalisticPresentation.html
+* CS1minimalisticPresentation.md
 
 #### CaseStudy1DummyRMDArturo_files/figure-html Folder
+* plot1-1.png - Presentation graphics (scatter plot).
+* plot2-1.png - Presentation graphics (scatter plot).
+* unnamed-chunk-1-1.png - Presentation graphics (bar plot).
+* unnamed-chunk-2-1.png - Presentation graphics (bar plot).
+* unnamed-chunk-2-2.png - Presentation graphics (bar plot).
+* unnamed-chunk-3-1.png - Presentation graphics (bar plot).
+
+#### CS1minimalisticPresentation/figure-html Folder
 * plot1-1.png - Presentation graphics (scatter plot).
 * plot2-1.png - Presentation graphics (scatter plot).
 * unnamed-chunk-1-1.png - Presentation graphics (bar plot).
