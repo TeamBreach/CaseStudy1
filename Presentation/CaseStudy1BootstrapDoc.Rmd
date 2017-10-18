@@ -24,6 +24,9 @@ output:
    #  keep_md: true
 ---
 
+# Abstract
+This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.
+
 # Introduction
 In recent years the craft brewery movement has exploded across the United States.  New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer.  The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness.  At the end of the day, they all manufacture beer.  Of particular interest to this study are the relationships of canned craft beer breweries and the common beer characteristics.  Do these characteristics show any relationships spatially or statistically?  This study hopes to answer that basic question and provide a foundation for future research on the topic.
 
@@ -36,9 +39,6 @@ Fundamentally, this study will seek to answer the following questions:
 * What is the median ABV and IBU for each state?
 * What is the spatial distribution of the data of interest?
 * Are there any statistical or spatial relationships between the variables presented in the data?
-
-## Abstract
-This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution.  The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.
 
 ## Scope
 The scope of this analytical research is limited to the data originally provided by the requestor.  As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015.  It is unclear if this data contains all craft breweries that create a brewed product, or only a sample.  The scope is further limited to only the 50 States and the District of Columbia.  No U.S. territories are included in the underlying data.  
@@ -204,11 +204,14 @@ StateName<-function(test){
 ```
 
 # Data
+This section will describe the originial data and discuss mthods used to convert the raw data into a tidy dataset ready for analysis.  These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.
+
 ## About the Data
+For more information on the raw data, see the codebook [here.](https://github.com/TeamBreach/CaseStudy1/blob/master/Codebook.md)
 
 ### Source
 
-The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
+The original data came in two files: Beer.csv & Breweries.csv. The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members. 
 
 To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables. 
 
@@ -412,8 +415,6 @@ brew_map<- ggplot(newbrewery2, aes(map_id=State))+    #sets the data (newbrewery
 #Plots the map for total number of breweries by state
 
 brew_map
-  
-
 ```
 
 -Table of most popular beer style per state
@@ -581,8 +582,12 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
   # L$coeff
   #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
 ```
-
 # Summary and Conclusions
+
+## Statistical Summary
+
+## Spatial Summary
+As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions.  Colorado contains more craft breweries than any other single state.  The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution.  In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions.  Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.
 
 ## Conclusions
 
@@ -603,6 +608,8 @@ During analysis of the data the researchers discussed many additional questions.
 * What is the best place to open a canned craft beer brewery?
 * What is the worst place to open a canned craft beer brewery?
 * This data focused on canned beer, what about bottled beer or aggregate of all craft beer?
+* What is driving the opening of so many breweries in Colorado?
+* Utah shows significantly lower median ABV.  Why?
 
 In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
 
