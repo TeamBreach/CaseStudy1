@@ -577,3 +577,14 @@ sum(AMindex)  #Count percent of Beer styles that are 'American': sum / 100
 sum(AM[AMindex])  #Calculate total number of beers that are 'American'
 
 1492/2410
+(245+424)/2410
+
+length(unique(AllBeerReg$Beer_ID))
+
+median_beer
+
+
+AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beers per style
+ANindex<-grepl('America', row.names(AN))  #Check for 'America' in the title
+sum(ANindex)  #Count percent of Beer styles that are 'American': sum / 100
+sum(AN[ANindex])  #Calculate total number of beers that are 'American'

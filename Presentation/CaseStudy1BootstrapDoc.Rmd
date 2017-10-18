@@ -311,13 +311,13 @@ apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 ```
 
-# Analysis
+#Analysis
 
-### Breweries and Styles
+###Breweries and Syles
 
-There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. In fact, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the title. In addition, California, Colorado, and Michigan house the greatest number of breweries. 
+There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
 
--The ten most popular canned beer styles, expand to see.
+-The ten most popular canned beer styles are presented below, expand to see. 'Saison' and 'Witbier' are the only non-'American' styles in the top ten at positions nine and ten respectively. 
 ```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
 #10 most popular beer styles
@@ -327,8 +327,27 @@ pop1
 
 ```
 
+-23 of the 100 unique styles are 'American'. However, these 23 styles constitute 62% of all craft cans. Calculations may be confirmed below. However, only 37 out of 2410 beers have 'American' in their title.
 
--The total number of breweries per state
+```{r pop1.Brew.AM, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+
+## Calculate percent of styles and beers that are American ##
+
+AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
+AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
+sum(AMindex)/100  #Count percent of Beer styles that are 'American': sum / 100
+sum(AM[AMindex])  #Calculate total number of beers that are 'American'
+sum(AM[AMindex])/2410  #Calculate percent number of beers that are 'American'
+
+AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beer names
+ANindex<-grepl('America', row.names(AN))  #Check for 'America' in the title
+sum(AN[ANindex])/2410  #Count percent of Beer styles that are 'American': sum / 2410
+sum(AN[ANindex])  #Calculate total number of beers that are 'American'
+
+```
+
+
+-The total number of breweries per state is shown below. The data does not show Puerto Rico, but it appears that every state and Washington DC have at least one Brewery. 
 
 ```{r state.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
@@ -340,7 +359,7 @@ names(rawbreweries)[2] = "Brewery_Name"
 
 ```
 
--Map of total number of breweries per state
+-Map of total number of breweries per state. Colorado stands out as having many more breweries than its neighbors. 
 
 ```{r state.Brew.map, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
@@ -414,7 +433,7 @@ pop2
 
 Alcohol per volume and international bitterness units.
 
-ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadruple Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
+ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupel Ale' out of Colorado is the most alcoholic beer. Six out of the ten most alcoholic beers are 'Imperial' beers while two out of the five most alcoholic beers come from 'Upslope Brewing Company' out of Boulder Colorado. Similarly, four of the ten most alcoholic beers come from California.
 
 -Summary Statistics for ABV below
 ```{r summ.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -423,13 +442,13 @@ summary(AllBeerReg$ABV)
 
 -List of 10 most alcoholic beers
 ```{r shigh.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE), c("State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City")]
-kable(o1[1:10,])
+o1<-AllBeerReg[order(AllBeerReg$ABV, decreasing = TRUE), c("Beer_ID", "State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City", "Style")]
+kable(o1[1:10,], row.names = FALSE)
 #o1[1:10,]
 ```
 
 
-The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 0.056% and only one is below the mean ABV of 0.05977%. Similarly, all ten of the most alcoholic beers core above the mean and median IBU. 
+The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU. 
 
 -Summary statistics for IBU
 ```{r summ.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -438,13 +457,13 @@ summary(AllBeerReg$IBU)
 
 -The 10 most bitter beers
 ```{r shigh.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City")]
-kable(o2[1:10,])
+o2<-AllBeerReg[order(AllBeerReg$IBU, decreasing = TRUE),c("Beer_ID", "State", "Beer_Name", "ABV","IBU", "Brewery_Name", "City", "Style")]
+kable(o2[1:10,], row.names = FALSE)
 #o2[1:10,]
 ```
 
 
-ABV and IBU appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increase of IBU values are associated with a small increase in ABV despite being very likely to be associated with higher ABV.
+ABV and IBU are probably related, but it is not obvious at first glance.
 
 -Barplot of median ABV and IBU per state
 ```{r med.ABV.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE, fig.width=12}
@@ -464,7 +483,8 @@ barplot(median_beer$IBU, names.arg = median_beer$State, cex.names = 0.7, cex.axi
 ```
 
 
--Map of median ABV per state
+-Map of median ABV per state below. Utah is the only state that stands out as having a particularly low median ABV at only 4.0%. In contrast, KY and Washington DC have the highest median ABV at 6.25%.
+
 ```{r map.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 median_beer2<-median_beer
 
@@ -504,7 +524,7 @@ abv_map<- ggplot(median_beer2, aes(map_id=State))+      #sets the data and the p
 abv_map
 ```
 
--Map of median IBU per state
+-Map of median IBU per state. The state with the lowest median IBV score is Wisconsin with only a 19 median IBV. The highest is Maine with a Median of 61. 
 ```{r map.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
 
@@ -543,7 +563,8 @@ ibu_map
 ```
 
 
--Scatter plot of ABV and IBU
+Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV. 
+
 ```{r ABV.v.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
   geom_point(shape=16) + 
@@ -551,23 +572,31 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 
 
 ```
-<<<<<<< HEAD
 
--ABV to IBU regression equation
+
+-ABV to IBU regression summary below. 
 ```{r ABV.v.IBU.eq, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
    L=lm(ABV~IBU, data=AllBeerReg)
+   summary(L)
   # L$coeff
-  bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
+  #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
 ```
 
 # Summary and Conclusions
 
 ## Conclusions
 
+Breweries appear to be distributed among the coast, likely related to population. However, Colorado brews more beers than any other state, especially considering its population relative to other states like Texas and California. Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
+
+<!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
+
+
 ## Additional Questions
 During analysis of the data the researchers discussed many additional questions.  These questions ultimately did not see resolution in this study due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles.  Questions include:
 
 * What is the most popular beer style by Region/City?
+* Which, if any, American styles are popular outside of the United States?
+* What separates an American beer style from its nonAmerican counterpart?
 * What are the median ABV/IBU by Beer Style?
 * Is there any relationship to ABV or IBU and the size of the beer (ounces)?
 * Why is there a correlation between ABV and IBU?  What causes it?
