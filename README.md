@@ -64,8 +64,9 @@ The following files are located within the Archive subfolder:
 The presentation folder contains numerous files used for knitting together the file presentation such as:
 * ABV_Map.jpeg - Image of the ABV by State map.
 * Breweries.jpeg	- Image of the Breweries by State map.
-* CaseStudy1BootstrapDoc.Rmd
-* CaseStudy1BootstrapDoc.html
+* CaseStudy1BootstrapDoc.Rmd - RMD that generates the HTML file of the same name.
+* CaseStudy1BootstrapDoc.html - Primary presentation output.
+* Casestudy1BootstrapDoc.md - presentation viewable on Github.
 * IBU_Map.jpeg - Image of the IBU by State map.
 * TestPresentation.Rpres
 * TestPresentation.md
