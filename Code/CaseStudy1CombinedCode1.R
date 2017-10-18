@@ -182,8 +182,6 @@ count_brew<-data.frame(table(rawbreweries$State))  #counts breweries per state
 
 ## Prepare for merging ##
 
-names(rawbeers)
-
 rawbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
 rawbeers <- rename(rawbeers,c('Name'='Beer_Name')) #Renames column in raw to avoid conflicts with merges later
 rawbreweries <- rename(rawbreweries,c('Name'='Brewery_Name')) #Renames column in raw to avoid conflicts with merges later
@@ -195,11 +193,6 @@ names(rawbreweries)
 #names(rawbeers)[1] = "Beer_name"
 #names(rawbreweries)[2] = "Brewery_Name"
 
-rawbeers<-rename(rawbeers, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
-mergeddrunk<-rename(mergeddrunk, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
-
-
-
 ## Merge Data ##
 AllBeer <- merge(rawbeers, rawbreweries, by="Brew_ID")
 str(AllBeer)
@@ -210,6 +203,10 @@ str(AllBeer)
 head(AllBeer, 6)
 
 tail(AllBeer, 6)
+
+# #Missing Values#
+# apply(AllBeer, 2, function(y) sum(y == ""))
+# apply(apply(AllBeer, 2, is.na), 2, sum)
 
 
 
@@ -232,8 +229,10 @@ levels(state.geo$state.abb)=levels(AllBeer$State)
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", all.x = TRUE)
 str(AllBeerReg)
-apply(AllBeerReg, 2, function(y) sum(y == ""))
-apply(apply(AllBeerReg, 2, is.na), 2, sum)
+
+# #Check again for missing values #
+# apply(AllBeerReg, 2, function(y) sum(y == ""))
+# apply(apply(AllBeerReg, 2, is.na), 2, sum)
 
 #Breweries by state on final data#
 
@@ -261,7 +260,7 @@ nastrings<-apply(AllBeer, 2, function(y) sum(y == ""))   #Check for blanks
 nastrings
 
 
-#3.a.
+#3.b.
 #Missing values for data with region/division
 
 naAllBeerReg <-sapply(AllBeerReg, function(y) sum(length(which(is.na(y)))))  #Sums the NAs in each column to serach for data that needs cleaning
@@ -534,11 +533,6 @@ pop1
 #This gets the most brewed style per State
 TTT=table(AllBeerReg[, c("Style", "State")])
 TT=apply(TTT, 2, which.max)
-# TTT=table(AllBeerReg[, c("State", "Style")] )
-# TT=apply(T, 1, which.max)
-# str(TTT)
-# row.names(TTT)
-
 
 pop2=data.frame("State" =colnames(TTT),
             "Style" = row.names(TTT)[apply(TTT, 2, which.max)])
@@ -558,11 +552,6 @@ sort(table(AllBeerReg$City))[384:374]
 #Same code as before but for cities
 TTT=table(AllBeerReg[, c("Style", "City")])
 TT=apply(T, 2, which.max)
-# TTT=table(AllBeerReg[, c("State", "Style")] )
-# TT=apply(T, 1, which.max)
-# str(TTT)
-# row.names(TTT)
-
 
 pop3=data.frame("City" =colnames(TTT),
                 "Style" = row.names(TTT)[apply(TTT, 2, which.max)])

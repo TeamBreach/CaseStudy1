@@ -1,48 +1,16 @@
-## Load Data ##
-getwd()
-#setwd("C:/Users/acasi/Downloads")
-BeersData <- read.csv("C:/Users/acasi/Downloads/Beers.csv")
-BreweriesData <- read.csv("C:/Users/acasi/Downloads/Breweries.csv")
+######################################
+#  Case Study 1 Makefile
+#  Arturo Casillas & Kevin Dickens
+#  Created: October 18, 2017
+#  Updated: October 18, 2017
+######################################
 
-str(BeersData)
-str(BreweriesData)
+#Raw Data
+* Beers.csv - Raw dataset 1 of 2 used for the primary analysis questions of this project.
+* Breweries.csv - Raw dataset 2 of 2 used for the primary analysis questions of this project.
 
-## Prepare for merging ##
-names(BeersData)
-names(BeersData)[5] = "Brew_ID"
-names(BeersData)[1] = "Beer.name"
-names(BreweriesData)[2] = "Brewery.name"
+#Code for analysis and data cleanup
+* CaseStudy1CombinedCode1.R - Code used to clean, merge, and analyze the data as well as prepare plots
 
-
-## Merge Data ##
-AllBeer <- merge(BeersData, BreweriesData, by="Brew_ID")
-str(AllBeer)
-
-## Check for missing values ##
-###Numeric
-apply(apply(AllBeer, 2, is.na), 2, sum)
-###Character
-apply(AllBeer, 2, function(y) sum(y == ""))
-
-
-## Add region/division ##
-library(datasets)
-state.geo=data.frame(state.abb, state.region, state.division)
-levels(state.geo$state.abb)=c(levels(state.geo$state.abb), "DC")
-names(state.geo)[1]='State'
-state.geo[51, ] = c('DC','South', 'South Atlantic')
-
-#Final Data#
-AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State")
-str(AllBeerReg)
-
-# For Plotting
-library(lattice)
-library(ggplot2)
-library(ggmap)
-
-# For analysis
-library("fiftystater")
-
-# For Beamer
-library(knitr)
+#Presentation
+* CaseStudy1BootstrapDoc.Rmd - Markdown file that is used to generate the presentation.
