@@ -386,9 +386,9 @@ pander(apply(AllBeerReg, 2, function(y) sum(y == "")))
 -------------------------------
 --->
 
-#Analysis
+# Analysis
 
-###Breweries and Syles
+### Breweries and Syles
 
 There are 558 unique breweries and 100 different styles. The most popular style is 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greatest number of breweries. 
 
