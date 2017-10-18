@@ -560,9 +560,6 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
   bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
 ```
 
-##Summary and Conclusions
-=======
- 
 # Summary and Conclusions
 
 ## Conclusions
@@ -570,13 +567,13 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ## Additional Questions
 During analysis of the data the researchers discussed many additional questions.  These questions ultimately did not see resolution in this study due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles.  Questions include:
 
-* What is the most popular beer style by Region/State/City?
+* What is the most popular beer style by Region/City?
 * What are the median ABV/IBU by Beer Style?
 * Is there any relationship to ABV or IBU and the size of the beer (ounces)?
 * Why is there a correlation between ABV and IBU?  What causes it?
 * What is the best place to open a canned craft beer brewery?
 * What is the worst place to open a canned craft beer brewery?
-* This data focused on canned beer, what about bottled beer?
+* This data focused on canned beer, what about bottled beer or aggregate of all craft beer?
 
 In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
 
