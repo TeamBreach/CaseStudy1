@@ -1,11 +1,14 @@
+***
 ## Case Study 1 - Beer Research
 
 ### Created October 3rd, 2017
 
 ##### Team Breach is an analysis team formed by Arturo Casillas and Kevin Dickens.
+***
 
 ## Organization
 ### Folder Structure
+---
 This repo contains the following folders:
 * Code - Code repository.
   * Archive - Archive of older code either left unused or moved to archive after reconciliation of code files.
@@ -16,9 +19,13 @@ This repo contains the following folders:
   * TestPresentation-figure - Test output folder
 
 ### Files
+---
+This section will detail the files that appear in this repo and their description.
 
 ### Code Folder
+---
 The code folder contains the following files:
+
 * CaseStudy1CodeArturo.R
 * CaseStudy1CombinedCode1.R
 * Dickens_casestudy1.R
@@ -30,6 +37,7 @@ The following files are located within the Archive subfolder:
 * map_testcode.R
 
 ### Data Folder
+---
 * Beers.csv - Raw dataset 1 of 2 used for the primary analysis questions of this project.
 * Breweries.csv - Raw dataset 2 of 2 used for the primary analysis questions of this project.
 * CaseStudy1DummyRMDArturo.Rmd
@@ -39,6 +47,7 @@ The following files are located within the Archive subfolder:
 * state-geocodes-v2016.csv - State geocodes.  Unused but kept for future analysis.
 
 ### Presentation Folder
+---
 The presentation folder contains numerous files used for knitting together the file presentation such as:
 * ABV_Map.jpeg - Image of the ABV by State map.
 * Breweries.jpeg	- Image of the Breweries by State map.
