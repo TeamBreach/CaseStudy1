@@ -231,11 +231,9 @@ str(rawbreweries)
 ```{r prep, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ## Prepare for merging ##
 
-names(rawbeers)[5] = "Brew_ID"  #Rename from 'Brewery_id' to ease merging
-
-names(rawbeers)[1] = "Beer_Name" #Rename 'Name' to 'Beer_Name' to avoid confusion with brewery name or state
-
-names(rawbreweries)[2] = "Brewery_Name"  #Rename 'Name' to 'Brewery_Name' avoid confusion and ease merging
+rawbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
+rawbeers <- rename(rawbeers,c('Name'='Beer_Name')) #Renames column in raw to avoid conflicts with merges later
+rawbreweries <- rename(rawbreweries,c('Name'='Brewery_Name')) #Renames column in raw to avoid conflicts with merges later
 
 ```
 
@@ -346,7 +344,9 @@ There are 558 unique breweries and 100 different styles. The most popular style 
 
 #10 most popular beer styles
 ##use table to get frequencies and then sort
-pop1=sort(table(AllBeerReg$Style))[100:91]
+ length(unique(AllBeerReg$Style))->s
+ s-9 -> f
+pop1=sort(table(AllBeerReg$Style))[s:f]
 pop1
 
 ```
@@ -361,7 +361,7 @@ AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
 AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
 
 ## Calculate percent of unique styles, total number of beers that are 'American', and percent number of beers that are 'American'
-sum(AMindex)/100; sum(AM[AMindex]); sum(AM[AMindex])/2410
+sum(AMindex)/length(unique(AllBeerReg$Style)); sum(AM[AMindex]); sum(AM[AMindex])/length(AllBeerReg$Beer_ID)
 
 
 ## Calculate percent of beers that are have America in the name ##
@@ -369,7 +369,7 @@ AN<-table(AllBeerReg$Beer_Name)  #Get frequency of Beer names
 ANindex<-grepl('America', row.names(AN))  #Check for 'America' in the title
 
 ## Calculate percent of Beers that are 'American', total number of beers that are 'American'
-sum(AN[ANindex])/2410  ; sum(AN[ANindex])  
+sum(AN[ANindex])/length(AllBeerReg$Beer_ID)  ; sum(AN[ANindex])  
 ```
 
 

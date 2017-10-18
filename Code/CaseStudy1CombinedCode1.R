@@ -184,11 +184,20 @@ count_brew<-data.frame(table(rawbreweries$State))  #counts breweries per state
 
 names(rawbeers)
 
-names(rawbeers)[5] = "Brew_ID"
+rawbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
+rawbeers <- rename(rawbeers,c('Name'='Beer_Name')) #Renames column in raw to avoid conflicts with merges later
+rawbreweries <- rename(rawbreweries,c('Name'='Brewery_Name')) #Renames column in raw to avoid conflicts with merges later
 
-names(rawbeers)[1] = "Beer_name"
+names(rawbeers)
+names(rawbreweries)
 
-names(rawbreweries)[2] = "Brewery_Name"
+#names(rawbeers)[5] = "Brew_ID"
+#names(rawbeers)[1] = "Beer_name"
+#names(rawbreweries)[2] = "Brewery_Name"
+
+rawbeers<-rename(rawbeers, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
+mergeddrunk<-rename(mergeddrunk, c('Name.x'='Beer_Name', 'Name.y'='Brewery_Name')) #renames columns affected by merge
+
 
 
 ## Merge Data ##
@@ -513,7 +522,9 @@ ggplot(dat=na.omit(AllBeerReg), aes(x=IBU, y=ABV)) +
 
 #10 most popular beer styles
 ##use table to get frequencies and then sort
-pop1=sort(table(AllBeerReg$Style))[100:90]
+ length(unique(AllBeerReg$Style))->s
+ s-9 -> f
+pop1=sort(table(AllBeerReg$Style))[s:f]
 pop1
 
 #str(table(AllBeerReg$State, AllBeerReg$Style ))
@@ -575,9 +586,6 @@ AM<-table(AllBeerReg$Style)  #Get frequency of Beers per style
 AMindex<-grepl('America', row.names(AM))  #Check for 'America' in the title
 sum(AMindex)  #Count percent of Beer styles that are 'American': sum / 100
 sum(AM[AMindex])  #Calculate total number of beers that are 'American'
-
-1492/2410
-(245+424)/2410
 
 length(unique(AllBeerReg$Beer_ID))
 
