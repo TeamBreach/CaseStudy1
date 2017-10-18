@@ -204,7 +204,7 @@ StateName<-function(test){
 ```
 
 # Data
-This section will describe the originial data and discuss mthods used to convert the raw data into a tidy dataset ready for analysis.  These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.
+This section will describe the original data and discuss methods used to convert the raw data into a tidy dataset ready for analysis.  These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.
 
 ## About the Data
 For more information on the raw data, see the codebook [here.](https://github.com/TeamBreach/CaseStudy1/blob/master/Codebook.md)
@@ -338,7 +338,7 @@ pander(apply(AllBeerReg, 2, function(y) sum(y == "")))
 
 ###Breweries and Syles
 
-There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
+There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greatest number of breweries. 
 
   -The ten most popular canned beer styles are presented below, expand to see.  
 ```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -473,7 +473,7 @@ kable(o1[1:10,], row.names = FALSE)
 ```
 
 
-The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Imperial IPA' out of Oregon is the most bitter beer. Nine out of the 10 most bitter beers are IPAs and eight our of the 10 most bitter beers are Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoolic beers core above the mean and median IBU. 
+The IBU distribution is very right skewed. The most bitter beer is 'Bitter Bitch Imperial IPA' out of Oregon. Nine out of the 10 most bitter beers are IPAs and eight of the 10 most bitter beers are Double Imperial IPAs. Also, there is no overlap between the 10 most bitter and 10 most alcoholic canned beers. However, all ten of the most bitter beers are above the median ABV of 5.6% and only one is below the mean ABV of 5.977%. Similarly, all ten of the most alcoholic beers lie above the mean and median IBU. 
 
 -Summary statistics for IBU
 ```{r summ.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
@@ -593,7 +593,7 @@ ibu_map
 ```
 
 
-Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that a large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV. 
+Upon further inspection, ABV and IBU do appear to be related, which is reasonable. The association is strong but not very powerful, in the sense that large increases of IBU values are associated with a small increases in ABV despite being a likely association to occur. More precisely, positing a linear relationship suggests a 10 point increase in IBU is only associated with a 0.35% statistically significant increase in ABV. However, almost 40% of IBU values are missing. This could bias the results as less popular or accessible craft brews may be more likely to be niche products with a higher variance in IBU and ABV. 
 
 ```{r ABV.v.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) + 
