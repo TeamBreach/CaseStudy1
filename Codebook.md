@@ -32,9 +32,10 @@ To prepare the data for analysis, variable names are altered for clarity and to 
 ### Code to obtain tidy data set
 ```r
 ## Prepare for merging ##
-names(rawbeers)[5] = "Brew_ID"  #Rename 'Brewery_id' to ease merging
-names(rawbeers)[1] = "Beer_Name" #Rename 'Name' to 'Beer_Name' to avoid confusion with brewery name or state
-names(rawbreweries)[2] = "Brewery_Name"  #Rename 'Name' to 'Brewery_Name' avoid confusion and ease merging
+library(plyr)
+rawbeers <- rename(rawbeers,c('Brewery_id'='Brew_ID')) #Renames column in raw data so a primary key match can be made
+rawbeers <- rename(rawbeers,c('Name'='Beer_Name')) #Renames column in raw to avoid conflicts with merges later
+rawbreweries <- rename(rawbreweries,c('Name'='Brewery_Name')) #Renames column in raw to avoid conflicts with merges later
 
 ## Merge Data ##
 AllBeer <- merge(rawbeers, rawbreweries, by="Brew_ID")
