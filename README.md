@@ -4,7 +4,20 @@
 ### Created October 3rd, 2017
 
 ##### Team Breach is an analysis team formed by Arturo Casillas and Kevin Dickens.
-***
+---
+| Responsibilities | Analyst |
+| :--------------: | :-----: |
+| Presentation Files | Arturo |
+| Maps | Kevin |
+| HTML Formatting | Arturo |
+| Makefile | Arturo |
+| Introduction | Kevin |
+| Spatial Conclusion | Kevin |
+| Statistical Conclusion | Arturo |
+| Tidy Data | Both |
+| Readme | Kevin |
+| Codebook | Kevin |
+| Analysis | Both |
 
 ## Organization
 ### Folder Structure
