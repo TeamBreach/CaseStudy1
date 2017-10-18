@@ -14,6 +14,7 @@ This repo contains the following folders:
   * Archive - Archive of older code either left unused or moved to archive after reconciliation of code files.
 * Data - Raw data used for this project as well as various data exports
 * Presentation - Files for presentation.
+  * Archive - General Archive for Presentation files
   * CaseStudy1DummyRMDArturo_files
     * figure-html - Archive presentation files.
   * TestPresentation-figure - Test output folder
