@@ -615,11 +615,16 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 # Summary and Conclusions
 
 ## Spatial Summary and Conclusions
-As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions.  Colorado contains more craft breweries than any other single state.  The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution.  In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions.  Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.
+As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions.  Colorado contains more craft breweries than any other single state.  The west coast trends higher than the rest of the country and the upper Midwest and St. Lawrence River corridor shows slightly higher than usual distribution.  In order to evaluate why, we'd need more data but reasonable assumptions for the west coast and the St. Lawrence corridor stem from the large population in those regions.  Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.
+
+There appear to be no easily quantifiable spatial distribution trends for ABV or IBU by state.  The central states away from the coasts appear higher overall but do not deviate from the median significantly enough to note a trend.  Utah stands out as the sole anomaly with significantly lower ABV than the surrounding states, especially since it rests central to a cluster of higher than typical ABV states.  This could be due to government intervention by the state or from societal differences given the large Mormon population in Utah.  
+
+Certain regions stand out as preferring different levels of bitterness as shown by the map of IBU by state.  In order to discuss popularity of beer by IBU we must note that the only measure of popularity available is by looking at the median IBU of beers.  The data for IBU is incomplete in this dataset and only tells us what beers were produced and not what beers were actually consumed.  The Pacific Coast and northwestern states prefer a moderate to high level of bitterness while the central plains states appear to prefer lower bitterness.  Both the southeastern and northeastern states seemingly prefer higher bitterness levels as well, but not as consistently as the west and northwest.  Of note is the absence of data for South Dakota.  Without further data we can only assume this is a regional preference and not some other underlying social, governmental, or societal difference.
 
 ## Statistical Summary and Conclusions
 
 Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
+
 
 <!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
 
@@ -638,6 +643,7 @@ During analysis of the data the researchers discussed many additional questions.
 * This data focused on canned beer, what about bottled beer or aggregate of all craft beer?
 * What is driving the opening of so many breweries in Colorado?
 * Utah shows significantly lower median ABV.  Why?
+* Are regions that grow more hops likely to prefer beer with a higher IBU?
 
 In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.
 
