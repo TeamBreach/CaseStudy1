@@ -551,8 +551,8 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
   bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
 ```
 
-##Summary and Conclusions
-=======
+<!---##Summary and Conclusions
+=======--->
  
 # Summary and Conclusions
 

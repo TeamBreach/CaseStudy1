@@ -250,13 +250,15 @@ str(AllBeer)
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))  #Trim the leadig spaces from state abbreviation
 ```
 
--Expand below to see the first 6 rows and perform a spot check for integrity (raw)
+-Perform a spot check for integrity, view the first six rows
 ```{r head, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 #kable(head(AllBeer, 6), row.names = FALSE)
-head(AllBeer, 6)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '...')
+pander(head(AllBeer, 6), row.names = FALSE)
 ```
 
--Also expand below to see the last 6 rows and perform a spot check for integrity (pander)
+-Perform a spot check for integrity, view the lasts six rows
 ```{r tail, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 panderOptions('table.split.table', 100)
 panderOptions('table.continues', '...')
@@ -267,7 +269,7 @@ pander(tail(AllBeer, 6), row.names = FALSE)
 
 The data were examined for missing values and nonsense entries through formal methods in addition to spot checks. In summary, Only Style, ABV and IBU have missing values. Almost 50% of IBU values are missing, which will most certainly affect our conclusions. Only 3% of ABV values and 5 Style entries are missing. 
 
--Confirm numeric missing values
+  -Confirm numeric missing values
 ```{r num.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ## Prepare for merging ##
 
@@ -276,7 +278,7 @@ panderOptions('table.continues', '')
 pander(apply(apply(AllBeer, 2, is.na), 2, sum))
 ```
 
--Confirm character missing values
+  -Confirm character missing values
 ```{r char.missing, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 ## Double Check ##
 ## Look at blank Strings ##
@@ -307,20 +309,38 @@ levels(state.geo$State)=levels(AllBeer$State)
 #Final Data#
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", all.x = TRUE)
-str(AllBeerReg)
 
-apply(AllBeerReg, 2, function(y) sum(y == ""))
-apply(apply(AllBeerReg, 2, is.na), 2, sum)
+#View Final Data#
+str(AllBeerReg); head(AllBeerReg, 6); tail(AllBeerReg, 6)
+
+#Recheck for missing values
+apply(apply(AllBeer, 2, is.na), 2, sum); apply(AllBeerReg, 2, function(y) sum(y == ""))
 
 ```
+
+<!---
+-Confirm numeric missing values in updated data
+```{r reg1.num.miss, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(apply(AllBeer, 2, is.na), 2, sum))
+```
+
+-Confirm character missing values in updated data
+```{r reg1.char.miss, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(AllBeerReg, 2, function(y) sum(y == "")))
+```
+--->
 
 #Analysis
 
 ###Breweries and Syles
 
-There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
+There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greaterst number of breweries. 
 
--The ten most popular canned beer styles are presented below, expand to see. 'Saison' and 'Witbier' are the only non-'American' styles in the top ten at positions nine and ten respectively. 
+  -The ten most popular canned beer styles are presented below, expand to see.  
 ```{r pop1.Brew.H, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
 #10 most popular beer styles
@@ -417,7 +437,7 @@ brew_map<- ggplot(newbrewery2, aes(map_id=State))+    #sets the data (newbrewery
 brew_map
 ```
 
--Table of most popular beer style per state
+-For a list of the most popular beer style per state, expand below
 
 ```{r state.Brew.pop2, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
 
@@ -438,7 +458,11 @@ ABV does not have much variation. 'Lee Hill Series Vol. 5 Belgian Style Quadrupe
 
 -Summary Statistics for ABV below
 ```{r summ.ABV, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-summary(AllBeerReg$ABV)
+## Summary Statistics of ABV ##
+#summary(AllBeerReg$ABV)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$ABV))
 ```
 
 -List of 10 most alcoholic beers
@@ -453,7 +477,12 @@ The IBU distribution is very right skewed. The most bitter bear 'Bitter Bitch Im
 
 -Summary statistics for IBU
 ```{r summ.IBU, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-summary(AllBeerReg$IBU)
+
+## Summary Statistics of IBU ##
+#summary(AllBeerReg$IBU)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$IBU))
 ```
 
 -The 10 most bitter beers
@@ -575,23 +604,22 @@ ggplot(dat=AllBeerReg, aes(x=IBU, y=ABV)) +
 ```
 
 
--ABV to IBU regression summary below. 
+-For ABV to IBU regression summary details, expand below. 
 ```{r ABV.v.IBU.eq, bootstrap.show.code=FALSE, bootstrap.show.message=FALSE, bootstrap.show.warning=FALSE, bootstrap.show.output=FALSE}
-   L=lm(ABV~IBU, data=AllBeerReg)
-   summary(L)
   # L$coeff
   #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
+   L=lm(ABV~IBU, data=AllBeerReg)
+   summary(L)
+
 ```
 # Summary and Conclusions
 
-## Statistical Summary
-
-## Spatial Summary
+## Spatial Summary and Conclusions
 As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions.  Colorado contains more craft breweries than any other single state.  The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution.  In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions.  Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.
 
-## Conclusions
+## Statistical Summary and Conclusions
 
-Breweries appear to be distributed among the coast, likely related to population. However, Colorado brews more beers than any other state, especially considering its population relative to other states like Texas and California. Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
+Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic. 
 
 <!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
 

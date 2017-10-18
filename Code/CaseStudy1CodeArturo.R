@@ -143,4 +143,15 @@ for(i in 1:4){
 }
 
 
+# + annotate(geom="text", x=100, y=0.04, label=test)
+#   
+#   test=expression(bquote(ABU[i] == IBU[i]%*% .(L$coeff[2]) + .(L$coeff[1])))
+#   expression(ABU[i] == IBU[i]%*% .(L$coeff[2]) + .(L$coeff[1]))
+#   ?annotate(geom="text", x=100, y=0.04, label=test)
+# 
+#   plot(ABV~IBU, data=AllBeerReg)
+#   abline(lm(ABV~IBU, data=AllBeerReg))
+#   L=lm(ABV~IBU, data=AllBeerReg)
+#   L$coeff
+#   text(50,.02, bquote(ABU[i] == IBU[i]%*% .(L$coeff[2]) + .(L$coeff[1])), pos=4 )
 

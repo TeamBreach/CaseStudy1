@@ -871,19 +871,21 @@
 <div class="container">
 <div class="row row-offcanvas row-offcanvas-right">
 <div class="contents col-xs-12 col-md-10">
+<h1 id="abstract">Abstract</h1>
+<p>This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution. The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.</p>
 <h1 id="introduction">Introduction</h1>
 <p>In recent years the craft brewery movement has exploded across the United States. New breweries open every month across the nation and they come in many shapes, sizes, and forms from the microbrewery that primarily focuses on brewing beer to bars known as brewpubs who craft their own beer. The products that these establishments offer vary in many ways from packaging (cans versus bottles), to alcohol content, to style and bitterness. At the end of the day, they all manufacture beer. Of particular interest to this study are the relationships of canned craft beer breweries and the common beer characteristics. Do these characteristics show any relationships spatially or statistically? This study hopes to answer that basic question and provide a foundation for future research on the topic.</p>
 <p>Of particular interest to the researchers requesting the analysis and those involved in the study are the spatial relationships and distributions of the canned craft beer movement. This study will look at how the breweries are distributed across the country and look at the spatial distributions of other beer characteristics to better understand trends and popularity of various beer styles. The spatial interpretation of data will inform readers of hot spots of craft brewery activity.</p>
 <p>This study will also perform basic statistical analysis to better understand and interpret the both the spatial data and the underlying canned craft beer data as well. The findings will inform readers on the distributions of the data and allow them to look at the included maps to determine which states lie above or below median values as well as determine underlying relationships between such characteristics as alcohol by volume and international bitterness units.</p>
 <p>Fundamentally, this study will seek to answer the following questions: * How many breweries are in each state? * What is the median ABV and IBU for each state? * What is the spatial distribution of the data of interest? * Are there any statistical or spatial relationships between the variables presented in the data?</p>
-<h2 id="abstract">Abstract</h2>
-<p>This study seeks to evaluate the distribution of beer and certain beer characteristics across the United States and answer questions important to the relationships between those characteristics and the spatial distribution. The goal is to show the distribution of breweries across the united states, discuss correlation between the primary beer characteristics of ABV and IBU, and begin to explore the spatial relationships between breweries and beer characteristics.</p>
 <h2 id="scope">Scope</h2>
 <p>The scope of this analytical research is limited to the data originally provided by the requestor. As such the scope of the data pertains to U.S. domestic craft breweries that produce a canned beer product no later than 2015. It is unclear if this data contains all craft breweries that create a brewed product, or only a sample. The scope is further limited to only the 50 States and the District of Columbia. No U.S. territories are included in the underlying data.</p>
 <h1 id="data">Data</h1>
+<p>This section will describe the originial data and discuss mthods used to convert the raw data into a tidy dataset ready for analysis. These steps are crucial for replication of the analysis as the raw data contained several anomalies which could prevent replication of the analysis presented later.</p>
 <h2 id="about-the-data">About the Data</h2>
+<p>For more information on the raw data, see the codebook <a href="https://github.com/TeamBreach/CaseStudy1/blob/master/Codebook.md">here.</a></p>
 <h3 id="source">Source</h3>
-<p>The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members.</p>
+<p>The original data came in two files: Beer.csv &amp; Breweries.csv. The tables contain a list of 2410 US craft beers and 510 US breweries. The beer data corresponds to craft beers available in cans and lists the beer ID number, the size of the can in ounces, style of beer, percent alcohol per volume (ABV), and international bitterness units (IBU) as well as the beer name and brewery ID. The Breweries data lists breweries by location of state and city along with a unique ID. This data was traced to CraftCans.com and further traced to the Brewers Association (BA). A more expansive data set is available to Brewers Association members.</p>
 <p>To prepare the data for analysis, variable names are altered for clarity and to minimize merging issues. The beers and breweries are linked by a unique numeric ID (Brew_ID), so no assumptions or algorithm was needed to combine the tables.</p>
 <p>-View the original data. Expand below to see details.</p>
 <div class="row">
@@ -960,40 +962,142 @@ str(AllBeer)</code></pre>
 </button>
 <pre style="display:none"><code class="source r">levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))  #Trim the leadig spaces from state abbreviation</code></pre>
 </div>
--Expand below to see the first 6 rows and perform a spot check for integrity (raw)
+-Perform a spot check for integrity, view the first six rows
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
 <pre style="display:none"><code class="source r">#kable(head(AllBeer, 6), row.names = FALSE)
-head(AllBeer, 6)</code></pre>
-<button class="output R toggle btn btn-xs btn-success">
-<span class="glyphicon glyphicon-chevron-up"></span> R output
-</button>
-<pre style="display:none"><code class="output r">##   Brew_ID     Beer_Name Beer_ID   ABV IBU
-## 1       1  Get Together    2692 0.045  50
-## 2       1 Maggie's Leap    2691 0.049  26
-## 3       1    Wall's End    2690 0.048  19
-## 4       1       Pumpion    2689 0.060  38
-## 5       1    Stronghold    2688 0.060  25
-## 6       1   Parapet ESB    2687 0.056  47
-##                                 Style Ounces       Brewery_Name
-## 1                        American IPA     16 NorthGate Brewing 
-## 2                  Milk / Sweet Stout     16 NorthGate Brewing 
-## 3                   English Brown Ale     16 NorthGate Brewing 
-## 4                         Pumpkin Ale     16 NorthGate Brewing 
-## 5                     American Porter     16 NorthGate Brewing 
-## 6 Extra Special / Strong Bitter (ESB)     16 NorthGate Brewing 
-##          City State
-## 1 Minneapolis    MN
-## 2 Minneapolis    MN
-## 3 Minneapolis    MN
-## 4 Minneapolis    MN
-## 5 Minneapolis    MN
-## 6 Minneapolis    MN
-</code></pre>
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '...')
+pander(head(AllBeer, 6), row.names = FALSE)</code></pre>
+<table>
+<caption>...</caption>
+<colgroup>
+<col width="11%" />
+<col width="17%" />
+<col width="11%" />
+<col width="8%" />
+<col width="6%" />
+<col width="35%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Brew_ID</th>
+<th align="center">Beer_Name</th>
+<th align="center">Beer_ID</th>
+<th align="center">ABV</th>
+<th align="center">IBU</th>
+<th align="center">Style</th>
+<th align="center">Ounces</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">Get Together</td>
+<td align="center">2692</td>
+<td align="center">0.045</td>
+<td align="center">50</td>
+<td align="center">American IPA</td>
+<td align="center">16</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">Maggie's Leap</td>
+<td align="center">2691</td>
+<td align="center">0.049</td>
+<td align="center">26</td>
+<td align="center">Milk / Sweet Stout</td>
+<td align="center">16</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">Wall's End</td>
+<td align="center">2690</td>
+<td align="center">0.048</td>
+<td align="center">19</td>
+<td align="center">English Brown Ale</td>
+<td align="center">16</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">Pumpion</td>
+<td align="center">2689</td>
+<td align="center">0.06</td>
+<td align="center">38</td>
+<td align="center">Pumpkin Ale</td>
+<td align="center">16</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">Stronghold</td>
+<td align="center">2688</td>
+<td align="center">0.06</td>
+<td align="center">25</td>
+<td align="center">American Porter</td>
+<td align="center">16</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">Parapet ESB</td>
+<td align="center">2687</td>
+<td align="center">0.056</td>
+<td align="center">47</td>
+<td align="center">Extra Special / Strong Bitter (ESB)</td>
+<td align="center">16</td>
+</tr>
+</tbody>
+</table>
+<table style="width:57%;">
+<colgroup>
+<col width="27%" />
+<col width="19%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Brewery_Name</th>
+<th align="center">City</th>
+<th align="center">State</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+<tr class="even">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+<tr class="odd">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+<tr class="even">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+<tr class="odd">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+<tr class="even">
+<td align="center">NorthGate Brewing</td>
+<td align="center">Minneapolis</td>
+<td align="center">MN</td>
+</tr>
+</tbody>
+</table>
 </div>
--Also expand below to see the last 6 rows and perform a spot check for integrity (pander)
+-Perform a spot check for integrity, view the lasts six rows
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -1259,11 +1363,13 @@ levels(state.geo$State)=levels(AllBeer$State)
 #Final Data#
 levels(AllBeer$State)=trimws(levels(AllBeer$State), which = c("left"))
 AllBeerReg<-merge(x=AllBeer, y=state.geo, by.x="State", all.x = TRUE)
-str(AllBeerReg)</code></pre>
+
+#View Final Data#
+str(AllBeerReg); head(AllBeerReg, 6); tail(AllBeerReg, 6)</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
-<pre style="display:none"><code class="output r">## 'data.frame':  2410 obs. of  12 variables:
+<pre style="display:none"><code class="output r">## 'data.frame':    2410 obs. of  12 variables:
 ##  $ State         : Factor w/ 51 levels "AK","AL","AR",..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Brew_ID       : int  103 103 494 459 103 459 224 271 224 224 ...
 ##  $ Beer_Name     : Factor w/ 2305 levels "#001 Golden Amber Lager",..: 1137 114 1604 1955 1138 1847 1878 94 1873 1584 ...
@@ -1277,10 +1383,69 @@ str(AllBeerReg)</code></pre>
 ##  $ state.region  : Factor w/ 4 levels "Northeast","South",..: 4 4 4 4 4 4 4 4 4 4 ...
 ##  $ state.division: Factor w/ 9 levels "New England",..: 9 9 9 9 9 9 9 9 9 9 ...
 </code></pre>
+<button class="output R toggle btn btn-xs btn-success">
+<span class="glyphicon glyphicon-chevron-up"></span> R output
+</button>
+<pre style="display:none"><code class="output r">##   State Brew_ID                  Beer_Name Beer_ID   ABV IBU
+## 1    AK     103            King Street IPA    1667 0.060  70
+## 2    AK     103                  Amber Ale    2436 0.051  NA
+## 3    AK     494             Polar Pale Ale     920 0.052  17
+## 4    AK     459          Sunken Island IPA     349 0.068  NA
+## 5    AK     103        King Street Pilsner    1706 0.055  NA
+## 6    AK     459 Skilak Scottish Ale (2011)     348 0.058  NA
+##                      Style Ounces                 Brewery_Name      City
+## 1             American IPA     12  King Street Brewing Company Anchorage
+## 2 American Amber / Red Ale     12  King Street Brewing Company Anchorage
+## 3  American Pale Ale (APA)     12 Broken Tooth Brewing Company Anchorage
+## 4             American IPA     12  Kenai River Brewing Company  Soldotna
+## 5           Czech Pilsener     12  King Street Brewing Company Anchorage
+## 6             Scottish Ale     12  Kenai River Brewing Company  Soldotna
+##   state.region state.division
+## 1         West        Pacific
+## 2         West        Pacific
+## 3         West        Pacific
+## 4         West        Pacific
+## 5         West        Pacific
+## 6         West        Pacific
+</code></pre>
+<button class="output R toggle btn btn-xs btn-success">
+<span class="glyphicon glyphicon-chevron-up"></span> R output
+</button>
+<pre style="display:none"><code class="output r">##      State Brew_ID                        Beer_Name Beer_ID   ABV IBU
+## 2405    WY     458    Saddle Bronc Brown Ale (2013)    1198 0.048  16
+## 2406    WY     192                   Pakoâ<U+0080><U+0099>s EyePA     393 0.068  60
+## 2407    WY     192               Snow King Pale Ale    1606 0.060  55
+## 2408    WY     458             Wagon Box Wheat Beer    1197 0.059  15
+## 2409    WY     458            Indian Paintbrush IPA    1199 0.070  75
+## 2410    WY     458 Bomber Mountain Amber Ale (2013)    1200 0.046  20
+##                         Style Ounces                    Brewery_Name
+## 2405        English Brown Ale     12 The Black Tooth Brewing Company
+## 2406             American IPA     12     Snake River Brewing Company
+## 2407  American Pale Ale (APA)     12     Snake River Brewing Company
+## 2408  American Pale Wheat Ale     12 The Black Tooth Brewing Company
+## 2409             American IPA     12 The Black Tooth Brewing Company
+## 2410 American Amber / Red Ale     12 The Black Tooth Brewing Company
+##          City state.region state.division
+## 2405 Sheridan        South South Atlantic
+## 2406  Jackson        South South Atlantic
+## 2407  Jackson        South South Atlantic
+## 2408 Sheridan        South South Atlantic
+## 2409 Sheridan        South South Atlantic
+## 2410 Sheridan        South South Atlantic
+</code></pre>
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">apply(AllBeerReg, 2, function(y) sum(y == ""))</code></pre>
+<pre style="display:none"><code class="source r">#Recheck for missing values
+apply(apply(AllBeer, 2, is.na), 2, sum); apply(AllBeerReg, 2, function(y) sum(y == ""))</code></pre>
+<button class="output R toggle btn btn-xs btn-success">
+<span class="glyphicon glyphicon-chevron-up"></span> R output
+</button>
+<pre style="display:none"><code class="output r">##      Brew_ID    Beer_Name      Beer_ID          ABV          IBU 
+##            0            0            0           62         1005 
+##        Style       Ounces Brewery_Name         City        State 
+##            0            0            0            0            0
+</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
 </button>
@@ -1291,25 +1456,44 @@ str(AllBeerReg)</code></pre>
 ##   state.region state.division 
 ##              0              0
 </code></pre>
-<button class="source R toggle btn btn-xs btn-primary">
-<span class="glyphicon glyphicon-chevron-up"></span> R source
-</button>
-<pre style="display:none"><code class="source r">apply(apply(AllBeerReg, 2, is.na), 2, sum)</code></pre>
-<button class="output R toggle btn btn-xs btn-success">
-<span class="glyphicon glyphicon-chevron-up"></span> R output
-</button>
-<pre style="display:none"><code class="output r">##          State        Brew_ID      Beer_Name        Beer_ID            ABV 
-##              0              0              0              0             62 
-##            IBU          Style         Ounces   Brewery_Name           City 
-##           1005              0              0              0              0 
-##   state.region state.division 
-##              0              0
-</code></pre>
 </div>
+<!---
+-Confirm numeric missing values in updated data
+<div class="row"><button class="source R toggle btn btn-xs btn-primary"><span class="glyphicon glyphicon-chevron-up"></span> R source</button><pre style="display:none"><code class="source r">panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(apply(AllBeer, 2, is.na), 2, sum))</code></pre>
+-------------------------------------------------------------------------------------------
+ Brew_ID   Beer_Name   Beer_ID   ABV   IBU    Style   Ounces   Brewery_Name   City   State 
+--------- ----------- --------- ----- ------ ------- -------- -------------- ------ -------
+    0          0          0      62    1005     0       0           0          0       0   
+-------------------------------------------------------------------------------------------
+
+</div>
+
+-Confirm character missing values in updated data
+<div class="row"><button class="source R toggle btn btn-xs btn-primary"><span class="glyphicon glyphicon-chevron-up"></span> R source</button><pre style="display:none"><code class="source r">panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(apply(AllBeerReg, 2, function(y) sum(y == "")))</code></pre>
+------------------------------------------------------------------------------------------
+ State   Brew_ID   Beer_Name   Beer_ID   ABV   IBU   Style   Ounces   Brewery_Name   City 
+------- --------- ----------- --------- ----- ----- ------- -------- -------------- ------
+   0        0          0          0      NA    NA      5       0           0          0   
+------------------------------------------------------------------------------------------
+
+ 
+-------------------------------
+ state.region   state.division 
+-------------- ----------------
+      0               0        
+-------------------------------
+
+</div>
+--->
 <h1 id="analysis">Analysis</h1>
 <h3 id="breweries-and-syles">Breweries and Syles</h3>
-<p>There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name. In addition, California, Colorado, and Michigan house the greaterst number of breweries.</p>
--The ten most popular canned beer styles are presented below, expand to see. 'Saison' and 'Witbier' are the only non-'American' styles in the top ten at positions nine and ten respectively.
+<p>There are 558 unique breweries and 100 different styles. The most popular styles per state are 'American IPA' followed by 'American Pale Ale'. These two styles combined constitute 27.8% of all 2410 beers. Furthermore, eight of the most popular styles also have 'American' in the name. Only Nevada's and New Hampshire's most popular styles do not have 'American' in the name, being 'Saison' and 'Witbier' respectively. In addition, California, Colorado, and Michigan house the greaterst number of breweries.</p>
+-The ten most popular canned beer styles are presented below, expand to see.<br />
+
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -1667,7 +1851,7 @@ brew_map</code></pre>
 <img src="data:image/png;base64,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" />
 </div>
 </div>
-<p>-Table of most popular beer style per state</p>
+<p>-For a list of the most popular beer style per state, expand below</p>
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
@@ -1743,13 +1927,44 @@ pop2</code></pre>
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">summary(AllBeerReg$ABV)</code></pre>
-<button class="output R toggle btn btn-xs btn-success">
-<span class="glyphicon glyphicon-chevron-up"></span> R output
-</button>
-<pre style="display:none"><code class="output r">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62
-</code></pre>
+<pre style="display:none"><code class="source r">## Summary Statistics of ABV ##
+#summary(AllBeerReg$ABV)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$ABV))</code></pre>
+<table style="width:88%;">
+<colgroup>
+<col width="11%" />
+<col width="13%" />
+<col width="12%" />
+<col width="13%" />
+<col width="13%" />
+<col width="11%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Min.</th>
+<th align="center">1st Qu.</th>
+<th align="center">Median</th>
+<th align="center">Mean</th>
+<th align="center">3rd Qu.</th>
+<th align="center">Max.</th>
+<th align="center">NA's</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0.001</td>
+<td align="center">0.05</td>
+<td align="center">0.056</td>
+<td align="center">0.05977</td>
+<td align="center">0.067</td>
+<td align="center">0.128</td>
+<td align="center">62</td>
+</tr>
+</tbody>
+</table>
 </div>
 -List of 10 most alcoholic beers
 <div class="row">
@@ -1885,13 +2100,44 @@ kable(o1[1:10,], row.names = FALSE)</code></pre>
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">summary(AllBeerReg$IBU)</code></pre>
-<button class="output R toggle btn btn-xs btn-success">
-<span class="glyphicon glyphicon-chevron-up"></span> R output
-</button>
-<pre style="display:none"><code class="output r">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
-##    4.00   21.00   35.00   42.71   64.00  138.00    1005
-</code></pre>
+<pre style="display:none"><code class="source r">## Summary Statistics of IBU ##
+#summary(AllBeerReg$IBU)
+panderOptions('table.split.table', 100)
+panderOptions('table.continues', '')
+pander(summary(AllBeerReg$IBU))</code></pre>
+<table style="width:81%;">
+<colgroup>
+<col width="9%" />
+<col width="13%" />
+<col width="12%" />
+<col width="11%" />
+<col width="13%" />
+<col width="9%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Min.</th>
+<th align="center">1st Qu.</th>
+<th align="center">Median</th>
+<th align="center">Mean</th>
+<th align="center">3rd Qu.</th>
+<th align="center">Max.</th>
+<th align="center">NA's</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">21</td>
+<td align="center">35</td>
+<td align="center">42.71</td>
+<td align="center">64</td>
+<td align="center">138</td>
+<td align="center">1005</td>
+</tr>
+</tbody>
+</table>
 </div>
 -The 10 most bitter beers
 <div class="row">
@@ -2149,12 +2395,14 @@ ibu_map</code></pre>
 <img src="data:image/png;base64,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" />
 </div>
 </div>
--ABV to IBU regression summary below.
+-For ABV to IBU regression summary details, expand below.
 <div class="row">
 <button class="source R toggle btn btn-xs btn-primary">
 <span class="glyphicon glyphicon-chevron-up"></span> R source
 </button>
-<pre style="display:none"><code class="source r">   L=lm(ABV~IBU, data=AllBeerReg)
+<pre style="display:none"><code class="source r">  # L$coeff
+  #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))
+   L=lm(ABV~IBU, data=AllBeerReg)
    summary(L)</code></pre>
 <button class="output R toggle btn btn-xs btn-success">
 <span class="glyphicon glyphicon-chevron-up"></span> R output
@@ -2179,15 +2427,12 @@ ibu_map</code></pre>
 ## Multiple R-squared:  0.4497, Adjusted R-squared:  0.4493 
 ## F-statistic:  1147 on 1 and 1403 DF,  p-value: < 2.2e-16
 </code></pre>
-<button class="source R toggle btn btn-xs btn-primary">
-<span class="glyphicon glyphicon-chevron-up"></span> R source
-</button>
-<pre style="display:none"><code class="source r">  # L$coeff
-  #bquote(ABU[i] == IBU[i]%*% .(signif(L$coeff[2], 3)) + .(signif(L$coeff[1], 3)))</code></pre>
 </div>
 <h1 id="summary-and-conclusions">Summary and Conclusions</h1>
-<h2 id="conclusions">Conclusions</h2>
-<p>Breweries appear to be distributed among the coast, likely related to population. However, Colorado brews more beers than any other state, especially considering its population relative to other states like Texas and California. Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic.</p>
+<h2 id="spatial-summary-and-conclusions">Spatial Summary and Conclusions</h2>
+<p>As one can see, craft canned breweries are roughly equally distributed across the country with a few notable exceptions. Colorado contains more craft breweries than any other single state. The west coast trends higher than the rest of the country and the upper midwest and St. Lawrence River corridor shows slightly higher than usual distribution. In order to evaluate why, we'd need more data but reasonable assumptions for the the west coast and the St. Lawrence corridor stem from the large population in those regions. Colorado remains an anomaly at this point as commonly available data do not give any meaningful explanation to this phenomenon.</p>
+<h2 id="statistical-summary-and-conclusions">Statistical Summary and Conclusions</h2>
+<p>Alcohol by volume, abbreviated as ABV, appears to be relatively consistent among the styles and among states. Beers brewed out of Utah are the only ones whose median ABV deviate substantially from the rest of the states. International bitterness units, abbreviated IBU, varies much more among states and among styles. However, much of the data is missing which could account for the additional variance we are seeing. The most bitter beers are American Double IPAs. It appears that 'American' beer styles, like American IPA and APA, are very popular and make up a disproportionate share of all craft canned beers that are brewed. In fact, American IPA and American APA alone make up 27.8% of all canned beers that were surveyed. However, only 37 of the 2410 beers in the sample actually have 'American' in the title making it likely that these styles are brewed out of popularity and not as a marketing tactic.</p>
 <!---With additional information, such as how many of these styles are sold under the name 'American' outside of the United States and how many of these American styles have European counterparts, --->
 <h2 id="additional-questions">Additional Questions</h2>
 <p>During analysis of the data the researchers discussed many additional questions. These questions ultimately did not see resolution in this study due to time or data constraints but could prove fruitful areas of research in the immediate future, particularly for those seeking to open a brewery in the near term or analyzing the common traits or popularity of various beer styles. Questions include:</p>
@@ -2201,6 +2446,8 @@ ibu_map</code></pre>
 <li>What is the best place to open a canned craft beer brewery?</li>
 <li>What is the worst place to open a canned craft beer brewery?</li>
 <li>This data focused on canned beer, what about bottled beer or aggregate of all craft beer?</li>
+<li>What is driving the opening of so many breweries in Colorado?</li>
+<li>Utah shows significantly lower median ABV. Why?</li>
 </ul>
 <p>In turn these questions would likely open up additional avenues of research as long as discoverable data exists to support that research.</p>
 <h3 id="whats-next">What's Next?</h3>
